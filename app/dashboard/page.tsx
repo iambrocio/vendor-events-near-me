@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { Sidebar, type Section } from "./Sidebar";
 
 type MarketStatus = "Live" | "Draft" | "Waitlist";
 
@@ -45,14 +46,6 @@ const MARKETS: Market[] = [
   },
 ];
 
-const NAV = [
-  { label: "Dashboard", badge: "" },
-  { label: "My markets", badge: "3" },
-  { label: "Vendors", badge: "" },
-] as const;
-
-type Section = (typeof NAV)[number]["label"];
-
 const statusBadge: Record<MarketStatus, string> = {
   Live: "text-paper bg-market-green",
   Draft: "text-ink bg-amber",
@@ -66,93 +59,6 @@ function StatusTag({ status }: { status: MarketStatus }) {
     >
       {status}
     </span>
-  );
-}
-
-function Sidebar({
-  section,
-  onNavigate,
-}: {
-  section: Section;
-  onNavigate: (s: Section) => void;
-}) {
-  return (
-    <aside className="flex flex-col justify-between gap-8 bg-black px-[18px] py-[22px]">
-      <div className="flex flex-col gap-7">
-        {/* Wordmark */}
-        <div className="flex items-baseline gap-[7px] px-[10px] py-1">
-          <span className="font-sans text-[19px] font-extrabold tracking-[-0.02em] text-paper">
-            Vendor Events
-          </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-amber">
-            near me
-          </span>
-        </div>
-
-        {/* Org switcher */}
-        <button className="flex items-center gap-[11px] rounded-[10px] border border-[#2E2E2E] bg-[#121212] px-3 py-[11px] text-left transition-colors hover:border-sage-muted">
-          <span className="flex h-[30px] w-[30px] items-center justify-center rounded-lg bg-amber text-sm font-bold text-ink">
-            CD
-          </span>
-          <span className="flex flex-1 flex-col gap-px">
-            <span className="text-sm font-semibold text-paper">Clintonville CDC</span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.08em] text-sage-muted">
-              3 markets
-            </span>
-          </span>
-          <span className="text-[13px] text-sage-muted">▾</span>
-        </button>
-
-        {/* Nav */}
-        <nav className="flex flex-col gap-[3px]">
-          <span className="px-[10px] pb-2 font-mono text-[10px] uppercase tracking-[0.12em] text-sage-muted">
-            Manage
-          </span>
-          {NAV.map((item) => {
-            const active = item.label === section;
-            return (
-              <button
-                key={item.label}
-                onClick={() => onNavigate(item.label)}
-                className={`flex items-center justify-between gap-[10px] rounded-[9px] px-3 py-[11px] transition-colors ${
-                  active ? "bg-market-green text-paper" : "text-[#C4CFC7] hover:bg-white/5"
-                }`}
-              >
-                <span className="text-[15px] font-medium">{item.label}</span>
-                {item.badge && (
-                  <span
-                    className={`font-mono text-[11px] font-medium ${
-                      active
-                        ? "rounded-[5px] bg-amber px-[7px] py-[2px] text-ink"
-                        : "text-amber"
-                    }`}
-                  >
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </nav>
-      </div>
-
-      {/* Account */}
-      <div className="flex items-center gap-[11px] px-[10px] py-2">
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2E2E2E] text-xs font-bold text-paper">
-          AV
-        </span>
-        <span className="flex flex-1 flex-col gap-px">
-          <span className="text-[13px] font-semibold text-paper">Ada Vinh</span>
-          <span className="text-xs text-sage-muted">Organizer</span>
-        </span>
-        <Link
-          href="/signin"
-          className="font-mono text-[10px] uppercase tracking-[0.1em] text-sage-muted hover:text-paper"
-        >
-          Out
-        </Link>
-      </div>
-    </aside>
   );
 }
 
@@ -171,9 +77,12 @@ function MyMarkets() {
         <h2 className="font-sans text-[19px] font-bold tracking-[-0.015em]">
           Your markets
         </h2>
-        <a href="#" className="font-sans text-sm font-semibold text-market-green hover:text-clay">
+        <Link
+          href="/dashboard/list-market"
+          className="font-sans text-sm font-semibold text-market-green hover:text-clay"
+        >
           Add a market →
-        </a>
+        </Link>
       </header>
 
       {/* Column headers */}
@@ -225,7 +134,7 @@ export default function OrganizerDashboard() {
 
   return (
     <div className="grid min-h-screen grid-cols-[264px_1fr] text-ink">
-      <Sidebar section={section} onNavigate={setSection} />
+      <Sidebar active={section} onNavigate={setSection} />
 
       <div className="flex min-w-0 flex-col">
         {/* Top bar */}
@@ -242,9 +151,12 @@ export default function OrganizerDashboard() {
             <button className="rounded-lg border-[1.5px] border-hairline px-[18px] py-[11px] font-sans text-sm font-semibold text-ink transition-colors hover:border-ink">
               View public page
             </button>
-            <button className="rounded-lg bg-market-green px-[18px] py-3 font-sans text-sm font-semibold text-white transition-colors hover:bg-market-green-dark">
+            <Link
+              href="/dashboard/list-market"
+              className="rounded-lg bg-market-green px-[18px] py-3 font-sans text-sm font-semibold text-white transition-colors hover:bg-market-green-dark"
+            >
               Add a market
-            </button>
+            </Link>
           </div>
         </header>
 
