@@ -1,26 +1,27 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Brand palette — Vendor Events Near Me */
+  --color-market-green: #1b5e43;
+  --color-market-green-dark: #164c37;
+  --color-clay: #e2622b;
+  --color-clay-dark: #c9521f;
+  --color-amber: #f2b33d;
+  --color-ink: #14231c;
+  --color-paper: #fbf7f0;
+  --color-surface: #ffffff;
+  --color-hairline: #e4dccf;
+  --color-sage: #5f6b63;
+  --color-sage-muted: #9daaa1;
+  --color-tag-soft: #efe7d8;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-dm-sans);
+  --font-mono: var(--font-ibm-plex-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-dm-sans), sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
