@@ -4,6 +4,7 @@ import { AuthShell, Field } from "../auth-ui";
 
 export const metadata: Metadata = {
   title: "Create your account · Vendor Events Near Me",
+  robots: { index: false, follow: false },
 };
 
 export default function SignUp() {

@@ -1,6 +1,19 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/sanity/lib/pageSeo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata({
+    key: "home",
+    canonical: "/",
+    defaultTitle: "Vendor Events Near Me",
+    defaultDescription:
+      "Markets worth showing up for. Run by organizers who take vendor applications.",
+  });
+}
 
 type Market = {
+  slug: string;
   name: string;
   place: string;
   type: string;
@@ -14,6 +27,7 @@ type Market = {
 
 const FEATURED: Market[] = [
   {
+    slug: "clintonville-farmers-market-1",
     name: "Clintonville Farmers Market",
     place: "Clintonville, Columbus",
     type: "Farmers",
@@ -26,6 +40,7 @@ const FEATURED: Market[] = [
       "The biggest Saturday crowd in Columbus, and produce vendors get first pick of the north row.",
   },
   {
+    slug: "short-north-night-market-2",
     name: "Short North Night Market",
     place: "Short North, Columbus",
     type: "Craft",
@@ -38,6 +53,7 @@ const FEATURED: Market[] = [
       "Evening market with foot traffic from the bar strip. Prepared food and craft do best here.",
   },
   {
+    slug: "bexley-maker-fair-3",
     name: "Bexley Maker Fair",
     place: "Bexley",
     type: "Craft",
@@ -109,7 +125,9 @@ function MarketCard({ m }: { m: Market }) {
       </div>
       <div className="flex flex-col gap-2">
         <h3 className="font-sans text-[21px] font-bold leading-[1.2] tracking-[-0.015em]">
-          {m.name}
+          <Link href={`/events/${m.slug}`} className="text-ink hover:text-clay">
+            {m.name}
+          </Link>
         </h3>
         <span className="text-[15px] text-sage">{m.place}</span>
         <p className="mt-1 text-[15px] leading-[1.5] text-sage text-pretty">
@@ -135,7 +153,8 @@ export default function Home() {
   return (
     <div className="flex w-full flex-1 flex-col bg-paper text-ink">
         {/* Header */}
-      <header className="flex items-center justify-between gap-6 border-b border-hairline px-6 py-5 sm:px-10">
+      <header className="border-b border-hairline">
+        <div className="container-site flex items-center justify-between gap-6 px-6 py-5 sm:px-10">
         <div className="flex items-center gap-8 sm:gap-[34px]">
           <Wordmark />
           <nav className="hidden items-center gap-[22px] md:flex">
@@ -156,10 +175,11 @@ export default function Home() {
         >
           List your market
         </Link>
+        </div>
       </header>
 
       {/* Hero — centered search */}
-      <section className="flex flex-col items-center gap-[26px] px-6 py-16 text-center sm:px-10 sm:pb-[72px] sm:pt-[84px]">
+      <section className="container-site flex flex-col items-center gap-[26px] px-6 py-16 text-center sm:px-10 sm:pb-[72px] sm:pt-[84px]">
         <span className="font-mono text-xs uppercase tracking-[0.14em] text-clay">
           18 markets · 4 states · updated weekly
         </span>
@@ -219,7 +239,8 @@ export default function Home() {
       </section>
 
       {/* Featured markets */}
-      <section className="flex flex-col gap-6 border-t border-hairline bg-surface px-6 py-14 sm:px-10 sm:pb-16 sm:pt-11">
+      <section className="border-t border-hairline bg-surface px-6 py-14 sm:px-10 sm:pb-16 sm:pt-11">
+        <div className="container-site flex flex-col gap-6">
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
           <div className="flex flex-col gap-1.5">
             <span className="font-mono text-xs uppercase tracking-[0.14em] text-clay">
@@ -241,10 +262,12 @@ export default function Home() {
             <MarketCard key={m.name} m={m} />
           ))}
         </div>
+        </div>
       </section>
 
       {/* For organizers */}
-      <section className="flex flex-col gap-6 bg-ink px-6 py-14 sm:px-10">
+      <section className="bg-ink px-6 py-14 sm:px-10">
+        <div className="container-site flex flex-col gap-6">
         <div className="grid grid-cols-1 items-end gap-8 md:grid-cols-2 md:gap-12">
           <div className="flex flex-col gap-[14px]">
             <span className="font-mono text-xs uppercase tracking-[0.14em] text-amber">
@@ -304,6 +327,7 @@ export default function Home() {
               Privacy
             </Link>
           </div>
+        </div>
         </div>
       </section>
     </div>
