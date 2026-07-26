@@ -129,7 +129,8 @@ export default async function BlogPost({
 
   return (
     <div className="flex w-full flex-1 flex-col bg-paper text-ink">
-      <header className="flex items-center justify-between gap-6 border-b border-hairline px-6 py-5 sm:px-10">
+      <header className="border-b border-hairline">
+        <div className="container-site flex items-center justify-between gap-6 px-6 py-5 sm:px-10">
         <Link href="/" className="flex items-baseline gap-[7px]">
           <span className="font-sans text-[21px] font-extrabold tracking-[-0.02em]">
             Vendor Events
@@ -141,9 +142,26 @@ export default async function BlogPost({
         <Link href="/blog" className="text-[15px] font-medium hover:text-clay">
           ← All posts
         </Link>
+        </div>
       </header>
 
-      <article className="mx-auto w-full max-w-[1040px] px-6 py-14 sm:px-10">
+      <article className="container-site px-6 py-14 sm:px-10">
+        {/* Breadcrumb */}
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-8 flex flex-wrap items-center gap-[9px] font-mono text-[11px] uppercase tracking-[0.1em]"
+        >
+          <Link href="/" className="text-sage hover:text-clay">
+            Home
+          </Link>
+          <span className="text-[#A6AFA8]">/</span>
+          <Link href="/blog" className="text-sage hover:text-clay">
+            Blog
+          </Link>
+          <span className="text-[#A6AFA8]">/</span>
+          <span className="text-ink">{post.title}</span>
+        </nav>
+
         {/* Hero */}
         <div className="mb-12 flex flex-col gap-5">
           <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-sage">

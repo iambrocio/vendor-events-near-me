@@ -141,7 +141,8 @@ export default function Home() {
   return (
     <div className="flex w-full flex-1 flex-col bg-paper text-ink">
         {/* Header */}
-      <header className="flex items-center justify-between gap-6 border-b border-hairline px-6 py-5 sm:px-10">
+      <header className="border-b border-hairline">
+        <div className="container-site flex items-center justify-between gap-6 px-6 py-5 sm:px-10">
         <div className="flex items-center gap-8 sm:gap-[34px]">
           <Wordmark />
           <nav className="hidden items-center gap-[22px] md:flex">
@@ -162,10 +163,11 @@ export default function Home() {
         >
           List your market
         </Link>
+        </div>
       </header>
 
       {/* Hero — centered search */}
-      <section className="flex flex-col items-center gap-[26px] px-6 py-16 text-center sm:px-10 sm:pb-[72px] sm:pt-[84px]">
+      <section className="container-site flex flex-col items-center gap-[26px] px-6 py-16 text-center sm:px-10 sm:pb-[72px] sm:pt-[84px]">
         <span className="font-mono text-xs uppercase tracking-[0.14em] text-clay">
           18 markets · 4 states · updated weekly
         </span>
@@ -225,7 +227,8 @@ export default function Home() {
       </section>
 
       {/* Featured markets */}
-      <section className="flex flex-col gap-6 border-t border-hairline bg-surface px-6 py-14 sm:px-10 sm:pb-16 sm:pt-11">
+      <section className="border-t border-hairline bg-surface px-6 py-14 sm:px-10 sm:pb-16 sm:pt-11">
+        <div className="container-site flex flex-col gap-6">
         <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
           <div className="flex flex-col gap-1.5">
             <span className="font-mono text-xs uppercase tracking-[0.14em] text-clay">
@@ -247,10 +250,12 @@ export default function Home() {
             <MarketCard key={m.name} m={m} />
           ))}
         </div>
+        </div>
       </section>
 
       {/* For organizers */}
-      <section className="flex flex-col gap-6 bg-ink px-6 py-14 sm:px-10">
+      <section className="bg-ink px-6 py-14 sm:px-10">
+        <div className="container-site flex flex-col gap-6">
         <div className="grid grid-cols-1 items-end gap-8 md:grid-cols-2 md:gap-12">
           <div className="flex flex-col gap-[14px]">
             <span className="font-mono text-xs uppercase tracking-[0.14em] text-amber">
@@ -310,6 +315,7 @@ export default function Home() {
               Privacy
             </Link>
           </div>
+        </div>
         </div>
       </section>
     </div>

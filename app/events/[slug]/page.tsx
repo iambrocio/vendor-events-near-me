@@ -143,7 +143,8 @@ export default async function MarketDetail({
   return (
     <div className="flex w-full flex-1 flex-col bg-paper text-ink">
       {/* Header */}
-      <header className="flex items-center justify-between gap-6 border-b border-hairline px-6 py-5 sm:px-10">
+      <header className="border-b border-hairline">
+        <div className="container-site flex items-center justify-between gap-6 px-6 py-5 sm:px-10">
         <div className="flex items-center gap-8 sm:gap-[34px]">
           <Link href="/">
             <Wordmark />
@@ -174,10 +175,11 @@ export default async function MarketDetail({
             List your market
           </Link>
         </div>
+        </div>
       </header>
 
       {/* Breadcrumb */}
-      <div className="mx-auto flex w-full max-w-[1120px] items-center gap-[9px] px-6 pt-5 sm:px-12">
+      <div className="container-site flex items-center gap-[9px] px-6 pt-5 sm:px-12">
         <Link
           href="/"
           className="font-mono text-[11px] uppercase tracking-[0.1em] text-sage hover:text-clay"
@@ -191,7 +193,7 @@ export default async function MarketDetail({
       </div>
 
       {/* Body */}
-      <div className="mx-auto grid w-full max-w-[1120px] grid-cols-1 items-start gap-12 px-6 pb-16 pt-8 sm:px-12 lg:grid-cols-[1fr_360px]">
+      <div className="container-site grid grid-cols-1 items-start gap-12 px-6 pb-16 pt-8 sm:px-12 lg:grid-cols-[1fr_360px]">
         {/* Main column */}
         <div className="flex min-w-0 flex-col gap-9">
           <div className="flex flex-col gap-3">
@@ -286,7 +288,7 @@ export default async function MarketDetail({
 
       {/* For organizers */}
       <section className="flex flex-col gap-6 bg-ink px-6 py-14 sm:px-10">
-        <div className="mx-auto grid w-full max-w-[1120px] grid-cols-1 items-end gap-8 md:grid-cols-2 md:gap-12">
+        <div className="container-site grid grid-cols-1 items-end gap-8 md:grid-cols-2 md:gap-12">
           <div className="flex flex-col gap-[14px]">
             <span className="font-mono text-xs uppercase tracking-[0.14em] text-amber">
               For organizers
@@ -313,7 +315,7 @@ export default async function MarketDetail({
             </div>
           </div>
         </div>
-        <div className="mx-auto flex w-full max-w-[1120px] flex-col items-start justify-between gap-4 border-t border-[#46584F] pt-6 sm:flex-row sm:items-center">
+        <div className="container-site flex flex-col items-start justify-between gap-4 border-t border-[#46584F] pt-6 sm:flex-row sm:items-center">
           <span className="text-sm text-sage-muted">
             Markets worth showing up for. Run by Marketlly.
           </span>

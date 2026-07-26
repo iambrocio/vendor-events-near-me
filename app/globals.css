@@ -19,6 +19,13 @@
   --font-mono: var(--font-ibm-plex-mono);
 }
 
+/* Default site content width — centered, 92% of the viewport. */
+@utility container-site {
+  width: 100%;
+  max-width: 92%;
+  margin-inline: auto;
+}
+
 body {
   background: var(--color-paper);
   color: var(--color-ink);

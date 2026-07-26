@@ -38,7 +38,8 @@ export default async function BlogIndex() {
 
   return (
     <div className="flex w-full flex-1 flex-col bg-paper text-ink">
-      <header className="flex items-center justify-between gap-6 border-b border-hairline px-6 py-5 sm:px-10">
+      <header className="border-b border-hairline">
+        <div className="container-site flex items-center justify-between gap-6 px-6 py-5 sm:px-10">
         <Link href="/" className="flex items-baseline gap-[7px]">
           <span className="font-sans text-[21px] font-extrabold tracking-[-0.02em]">
             Vendor Events
@@ -50,9 +51,10 @@ export default async function BlogIndex() {
         <Link href="/" className="text-[15px] font-medium hover:text-clay">
           ← Home
         </Link>
+        </div>
       </header>
 
-      <main className="mx-auto w-full max-w-[820px] px-6 py-14 sm:px-10">
+      <main className="container-site px-6 py-14 sm:px-10">
         <div className="mb-10 flex flex-col gap-2">
           <span className="font-mono text-xs uppercase tracking-[0.14em] text-clay">
             Blog
