@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 type Market = {
+  slug: string;
   name: string;
   place: string;
   type: string;
@@ -14,6 +15,7 @@ type Market = {
 
 const FEATURED: Market[] = [
   {
+    slug: "clintonville-farmers-market-1",
     name: "Clintonville Farmers Market",
     place: "Clintonville, Columbus",
     type: "Farmers",
@@ -26,6 +28,7 @@ const FEATURED: Market[] = [
       "The biggest Saturday crowd in Columbus, and produce vendors get first pick of the north row.",
   },
   {
+    slug: "short-north-night-market-2",
     name: "Short North Night Market",
     place: "Short North, Columbus",
     type: "Craft",
@@ -38,6 +41,7 @@ const FEATURED: Market[] = [
       "Evening market with foot traffic from the bar strip. Prepared food and craft do best here.",
   },
   {
+    slug: "bexley-maker-fair-3",
     name: "Bexley Maker Fair",
     place: "Bexley",
     type: "Craft",
@@ -109,7 +113,9 @@ function MarketCard({ m }: { m: Market }) {
       </div>
       <div className="flex flex-col gap-2">
         <h3 className="font-sans text-[21px] font-bold leading-[1.2] tracking-[-0.015em]">
-          {m.name}
+          <Link href={`/events/${m.slug}`} className="text-ink hover:text-clay">
+            {m.name}
+          </Link>
         </h3>
         <span className="text-[15px] text-sage">{m.place}</span>
         <p className="mt-1 text-[15px] leading-[1.5] text-sage text-pretty">
