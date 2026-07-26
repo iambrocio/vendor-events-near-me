@@ -1,4 +1,16 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+import { pageMetadata } from "@/sanity/lib/pageSeo";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata({
+    key: "home",
+    canonical: "/",
+    defaultTitle: "Vendor Events Near Me",
+    defaultDescription:
+      "Markets worth showing up for. Run by organizers who take vendor applications.",
+  });
+}
 
 type Market = {
   slug: string;

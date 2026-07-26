@@ -72,6 +72,7 @@ export async function generateMetadata({
   return {
     title: `${market.name} · Vendor Events Near Me`,
     description: market.about[0],
+    alternates: { canonical: `/events/${slug}` },
   };
 }
 

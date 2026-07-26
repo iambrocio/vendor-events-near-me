@@ -24,7 +24,7 @@ type Post = {
     image: ImageValue | null;
     bio: string | null;
   } | null;
-  seo: { title: string; description: string };
+  seo: { title: string; description: string; noIndex: boolean };
 };
 
 const fetchOptions = { next: { revalidate: 60 } };
@@ -49,6 +49,8 @@ export async function generateMetadata({
   return {
     title: post.seo.title,
     description: post.seo.description?.slice(0, 160),
+    alternates: { canonical: `/blog/${slug}` },
+    robots: post.seo.noIndex ? { index: false, follow: false } : undefined,
   };
 }
 

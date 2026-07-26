@@ -27,5 +27,13 @@ export const seo = defineType({
           .max(160)
           .warning("Meta descriptions over ~160 characters get truncated."),
     }),
+    defineField({
+      name: "noIndex",
+      title: "Hide from search engines",
+      description:
+        "Turn on to add a noindex tag so search engines keep this page out of results.",
+      type: "boolean",
+      initialValue: false,
+    }),
   ],
 });

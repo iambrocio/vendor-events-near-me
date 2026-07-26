@@ -5,11 +5,16 @@ import type { SanityImageSource } from "@sanity/image-url";
 import { client } from "@/sanity/lib/client";
 import { urlFor } from "@/sanity/lib/image";
 import { POSTS_QUERY } from "@/sanity/lib/queries";
+import { pageMetadata } from "@/sanity/lib/pageSeo";
 
-export const metadata: Metadata = {
-  title: "Blog · Vendor Events Near Me",
-  description: "Notes on running and selling at markets.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return pageMetadata({
+    key: "blog",
+    canonical: "/blog",
+    defaultTitle: "Blog · Vendor Events Near Me",
+    defaultDescription: "Notes on running and selling at markets.",
+  });
+}
 
 type PostListItem = {
   _id: string;

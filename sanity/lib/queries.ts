@@ -25,7 +25,8 @@ export const POST_QUERY = defineQuery(`
     author->{ name, image, bio },
     "seo": {
       "title": coalesce(seo.metaTitle, title),
-      "description": coalesce(seo.metaDescription, overview, pt::text(body))
+      "description": coalesce(seo.metaDescription, overview, pt::text(body)),
+      "noIndex": seo.noIndex == true
     }
   }
 `);
@@ -33,4 +34,15 @@ export const POST_QUERY = defineQuery(`
 // For generateStaticParams.
 export const POST_SLUGS_QUERY = defineQuery(`
   *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
+`);
+
+// SEO overrides for a code-built static page, keyed by route.
+export const PAGE_SEO_QUERY = defineQuery(`
+  *[_type == "page" && key == $key][0]{
+    "seo": {
+      "title": seo.metaTitle,
+      "description": seo.metaDescription,
+      "noIndex": seo.noIndex == true
+    }
+  }
 `);
