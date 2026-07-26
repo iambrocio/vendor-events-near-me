@@ -4,6 +4,7 @@ import { AuthShell, Field } from "../auth-ui";
 
 export const metadata: Metadata = {
   title: "Sign in · Vendor Events Near Me",
+  robots: { index: false, follow: false },
 };
 
 export default function SignIn() {

@@ -15,8 +15,10 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://vendoreventsnearme.com"),
   title: "Vendor Events Near Me",
-  description: "Markets worth showing up for. Run by organizers who take vendor applications.",
+  description:
+    "Markets worth showing up for. Run by organizers who take vendor applications.",
 };
 
 export default function RootLayout({
