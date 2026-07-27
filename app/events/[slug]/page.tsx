@@ -301,7 +301,7 @@ export default async function MarketDetail({
           <div className="flex flex-col gap-[18px]">
             <p className="text-[17px] leading-[1.55] text-sage-muted">
               Your first market is free to list. Vendor applications run through
-              Marketlly, so the spreadsheet stays closed.
+              your dashboard, so the spreadsheet stays closed.
             </p>
             <div className="flex gap-3">
               <Link
@@ -318,14 +318,11 @@ export default async function MarketDetail({
         </div>
         <div className="container-site flex flex-col items-start justify-between gap-4 border-t border-[#46584F] pt-6 sm:flex-row sm:items-center">
           <span className="text-sm text-sage-muted">
-            Markets worth showing up for. Run by Marketlly.
+            Markets worth showing up for.
           </span>
           <div className="flex flex-wrap gap-[22px]">
             <Link href="/" className="text-sm text-paper">
               All markets
-            </Link>
-            <Link href="/" className="text-sm text-paper">
-              Marketlly
             </Link>
             <Link href="/" className="text-sm text-paper">
               Contact
