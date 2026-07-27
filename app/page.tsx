@@ -82,7 +82,7 @@ const POPULAR_STATES = [
 
 const ORGANIZER_POINTS = [
   { n: "01", text: "One listing page vendors can find, share, and apply from." },
-  { n: "02", text: "Applications land in Marketlly, not in your inbox." },
+  { n: "02", text: "Applications land in one place, not in your inbox." },
   { n: "03", text: "Update dates and booth fees once, everywhere." },
 ];
 
@@ -285,8 +285,8 @@ export default function Home() {
           </div>
           <div className="flex flex-col gap-[18px]">
             <p className="text-[17px] leading-[1.55] text-sage-muted">
-              Listings are free. Vendor applications run through Marketlly, so
-              the spreadsheet stays closed.
+              Listings are free. Vendor applications run through your
+              dashboard, so the spreadsheet stays closed.
             </p>
             <div className="flex gap-3">
               <Link
@@ -317,14 +317,11 @@ export default function Home() {
 
         <div className="flex flex-col items-start justify-between gap-4 border-t border-[#46584F] pt-6 sm:flex-row sm:items-center">
           <span className="text-sm text-sage-muted">
-            Markets worth showing up for. Run by Marketlly.
+            Markets worth showing up for.
           </span>
           <div className="flex flex-wrap gap-[22px]">
             <Link href="/" className="text-sm text-paper">
               All markets
-            </Link>
-            <Link href="/" className="text-sm text-paper">
-              Marketlly
             </Link>
             <Link href="/" className="text-sm text-paper">
               Contact
