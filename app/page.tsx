@@ -3,13 +3,19 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/sanity/lib/pageSeo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return pageMetadata({
+  const metadata = await pageMetadata({
     key: "home",
     canonical: "/",
     defaultTitle: "Vendor Events Near Me",
     defaultDescription:
       "Markets worth showing up for. Run by organizers who take vendor applications.",
   });
+  return {
+    ...metadata,
+    verification: {
+      google: "BlxmLAALVyzFwyxHJSzzgH6VzWgtJD5Iw21dp65WCJY",
+    },
+  };
 }
 
 type Market = {
