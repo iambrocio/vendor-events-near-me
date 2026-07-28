@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SiteFooter } from "./SiteFooter";
 
 export function Wordmark() {
   return (
@@ -62,26 +63,31 @@ export function AuthShell({
   footer: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-[26px] bg-paper px-6 py-16 text-ink">
-      <Wordmark />
+    <>
+      <div className="flex flex-1 flex-col items-center justify-center gap-[26px] bg-paper px-6 py-16 text-ink">
+        <Wordmark />
 
-      <form className="flex w-full max-w-[420px] flex-col gap-[18px] rounded-2xl border-[1.5px] border-ink bg-surface p-8 shadow-[0_14px_40px_rgba(20,35,28,0.08)]">
-        <div className="flex flex-col gap-1">
-          <h1 className="font-sans text-[28px] font-extrabold leading-[1.1] tracking-[-0.03em]">
-            {title}
-          </h1>
-          <span className="text-[15px] leading-[1.5] text-sage">{subtitle}</span>
-        </div>
-        {children}
-        {footer}
-      </form>
+        <form className="flex w-full max-w-[420px] flex-col gap-[18px] rounded-2xl border-[1.5px] border-ink bg-surface p-8 shadow-[0_14px_40px_rgba(20,35,28,0.08)]">
+          <div className="flex flex-col gap-1">
+            <h1 className="font-sans text-[28px] font-extrabold leading-[1.1] tracking-[-0.03em]">
+              {title}
+            </h1>
+            <span className="text-[15px] leading-[1.5] text-sage">
+              {subtitle}
+            </span>
+          </div>
+          {children}
+          {footer}
+        </form>
 
-      <span className="text-sm text-sage">
-        Looking for a market to sell at?{" "}
-        <Link href="/" className="font-semibold">
-          Browse markets
-        </Link>
-      </span>
-    </div>
+        <span className="text-sm text-sage">
+          Looking for a market to sell at?{" "}
+          <Link href="/" className="font-semibold">
+            Browse markets
+          </Link>
+        </span>
+      </div>
+      <SiteFooter />
+    </>
   );
 }
