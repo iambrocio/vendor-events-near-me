@@ -36,6 +36,18 @@ export const POST_SLUGS_QUERY = defineQuery(`
   *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
 `);
 
+// HTML sitemap — every indexable post, newest first. Posts flagged `noIndex`
+// are left out so the sitemap only lists pages we want crawled.
+export const SITEMAP_POSTS_QUERY = defineQuery(`
+  *[_type == "post" && defined(slug.current) && seo.noIndex != true]
+    | order(publishedAt desc){
+      _id,
+      title,
+      "slug": slug.current,
+      publishedAt
+    }
+`);
+
 // SEO overrides for a code-built static page, keyed by route.
 export const PAGE_SEO_QUERY = defineQuery(`
   *[_type == "page" && key == $key][0]{

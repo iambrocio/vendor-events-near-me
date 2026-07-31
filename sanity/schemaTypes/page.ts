@@ -26,6 +26,7 @@ export const page = defineType({
         list: [
           { title: "Home (/)", value: "home" },
           { title: "Blog index (/blog)", value: "blog" },
+          { title: "Sitemap (/sitemap)", value: "sitemap" },
         ],
         layout: "radio",
       },
