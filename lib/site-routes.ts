@@ -102,14 +102,22 @@ function sectionKey(route: string) {
 }
 
 /**
- * Every public static route in the app, grouped into sections and ready to
- * render. New pages appear here automatically the next time the page renders —
- * nothing to register by hand.
+ * Every public static route in the app, sorted. Backs both the HTML sitemap
+ * and `sitemap.xml`, so a new page lands in both without being registered.
  */
-export async function getStaticRouteSections(): Promise<SiteSection[]> {
-  const routes = (await discoverStaticRoutes())
+export async function getPublicStaticRoutes(): Promise<string[]> {
+  return (await discoverStaticRoutes())
     .filter((route) => !EXCLUDED.some((pattern) => pattern.test(route)))
     .sort((a, b) => a.localeCompare(b));
+}
+
+/**
+ * The same routes, grouped into sections and ready to render. New pages appear
+ * here automatically the next time the page renders — nothing to register by
+ * hand.
+ */
+export async function getStaticRouteSections(): Promise<SiteSection[]> {
+  const routes = await getPublicStaticRoutes();
 
   const sections = new Map<string, SiteSection>();
 
