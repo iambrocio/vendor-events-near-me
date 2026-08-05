@@ -36,15 +36,17 @@ export const POST_SLUGS_QUERY = defineQuery(`
   *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
 `);
 
-// HTML sitemap — every indexable post, newest first. Posts flagged `noIndex`
-// are left out so the sitemap only lists pages we want crawled.
+// Sitemaps (HTML and XML) — every indexable post, newest first. Posts flagged
+// `noIndex` are left out so the sitemaps only list pages we want crawled.
+// `_updatedAt` is the last-edit stamp `sitemap.xml` reports as `lastmod`.
 export const SITEMAP_POSTS_QUERY = defineQuery(`
   *[_type == "post" && defined(slug.current) && seo.noIndex != true]
     | order(publishedAt desc){
       _id,
       title,
       "slug": slug.current,
-      publishedAt
+      publishedAt,
+      _updatedAt
     }
 `);
 
