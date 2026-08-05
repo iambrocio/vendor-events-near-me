@@ -8,7 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const metadata = await pageMetadata({
     key: "home",
     canonical: "/",
-    defaultTitle: "Vendor Events Near Me",
+    defaultTitle: "Find Local Markets and Vendors Events",
     defaultDescription:
       "Markets worth showing up for. Run by organizers who take vendor applications.",
   });
@@ -151,7 +151,7 @@ export default function Home() {
             18 markets · 4 states · updated weekly
           </span>
           <h1 className="max-w-[20ch] font-sans text-[44px] font-extrabold leading-[0.98] tracking-[-0.04em] sm:text-[72px]">
-            Find a market that wants your booth.
+            Find local vendor events and markets near you.
           </h1>
           <p className="max-w-[52ch] text-[18px] leading-[1.55] text-sage text-pretty">
             Search by city, state, or market type. Every listing shows the booth
