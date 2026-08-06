@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 
 export const NAV = [
   { label: "Dashboard", badge: "" },
@@ -94,21 +95,46 @@ export function Sidebar({
       </div>
 
       {/* Account */}
-      <div className="flex items-center gap-[11px] px-[10px] py-2">
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2E2E2E] text-xs font-bold text-paper">
-          AV
-        </span>
-        <span className="flex flex-1 flex-col gap-px">
-          <span className="text-[13px] font-semibold text-paper">Ada Vinh</span>
-          <span className="text-xs text-sage-muted">Organizer</span>
-        </span>
-        <Link
-          href="/signin"
-          className="font-mono text-[10px] uppercase tracking-[0.1em] text-sage-muted hover:text-paper"
-        >
-          Out
-        </Link>
-      </div>
+      <Account />
     </aside>
   );
+}
+
+/**
+ * The signed-in organizer. `useUser()` rather than `currentUser()` because
+ * this is a Client Component — the dashboard layout's `<ClerkProvider dynamic>`
+ * ships the user with the server render, so there's no unauthenticated flash.
+ */
+function Account() {
+  const { user } = useUser();
+  const name = user?.fullName ?? user?.primaryEmailAddress?.emailAddress ?? "";
+
+  return (
+    <div className="flex items-center gap-[11px] px-[10px] py-2">
+      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2E2E2E] text-xs font-bold text-paper">
+        {initials(name)}
+      </span>
+      <span className="flex min-w-0 flex-1 flex-col gap-px">
+        <span className="truncate text-[13px] font-semibold text-paper">
+          {name}
+        </span>
+        <span className="text-xs text-sage-muted">Organizer</span>
+      </span>
+      <SignOutButton>
+        <button className="font-mono text-[10px] uppercase tracking-[0.1em] text-sage-muted hover:text-paper">
+          Out
+        </button>
+      </SignOutButton>
+    </div>
+  );
+}
+
+/** First letter of the first two words — "Ada Vinh" → "AV". */
+function initials(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0].toUpperCase())
+    .join("");
 }

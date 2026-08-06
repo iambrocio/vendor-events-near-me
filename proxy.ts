@@ -3,8 +3,11 @@ import { clerkMiddleware } from "@clerk/nextjs/server";
 // Next 16 renamed the `middleware` convention to `proxy`; Clerk's handler is a
 // default export, so it carries over unchanged.
 //
-// Nothing is protected yet — this only makes auth state available to the app.
-// Route protection lands with the dashboard.
+// This only makes auth state available to the app — it deliberately does no
+// route protection. Clerk deprecated `createRouteMatcher` because path
+// matching here can diverge from how Next actually routes a request (Server
+// Functions are dispatched by ID, not path), which leaves protected data
+// reachable. Each page/layout under /dashboard calls `auth.protect()` itself.
 export default clerkMiddleware();
 
 export const config = {

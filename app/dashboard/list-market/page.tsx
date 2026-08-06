@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { auth } from "@clerk/nextjs/server";
 import { Sidebar } from "../Sidebar";
 
 export const metadata: Metadata = {
@@ -21,7 +22,10 @@ function Hint({ children }: { children: React.ReactNode }) {
   return <span className="text-[13px] text-sage">{children}</span>;
 }
 
-export default function ListMarket() {
+export default async function ListMarket() {
+  // Every protected file checks for itself — see the note in ../page.tsx.
+  await auth.protect();
+
   return (
     <div className="grid min-h-screen grid-cols-[264px_1fr] text-ink">
       <Sidebar active="My markets" />
