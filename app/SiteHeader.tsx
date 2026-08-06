@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HeaderAuth } from "./HeaderAuth";
 
 // One header for every indexable page. Add a link here and it appears
 // site-wide. The auth screens and the organizer dashboard are noindex and keep
@@ -42,20 +43,7 @@ export function SiteHeader() {
             ))}
           </nav>
         </div>
-        <div className="flex items-center gap-5">
-          <Link
-            href="/signin"
-            className="text-[15px] font-medium text-ink hover:text-clay"
-          >
-            Sign in
-          </Link>
-          <Link
-            href="/signup"
-            className="rounded-lg bg-market-green px-[18px] py-[11px] font-sans text-sm font-semibold text-white transition-colors hover:bg-market-green-dark"
-          >
-            List your market
-          </Link>
-        </div>
+        <HeaderAuth />
       </div>
     </header>
   );
