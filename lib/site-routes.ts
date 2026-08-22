@@ -13,8 +13,16 @@ const EXCLUDED = [/^\/studio(\/|$)/, /^\/dashboard(\/|$)/, /^\/sitemap$/];
 // adding a page never requires touching this file.
 const ROUTE_META: Record<string, { label: string; description?: string }> = {
   "/": {
-    label: "Home",
-    description: "Search markets by city, state, or market type.",
+    label: "Leaderboard",
+    description: "The board, sorted by bid. Highest bid sits at #1.",
+  },
+  "/about": {
+    label: "About",
+    description: "Why the board exists and what a bid actually buys.",
+  },
+  "/rules": {
+    label: "Rules",
+    description: "The ten rules for listing a market on the board.",
   },
   "/blog": {
     label: "Blog",
@@ -102,14 +110,22 @@ function sectionKey(route: string) {
 }
 
 /**
- * Every public static route in the app, grouped into sections and ready to
- * render. New pages appear here automatically the next time the page renders —
- * nothing to register by hand.
+ * Every public static route in the app, sorted. Backs both the HTML sitemap
+ * and `sitemap.xml`, so a new page lands in both without being registered.
  */
-export async function getStaticRouteSections(): Promise<SiteSection[]> {
-  const routes = (await discoverStaticRoutes())
+export async function getPublicStaticRoutes(): Promise<string[]> {
+  return (await discoverStaticRoutes())
     .filter((route) => !EXCLUDED.some((pattern) => pattern.test(route)))
     .sort((a, b) => a.localeCompare(b));
+}
+
+/**
+ * The same routes, grouped into sections and ready to render. New pages appear
+ * here automatically the next time the page renders — nothing to register by
+ * hand.
+ */
+export async function getStaticRouteSections(): Promise<SiteSection[]> {
+  const routes = await getPublicStaticRoutes();
 
   const sections = new Map<string, SiteSection>();
 
