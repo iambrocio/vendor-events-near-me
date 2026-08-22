@@ -13,8 +13,16 @@ const EXCLUDED = [/^\/studio(\/|$)/, /^\/dashboard(\/|$)/, /^\/sitemap$/];
 // adding a page never requires touching this file.
 const ROUTE_META: Record<string, { label: string; description?: string }> = {
   "/": {
-    label: "Home",
-    description: "Search markets by city, state, or market type.",
+    label: "Leaderboard",
+    description: "The board, sorted by bid. Highest bid sits at #1.",
+  },
+  "/about": {
+    label: "About",
+    description: "Why the board exists and what a bid actually buys.",
+  },
+  "/rules": {
+    label: "Rules",
+    description: "The ten rules for listing a market on the board.",
   },
   "/blog": {
     label: "Blog",

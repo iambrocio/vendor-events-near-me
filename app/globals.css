@@ -1,34 +1,62 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Brand palette — Vendor Events Near Me */
-  --color-market-green: #1b5e43;
-  --color-market-green-dark: #164c37;
-  --color-clay: #e2622b;
-  --color-clay-dark: #c9521f;
-  --color-amber: #f2b33d;
-  --color-ink: #14231c;
-  --color-paper: #fbf7f0;
-  --color-surface: #ffffff;
-  --color-hairline: #e4dccf;
-  --color-sage: #5f6b63;
-  --color-sage-muted: #9daaa1;
-  --color-tag-soft: #efe7d8;
+  /* Brand palette — the pay-to-win board.
+     Ink on white, one purple accent, hairlines instead of cards. */
+  --color-ink: #1e1814;
+  --color-paper: #ffffff;
+  --color-panel: rgba(30, 24, 20, 0.025);
+  --color-line: rgba(30, 24, 20, 0.13);
+  --color-line-strong: rgba(30, 24, 20, 0.18);
+  --color-line-input: rgba(30, 24, 20, 0.2);
+  --color-body: rgba(30, 24, 20, 0.74);
+  --color-muted: rgba(30, 24, 20, 0.62);
+  --color-faint: rgba(30, 24, 20, 0.5);
+  --color-accent: oklch(0.62 0.15 300);
+  --color-accent-hover: oklch(0.68 0.13 300);
+  --color-accent-deep: oklch(0.56 0.16 300);
+  --color-live: oklch(0.55 0.15 150);
 
-  --font-sans: var(--font-dm-sans);
-  --font-mono: var(--font-ibm-plex-mono);
+  /* Legacy token names, remapped onto the palette above so the pages that
+     aren't part of this redesign (blog, event pages, dashboard) still read as
+     one site. Prefer the semantic names above in new work. */
+  --color-surface: rgba(30, 24, 20, 0.025);
+  --color-hairline: rgba(30, 24, 20, 0.13);
+  --color-sage: rgba(30, 24, 20, 0.62);
+  --color-sage-muted: #a9a2a6;
+  --color-clay: oklch(0.62 0.15 300);
+  --color-clay-dark: oklch(0.68 0.13 300);
+  --color-market-green: oklch(0.56 0.16 300);
+  --color-market-green-dark: oklch(0.62 0.15 300);
+  --color-amber: oklch(0.78 0.13 300);
+  --color-tag-soft: #f1edf3;
+
+  --font-sans: var(--font-libre-franklin);
+  --font-mono: var(--font-space-mono);
 }
 
-/* Default site content width — centered, 92% of the viewport. */
+/* Board-width content column — everything full-bleed sits inside this. */
 @utility container-site {
   width: 100%;
-  max-width: 92%;
+  max-width: 1120px;
+  margin-inline: auto;
+}
+
+/* Narrower measure for the reading pages (About, Rules). */
+@utility container-prose {
+  width: 100%;
+  max-width: 720px;
   margin-inline: auto;
 }
 
 body {
   background: var(--color-paper);
   color: var(--color-ink);
-  font-family: var(--font-dm-sans), sans-serif;
+  font-family: var(--font-libre-franklin), Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: oklch(0.62 0.15 300);
+  color: #fff;
 }

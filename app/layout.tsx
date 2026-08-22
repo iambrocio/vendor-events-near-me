@@ -1,27 +1,27 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { clerkAppearance } from "./clerk-appearance";
-import { DM_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Libre_Franklin, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "@/lib/site";
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const libreFranklin = Libre_Franklin({
+  variable: "--font-libre-franklin",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "800"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const ibmPlexMono = IBM_Plex_Mono({
-  variable: "--font-ibm-plex-mono",
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "Vendor Events Near Me",
   description:
-    "Markets worth showing up for. Run by organizers who take vendor applications.",
+    "A pay-to-win leaderboard for markets, fairs and festivals. Highest bid sits at #1.",
 };
 
 export default function RootLayout({
@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${ibmPlexMono.variable} h-full antialiased`}
+      className={`${libreFranklin.variable} ${spaceMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <ClerkProvider appearance={clerkAppearance}>{children}</ClerkProvider>

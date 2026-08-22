@@ -15,16 +15,16 @@
  */
 export const clerkAppearance = {
   variables: {
-    colorPrimary: "#1b5e43", // market-green
+    colorPrimary: "#8347c4", // accent
     colorPrimaryForeground: "#ffffff",
     colorBackground: "#ffffff", // surface
-    colorForeground: "#14231c", // ink
-    colorMutedForeground: "#5f6b63", // sage
-    colorInput: "#fbf7f0", // paper
-    colorInputForeground: "#14231c", // ink
-    colorBorder: "#e4dccf", // hairline
-    fontFamily: "var(--font-dm-sans), sans-serif",
-    borderRadius: "9px",
+    colorForeground: "#1e1814", // ink
+    colorMutedForeground: "#6d6461", // muted
+    colorInput: "#fafaf9", // panel
+    colorInputForeground: "#1e1814", // ink
+    colorBorder: "#dfdcdb", // line
+    fontFamily: "var(--font-libre-franklin), sans-serif",
+    borderRadius: "0px",
   },
   elements: {
     // The site's card treatment: hard ink outline over a warm drop shadow.
@@ -35,8 +35,8 @@ export const clerkAppearance = {
     // wraps both.
     cardBox: {
       borderWidth: "1.5px",
-      borderColor: "#14231c",
-      boxShadow: "0 14px 40px rgba(20, 35, 28, 0.08)",
+      borderColor: "#1e1814",
+      boxShadow: "0 14px 40px rgba(30, 24, 20, 0.08)",
     },
   },
 };
