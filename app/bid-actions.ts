@@ -47,6 +47,7 @@ export async function startCheckout(
   const rawUrl = String(formData.get("applyUrl") ?? "");
   const blurb = String(formData.get("blurb") ?? "").trim().slice(0, 400);
   const category = String(formData.get("category") ?? "").trim().slice(0, 40) || "Market";
+  const location = String(formData.get("location") ?? "").trim().slice(0, 80);
 
   if (!name || normalizeName(name).length < 2) {
     return { error: "Give the market a name." };
@@ -58,6 +59,11 @@ export async function startCheckout(
   const applyUrl = normalizeUrl(rawUrl);
   if (!applyUrl) {
     return { error: "The vendor application link has to be a real URL." };
+  }
+
+  // A market with no place is useless to a vendor deciding whether to drive.
+  if (location.length < 2) {
+    return { error: "Say where the market is — city and state." };
   }
 
   const requested = parseBidCents(String(formData.get("bid") ?? ""));
@@ -129,6 +135,7 @@ export async function startCheckout(
       email,
       applyUrl,
       category,
+      location,
       blurb,
       totalCents: String(requested),
       chargedCents: String(chargeCents),

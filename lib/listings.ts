@@ -8,6 +8,7 @@ type ListingRow = {
   id: string;
   name: string;
   category: string;
+  location: string;
   bid_cents: number;
   apply_url: string;
   blurb: string;
@@ -16,13 +17,14 @@ type ListingRow = {
 };
 
 const SELECT =
-  "id, name, category, bid_cents, apply_url, blurb, created_at, updated_at";
+  "id, name, category, location, bid_cents, apply_url, blurb, created_at, updated_at";
 
 function toBoardRow(row: ListingRow): BoardRow {
   return {
     id: row.id,
     name: row.name,
     category: row.category,
+    location: row.location,
     bidCents: row.bid_cents,
     applyUrl: row.apply_url,
     blurb: row.blurb,
@@ -95,6 +97,7 @@ export async function recordPaidBid(input: {
   email: string;
   applyUrl: string;
   category: string;
+  location: string;
   blurb: string;
   /** The listing's new cumulative total — not the amount charged. */
   totalCents: number;
@@ -108,6 +111,7 @@ export async function recordPaidBid(input: {
     p_email: input.email.trim().toLowerCase(),
     p_apply_url: input.applyUrl,
     p_category: input.category,
+    p_location: input.location,
     p_blurb: input.blurb,
     p_total_cents: input.totalCents,
     p_charged_cents: input.chargedCents,

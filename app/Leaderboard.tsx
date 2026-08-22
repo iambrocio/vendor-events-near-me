@@ -166,6 +166,18 @@ export function Leaderboard({
               </label>
               <label className="block">
                 <span className="mb-1.5 block text-[12.5px] font-semibold text-muted">
+                  Where it happens
+                </span>
+                <input
+                  name="location"
+                  required
+                  maxLength={80}
+                  placeholder="Asheville, NC"
+                  className={`${INPUT} bg-panel`}
+                />
+              </label>
+              <label className="block">
+                <span className="mb-1.5 block text-[12.5px] font-semibold text-muted">
                   Type of market
                 </span>
                 <select name="category" className={`${INPUT} bg-panel`} defaultValue="Craft">
@@ -415,6 +427,11 @@ export function Leaderboard({
                       {row.category}
                     </span>
                   </div>
+                  {row.location && (
+                    <div className="mb-1.5 font-mono text-[12px] text-muted">
+                      {row.location}
+                    </div>
+                  )}
                   {row.blurb && (
                     <p className="mb-[9px] max-w-[62ch] text-pretty text-[14.5px] leading-[1.5] text-body">
                       {row.blurb}

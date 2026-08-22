@@ -9,6 +9,8 @@ export type BoardRow = {
   id: string;
   name: string;
   category: string;
+  /** Free-text "City, ST" as the organizer typed it. */
+  location: string;
   /** Cumulative amount paid for position, in cents. */
   bidCents: number;
   applyUrl: string;
@@ -60,10 +62,21 @@ export function displayUrl(url: string) {
 }
 
 /**
- * The rank a bid would take, 1-indexed, against a board sorted highest first.
- * Ties go to the listing already there — you have to beat a bid, not match it.
+ * The rank a HYPOTHETICAL bid would take, 1-indexed, against a board sorted
+ * highest first. Ties go to the listing already there — you have to beat a
+ * bid, not match it.
+ *
+ * Only for bids that aren't on the board yet. For a listing that already
+ * exists, use `rankOf` — passing a real listing's own bid through here counts
+ * it as its own competitor and reports one place too low.
  */
 export function rankFor(rows: Pick<BoardRow, "bidCents">[], bidCents: number) {
   const beaten = rows.findIndex((row) => row.bidCents < bidCents);
   return beaten === -1 ? rows.length + 1 : beaten + 1;
+}
+
+/** The rank a listing already on the board holds. Null if it isn't there. */
+export function rankOf(rows: Pick<BoardRow, "id">[], id: string) {
+  const index = rows.findIndex((row) => row.id === id);
+  return index === -1 ? null : index + 1;
 }

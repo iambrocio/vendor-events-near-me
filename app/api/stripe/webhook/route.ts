@@ -64,6 +64,7 @@ export async function POST(request: Request) {
       email: meta.email || session.customer_email || "",
       applyUrl: meta.applyUrl,
       category: meta.category || "Market",
+      location: meta.location ?? "",
       blurb: meta.blurb ?? "",
       totalCents,
       chargedCents: Number.isFinite(chargedCents) ? chargedCents : totalCents,
