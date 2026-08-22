@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "Vendor Events Near Me",
   description:
-    "A pay-to-win leaderboard for markets, fairs and festivals. Highest bid sits at #1.",
+    "A board of markets, fairs and festivals, sorted by what organizers paid to be there.",
 };
 
 export default function RootLayout({

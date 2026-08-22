@@ -10,9 +10,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const metadata = await pageMetadata({
     key: "home",
     canonical: "/",
-    defaultTitle: "Vendor Events Leaderboard — Buy Your Way to #1",
+    defaultTitle: "Vendor Events Leaderboard — List Your Market",
     defaultDescription:
-      "A pay-to-win board for markets, fairs and festivals. Highest bid sits at #1, every bid is public, and vendors go straight to your application.",
+      "A board of markets, fairs and festivals, sorted by what organizers paid for their spot. Every price is public, and vendors go straight to your application.",
   });
   return {
     ...metadata,

@@ -89,8 +89,8 @@ export async function startCheckout(
   const feeCents = processingFeeCents(chargeCents);
 
   // Only used to label the line item — the rank that sticks is whatever the
-  // money earns when the webhook lands, which may differ if someone outbids
-  // them while they're on Stripe's page. Rule 04.
+  // money earns when the webhook lands, which may differ if someone pays more
+  // while they're on Stripe's page. Rule 04.
   const board = await getBoard();
   const position = board.filter((row) => row.bidCents >= requested).length + 1;
 

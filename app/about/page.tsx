@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
     canonical: "/about",
     defaultTitle: "About the Board",
     defaultDescription:
-      "A free directory of markets since 2023, with one paid leaderboard bolted on. One input: your bid.",
+      "A free directory of markets since 2023, with one paid board bolted on. One input: what a spot is worth to you.",
   });
 }
 
@@ -24,7 +24,7 @@ export default function About() {
           About
         </div>
         <h1 className="mb-7 text-balance text-[34px] font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
-          It&rsquo;s a leaderboard. The scoreboard is money.
+          It&rsquo;s a board. The sort order is money.
         </h1>
 
         <div className="flex flex-col gap-[22px] text-[17px] leading-[1.6] text-body">
@@ -40,9 +40,9 @@ export default function About() {
             could think of.
           </p>
           <p className="text-pretty">
-            One input: your bid. Highest bid is #1. Second highest is #2. No algorithm, no
-            quality score, no ad dashboard, no &ldquo;let&rsquo;s hop on a quick call.&rdquo;
-            Want the top? Pay a dollar more than whoever&rsquo;s sitting there.
+            One input: what a spot is worth to you. Most paid is #1, second most is #2. No
+            algorithm, no quality score, no ad dashboard, no &ldquo;let&rsquo;s hop on a quick
+            call.&rdquo; Want to sit higher? Put in more. Nothing else moves you.
           </p>
 
           <h2 className="-mb-1.5 mt-3.5 text-[22px] font-bold tracking-[-0.015em] text-ink">
@@ -63,9 +63,9 @@ export default function About() {
             Everything is public on purpose
           </h2>
           <p className="text-pretty">
-            Every bid and every position change is visible to everyone, your competitors
-            included. You can see what a spot costs before you spend a dollar. Try getting that
-            out of a Facebook ad.
+            Every price and every position is visible to everyone, your competitors included.
+            You can see what a spot costs before you spend a dollar. Try getting that out of a
+            Facebook ad.
           </p>
 
           <h2 className="-mb-1.5 mt-3.5 text-[22px] font-bold tracking-[-0.015em] text-ink">
