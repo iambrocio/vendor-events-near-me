@@ -91,6 +91,13 @@ export async function startCheckout(
   const session = await getStripe().checkout.sessions.create({
     mode: "payment",
     customer_email: email,
+    payment_intent_data: {
+      // What organizers see on their card statement. Without this it reads as
+      // the Stripe account's business name, and a bid can be a four-figure
+      // charge from a name they don't recognise — which is how you collect
+      // disputes instead of listings. 5-22 chars, letters/numbers/spaces.
+      statement_descriptor_suffix: "VENDOREVENTS",
+    },
     success_url: `${SITE_URL}/?paid={CHECKOUT_SESSION_ID}`,
     cancel_url: `${SITE_URL}/?bid=cancelled`,
     line_items: [
