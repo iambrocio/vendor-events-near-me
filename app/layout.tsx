@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { clerkAppearance } from "./clerk-appearance";
-import { Libre_Franklin, Space_Mono } from "next/font/google";
+import { Roboto, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "@/lib/site";
 
-const libreFranklin = Libre_Franklin({
-  variable: "--font-libre-franklin",
+const roboto = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
 });
@@ -35,7 +35,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${libreFranklin.variable} ${spaceMono.variable} h-full antialiased`}
+      className={`${roboto.variable} ${spaceMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <ClerkProvider appearance={clerkAppearance}>{children}</ClerkProvider>

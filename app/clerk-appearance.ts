@@ -15,7 +15,7 @@
  */
 export const clerkAppearance = {
   variables: {
-    colorPrimary: "#8347c4", // accent
+    colorPrimary: "#7b4ddb", // accent
     colorPrimaryForeground: "#ffffff",
     colorBackground: "#ffffff", // surface
     colorForeground: "#1e1814", // ink
@@ -23,7 +23,7 @@ export const clerkAppearance = {
     colorInput: "#fafaf9", // panel
     colorInputForeground: "#1e1814", // ink
     colorBorder: "#dfdcdb", // line
-    fontFamily: "var(--font-libre-franklin), sans-serif",
+    fontFamily: "var(--font-roboto), sans-serif",
     borderRadius: "0px",
   },
   elements: {

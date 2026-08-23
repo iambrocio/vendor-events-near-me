@@ -127,7 +127,7 @@ export default function WhyListYourMarket() {
         </div>
       </div>
 
-      <SiteFooter tagline="One listing that fills a few booths has already paid for itself." />
+      <SiteFooter />
     </div>
   );
 }

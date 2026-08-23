@@ -114,7 +114,7 @@ export default function Rules() {
         </div>
       </div>
 
-      <SiteFooter tagline="Break one and you hear from us, not a bot." />
+      <SiteFooter />
     </div>
   );
 }

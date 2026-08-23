@@ -68,7 +68,7 @@ export default function About() {
         </div>
       </div>
 
-      <SiteFooter tagline="Part of Marketlly. Built so organizers have somewhere to put a market." />
+      <SiteFooter />
     </div>
   );
 }

@@ -30,6 +30,10 @@ const CATEGORIES = [
 // already made somewhere else on the site.
 const FAQS: { q: string; a: string }[] = [
   {
+    q: "Who sees my listing?",
+    a: "Vendors looking for markets to sell at. They find this board through search, our weekly vendor email and our social accounts. Top 10 goes into the email and the socials; top 3 also takes the homepage banner.",
+  },
+  {
     q: "What happens when someone pays more than me?",
     a: "You drop one position. That's it — your listing, your link and your blurb stay exactly where they were, one row lower. Pay again any time to climb back, and you only pay the difference between your old amount and the new one.",
   },
@@ -168,7 +172,7 @@ export function Leaderboard({
                 </span>
               </div>
               <div className="flex items-center justify-between gap-4 border-t-[1.5px] border-line-soft pt-[14px]">
-                <span className="text-sm font-semibold text-muted">Position this takes</span>
+                <span className="text-sm font-semibold text-muted">Position this puts you at</span>
                 <span className="rounded-full bg-accent px-[13px] py-1.5 text-[13.5px] font-bold text-white">
                   #{wouldBeRank}
                 </span>
@@ -488,7 +492,7 @@ export function Leaderboard({
                       {formatUsd(row.bidCents)}
                     </div>
                     <div className="mt-0.5 text-[11.5px] font-semibold text-faint sm:hidden">
-                      current price
+                      paid
                     </div>
                   </div>
                   <button
