@@ -48,6 +48,7 @@ export async function startCheckout(
   const blurb = String(formData.get("blurb") ?? "").trim().slice(0, 400);
   const category = String(formData.get("category") ?? "").trim().slice(0, 40) || "Market";
   const location = String(formData.get("location") ?? "").trim().slice(0, 80);
+  const eventDate = String(formData.get("eventDate") ?? "").trim();
 
   if (!name || normalizeName(name).length < 2) {
     return { error: "Give the market a name." };
@@ -64,6 +65,19 @@ export async function startCheckout(
   // A market with no place is useless to a vendor deciding whether to drive.
   if (location.length < 2) {
     return { error: "Say where the market is — city and state." };
+  }
+
+  // Optional: recurring markets have no single date. When given it has to be a
+  // real date that hasn't already passed, or the listing would be hidden the
+  // moment it went up.
+  if (eventDate) {
+    const today = new Date().toISOString().slice(0, 10);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(eventDate) || Number.isNaN(Date.parse(eventDate))) {
+      return { error: "That event date doesn't look like a real date." };
+    }
+    if (eventDate < today) {
+      return { error: "That event date has already passed." };
+    }
   }
 
   const requested = parseBidCents(String(formData.get("bid") ?? ""));
@@ -137,6 +151,7 @@ export async function startCheckout(
       category,
       location,
       blurb,
+      eventDate,
       totalCents: String(requested),
       chargedCents: String(chargeCents),
     },

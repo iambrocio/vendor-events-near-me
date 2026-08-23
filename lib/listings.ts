@@ -9,6 +9,7 @@ type ListingRow = {
   name: string;
   category: string;
   location: string;
+  event_date: string | null;
   bid_cents: number;
   apply_url: string;
   blurb: string;
@@ -16,8 +17,13 @@ type ListingRow = {
   updated_at: string;
 };
 
+/** Today in UTC as `YYYY-MM-DD`, the form Postgres compares a `date` against. */
+function todayIso() {
+  return new Date().toISOString().slice(0, 10);
+}
+
 const SELECT =
-  "id, name, category, location, bid_cents, apply_url, blurb, created_at, updated_at";
+  "id, name, category, location, event_date, bid_cents, apply_url, blurb, created_at, updated_at";
 
 function toBoardRow(row: ListingRow): BoardRow {
   return {
@@ -25,6 +31,7 @@ function toBoardRow(row: ListingRow): BoardRow {
     name: row.name,
     category: row.category,
     location: row.location,
+    eventDate: row.event_date,
     bidCents: row.bid_cents,
     applyUrl: row.apply_url,
     blurb: row.blurb,
@@ -44,6 +51,9 @@ export async function getBoard(): Promise<BoardRow[]> {
   const { data, error } = await getSupabase()
     .from("listings")
     .select(SELECT)
+    // A market still shows on its own day, so this is `gte`, not `gt`. Dateless
+    // listings are recurring markets and stay up.
+    .or(`event_date.is.null,event_date.gte.${todayIso()}`)
     .order("bid_cents", { ascending: false })
     .order("created_at", { ascending: true });
 
@@ -58,6 +68,7 @@ export async function getRecentBids(limit = 5): Promise<RecentBid[]> {
   const { data, error } = await getSupabase()
     .from("listings")
     .select("id, name, bid_cents, updated_at")
+    .or(`event_date.is.null,event_date.gte.${todayIso()}`)
     .order("updated_at", { ascending: false })
     .limit(limit);
 
@@ -99,6 +110,8 @@ export async function recordPaidBid(input: {
   category: string;
   location: string;
   blurb: string;
+  /** ISO date the market happens, or null for recurring markets. */
+  eventDate: string | null;
   /** The listing's new cumulative total — not the amount charged. */
   totalCents: number;
   /** What the card was actually charged, i.e. the delta on a raise. */
@@ -113,6 +126,7 @@ export async function recordPaidBid(input: {
     p_category: input.category,
     p_location: input.location,
     p_blurb: input.blurb,
+    p_event_date: input.eventDate,
     p_total_cents: input.totalCents,
     p_charged_cents: input.chargedCents,
   });
