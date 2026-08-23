@@ -39,27 +39,35 @@ const CATEGORIES = [
 const FAQS: { q: string; a: string }[] = [
   {
     q: "Who sees my listing?",
-    a: "Vendors looking for markets to sell at. They find this board through search, our weekly vendor email and our social accounts. Top 10 goes into the email and the socials; top 3 also takes the homepage banner.",
+    a: "Your listing is viewed by everyone who visits the site. This can be vendors or attendees, but most of the time it's vendors looking for events to sell at.",
   },
   {
     q: "What happens when someone pays more than me?",
-    a: "You drop one position. That's it — your listing, your link and your blurb stay exactly where they were, one row lower. Pay again any time to climb back, and you only pay the difference between your old amount and the new one.",
+    a: "They move above you, and you move down a position. If you want to beat them again you can just pay more than them.",
   },
   {
-    q: "What does a spot near the top actually get me?",
-    a: "Top 10 goes into the weekly vendor email and gets posted to our Facebook and Instagram. Top 3 also takes the banner on the homepage. Below that you get the board itself, which is what vendors searching for markets land on.",
+    q: "What does a spot at the top get me?",
+    a: "It gets you the most visibility; all the users who land on the site will automatically see your listing. That gives your event more chance of vendors applying to it.",
   },
   {
     q: "Do you take a cut of my booth fees?",
-    a: "Zero percent. Vendors click straight through to your own application form and we never see what happens next. We also never email your applicants.",
+    a: "No, we don't.",
   },
   {
     q: "Where do the listings come from?",
-    a: "Organizers, one at a time. Nothing here is scraped from other sites or event pages — a lot of scraped listings turn out to be fake or long cancelled, and charging for a spot is what keeps those off the board.",
+    a: "Listings come from organizers who are looking for vendors. We don't scrape websites or allow fake listings. That is part of the reason we charge — to keep out fake listings and spam.",
   },
   {
-    q: "Can I get a refund if it doesn't work?",
-    a: "Payments are final once they clear. The exception is us pulling your listing for a reason that isn't in the rules, in which case you get your money back.",
+    q: "Can I get a refund?",
+    a: "No, unfortunately, all sales are final.",
+  },
+  {
+    q: "Does my listing expire?",
+    a: "Yes, after your event date your listing will expire. We do this because we want to make sure all markets are still relevant and looking for vendors.",
+  },
+  {
+    q: "If I run a recurring market, do I need a listing every time?",
+    a: "Yes, for the time being. Later down the road we will work on a better method or deal.",
   },
 ];
 
@@ -147,8 +155,7 @@ export function Leaderboard({
           </h1>
           <p className="mx-auto mb-7 max-w-[46ch] text-pretty text-[16.5px] leading-[1.6] text-body">
             {paid.name} is live on the board for {formatUsd(paid.totalCents)}. Receipt is on
-            its way. If you landed in the top 10 you&rsquo;ll go out in this week&rsquo;s
-            vendor email and on our socials.
+            its way.
           </p>
           <Link
             href="/"
@@ -344,7 +351,8 @@ export function Leaderboard({
             </button>
             <div className="mt-3.5 text-[12.5px] leading-[1.55] text-muted">
               Card details are handled by Stripe, not us. Payments are final: somebody paying
-              more later moves your rank down but never removes your listing. See the{" "}
+              more later moves your rank down, and your listing runs until the day of your
+              event. See the{" "}
               <Link href="/rules" className="font-semibold text-accent-deep">
                 rules
               </Link>
@@ -745,8 +753,8 @@ export function Leaderboard({
           {
             step: "Step two",
             bg: "bg-mint",
-            title: "Get shared everywhere",
-            body: "Top 10 goes out to our Facebook, Instagram and the weekly vendor email. Top 3 takes over the homepage.",
+            title: "Get seen by vendors",
+            body: "Your listing sits on the board vendors land on when they search for markets to sell at. The more you pay, the higher up it sits.",
           },
           {
             step: "Step three",
@@ -840,8 +848,8 @@ export function Leaderboard({
           Somebody&rsquo;s about to pass you.
         </h2>
         <p className="mx-auto mb-6 max-w-[52ch] text-pretty text-[16.5px] text-body">
-          The board starts at {formatUsd(MIN_BID_CENTS)} and your listing stays up for good.
-          Put your market where vendors are already looking.
+          The board starts at {formatUsd(MIN_BID_CENTS)} and your listing runs until the day
+          of your event. Put your market where vendors are already looking.
         </p>
         <a
           href="#list-form"
