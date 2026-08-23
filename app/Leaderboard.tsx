@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useActionState, useState } from "react";
 import {
-  type BoardRow,
   MIN_BID_CENTS,
   PREVIEW_COUNT,
+  type BoardRow,
   displayUrl,
   formatUsd,
   processingFeeCents,
@@ -73,7 +73,6 @@ export function Leaderboard({
   const [showAll, setShowAll] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
   // null means "nothing typed yet" — the field then opens a dollar over the
   // top listing rather than at a hardcoded number.
   const [priceInput, setPriceInput] = useState<number | null>(null);
@@ -125,7 +124,6 @@ export function Leaderboard({
         {/* What the form collected, carried to the server as-is. The server
             re-prices from these; it never trusts the total below. */}
         <input type="hidden" name="name" value={name} />
-        <input type="hidden" name="applyUrl" value={url} />
         <input type="hidden" name="bid" value={String(priceCents / 100)} />
 
         <button
@@ -150,12 +148,6 @@ export function Leaderboard({
                   {name.trim() || "Your market"}
                 </span>
               </div>
-              <div className="flex justify-between gap-4">
-                <span className="text-sm font-semibold text-muted">Vendor application link</span>
-                <span className="break-all text-right text-sm font-semibold">
-                  {displayUrl(url.trim()) || "yourmarket.com/apply"}
-                </span>
-              </div>
               <div className="flex items-center justify-between gap-4 border-t-[1.5px] border-line-soft pt-[14px]">
                 <span className="text-sm font-semibold text-muted">Position this takes</span>
                 <span className="rounded-full bg-accent px-[13px] py-1.5 text-[13.5px] font-bold text-white">
@@ -166,6 +158,18 @@ export function Leaderboard({
 
             <div className="eyebrow mb-3.5 text-faint">How it shows on the board</div>
             <div className="flex flex-col gap-[14px]">
+              <label className="block">
+                <span className={FIELD_LABEL}>Vendor application link</span>
+                <input
+                  name="applyUrl"
+                  required
+                  placeholder="yourmarket.com/apply"
+                  className={INPUT}
+                />
+                <span className="mt-1.5 block text-xs leading-[1.5] text-muted">
+                  You can link to your vendor application or event page.
+                </span>
+              </label>
               <label className="block">
                 <span className={FIELD_LABEL}>Email for the receipt</span>
                 <input
@@ -263,132 +267,82 @@ export function Leaderboard({
 
   return (
     <div className="container-site px-6">
-      {/* Hero + the form it's selling */}
-      <div className="mt-2 rounded-[26px] bg-lav px-6 py-[54px] sm:px-12">
-        <div className="grid grid-cols-1 items-center gap-12 md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-          <div>
-            <div className="mb-5 inline-flex items-center gap-[7px] rounded-full bg-white px-3.5 py-[7px] text-[12.5px] font-bold text-accent-ink">
-              <span className="h-[7px] w-[7px] rounded-full bg-live" />
-              {rows.length > 0
-                ? `${rows.length} ${rows.length === 1 ? "market" : "markets"} on the board`
-                : "Nothing on the board yet"}
-            </div>
-            <h1 className="mb-[18px] text-balance text-[38px] font-extrabold leading-[1.0] tracking-[-0.035em] sm:text-[56px]">
-              List Your Vendor Event. Pay What It&rsquo;s Worth to You.
-            </h1>
-            <p className="mb-[26px] max-w-[48ch] text-pretty text-[17.5px] leading-[1.55] text-body">
-              Reach more vendors and grow your event. List your market in under 5 minutes and
-              pay whatever price you think it&rsquo;s worth. Markets that pay more show up
-              higher on the leaderboard and get seen by more vendors.
-            </p>
-            <div className="flex flex-wrap gap-2.5">
-              <a
-                href="#how-it-works"
-                className="rounded-full bg-white px-6 py-3.5 text-[15px] font-bold text-ink transition-colors hover:bg-white/60"
-              >
-                How it works
-              </a>
-              <Link
-                href="/why-list-your-market"
-                className="rounded-full border-[1.5px] border-line px-6 py-3.5 text-[15px] font-bold text-ink transition-colors hover:bg-white"
-              >
-                Why list your market
-              </Link>
-            </div>
-          </div>
+      {/* Hero — one line to get someone onto the board; the rest comes next */}
+      <div id="list-form" className="mx-auto max-w-[800px] pb-2 pt-[76px] text-center">
+        <div className="mb-6 inline-flex items-center gap-[7px] text-[13px] font-bold text-accent-ink">
+          <span className="h-[7px] w-[7px] rounded-full bg-live" />
+          {rows.length > 0
+            ? `${rows.length} ${rows.length === 1 ? "market" : "markets"} on the board`
+            : "Nothing on the board yet"}
+        </div>
+        <h1 className="mb-[22px] text-balance text-[40px] font-extrabold leading-[1.0] tracking-[-0.04em] sm:text-[60px]">
+          List Your Vendor Event. Pay What It&rsquo;s Worth to You.
+        </h1>
+        <p className="mx-auto mb-[34px] max-w-[60ch] text-pretty text-[18px] leading-[1.55] text-body">
+          Reach more vendors and grow your event. List your market in under 5 minutes and pay
+          whatever price you think it&rsquo;s worth. Markets that pay more show up higher on
+          the leaderboard and get seen by more vendors.
+        </p>
 
-          <div id="list-form" className="rounded-[20px] bg-white p-[26px]">
-            <div className="mb-5 flex items-baseline justify-between gap-3">
-              <div className="text-[19px] font-extrabold tracking-[-0.02em]">
-                List your market
-              </div>
-              <div className="rounded-full bg-lav-chip px-[11px] py-[5px] text-[12.5px] font-bold text-accent-ink">
-                from {formatUsd(MIN_BID_CENTS)}
-              </div>
-            </div>
+        {cancelled && (
+          <p className="mx-auto mb-4 max-w-[620px] rounded-2xl bg-lav px-4 py-3 text-[13.5px] text-muted">
+            Checkout cancelled — nothing was charged.
+          </p>
+        )}
 
-            {cancelled && (
-              <p className="mb-4 rounded-xl bg-lav px-3.5 py-2.5 text-[13px] leading-[1.5] text-muted">
-                Checkout cancelled — nothing was charged.
-              </p>
-            )}
-
-            <label className={FIELD_LABEL} htmlFor="market-name">
-              Market name
-            </label>
+        <div className="mx-auto mb-3.5 flex max-w-[620px] flex-col items-stretch gap-2 rounded-[26px] border-[1.5px] border-line bg-lav-tint p-[7px] sm:flex-row sm:items-stretch sm:rounded-full sm:pl-5">
+          <input
+            aria-label="Market name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Your market name"
+            className="min-w-0 flex-1 rounded-full bg-transparent px-4 py-3 text-[15.5px] text-ink outline-none sm:px-0 sm:py-0"
+          />
+          <div className="flex items-center gap-0.5 border-line px-2 sm:border-l-[1.5px] sm:pl-2.5">
+            <span className="text-[17px] font-bold text-faint">$</span>
             <input
-              id="market-name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Riverbend Makers Market"
-              className={`${INPUT} mb-3.5`}
+              aria-label="What you'll pay"
+              inputMode="numeric"
+              value={String(Math.round(priceCents / 100))}
+              onChange={(e) =>
+                setPriceInput(
+                  Math.max(
+                    MIN_BID_CENTS,
+                    (parseInt(e.target.value.replace(/[^0-9]/g, ""), 10) || 0) * 100,
+                  ),
+                )
+              }
+              className="w-[62px] bg-transparent text-[19px] font-extrabold tracking-[-0.02em] text-ink outline-none"
             />
-
-            <label className={FIELD_LABEL} htmlFor="market-url">
-              Vendor application link
-            </label>
-            <input
-              id="market-url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="yourmarket.com/apply"
-              className={INPUT}
-            />
-            <p className="mb-3.5 mt-1.5 text-xs leading-[1.5] text-muted">
-              You can link to your vendor application or event page.
-            </p>
-
-            <label className={FIELD_LABEL} htmlFor="market-price">
-              What you&rsquo;ll pay
-            </label>
-            <div className="mb-2.5 flex items-stretch overflow-hidden rounded-xl border-[1.5px] border-line bg-lav-tint">
-              <span className="flex items-center pl-3.5 pr-0.5 font-mono text-[22px] text-faint">
-                $
-              </span>
-              <input
-                id="market-price"
-                inputMode="numeric"
-                value={String(Math.round(priceCents / 100))}
-                onChange={(e) =>
-                  setPriceInput(
-                    Math.max(
-                      MIN_BID_CENTS,
-                      (parseInt(e.target.value.replace(/[^0-9]/g, ""), 10) || 0) * 100,
-                    ),
-                  )
-                }
-                className="min-w-0 flex-1 border-none bg-transparent px-1.5 py-3 font-mono text-[22px] font-bold text-ink outline-none"
-              />
-              <button
-                aria-label="Lower the price by a dollar"
-                onClick={() => setPriceInput(Math.max(MIN_BID_CENTS, priceCents - 100))}
-                className="w-10 shrink-0 text-xl text-muted hover:bg-lav-chip hover:text-ink"
-              >
-                −
-              </button>
-              <button
-                aria-label="Raise the price by a dollar"
-                onClick={() => setPriceInput(priceCents + 100)}
-                className="w-10 shrink-0 text-xl text-muted hover:bg-lav-chip hover:text-ink"
-              >
-                +
-              </button>
-            </div>
-            <div className="mb-[18px] text-[12.5px] font-semibold leading-[1.5] text-accent-ink">
-              {rows.length === 0
-                ? "Nothing on the board yet — this puts you at #1."
-                : priceCents > topCents
-                  ? "That puts you at #1."
-                  : `That sits at #${wouldBeRank}. ${formatUsd(topCents + 100)} would put you at the top.`}
-            </div>
-
-            <button onClick={() => setView("checkout")} className={PILL_BUTTON}>
-              List my market
+            <button
+              aria-label="Lower the price by a dollar"
+              onClick={() => setPriceInput(Math.max(MIN_BID_CENTS, priceCents - 100))}
+              className="h-[26px] w-[26px] rounded-full bg-chip text-[15px] text-muted hover:bg-line"
+            >
+              −
             </button>
-            <div className="mt-3 text-center text-[12.5px] leading-[1.5] text-muted">
-              Already listed? Same name, bigger number. You pay the difference.
-            </div>
+            <button
+              aria-label="Raise the price by a dollar"
+              onClick={() => setPriceInput(priceCents + 100)}
+              className="h-[26px] w-[26px] rounded-full bg-chip text-[15px] text-muted hover:bg-line"
+            >
+              +
+            </button>
           </div>
+          <button
+            onClick={() => setView("checkout")}
+            className="whitespace-nowrap rounded-full bg-accent px-6 py-[13px] font-sans text-[15px] font-bold text-white transition-colors hover:bg-accent-strong"
+          >
+            List my market
+          </button>
+        </div>
+        <div className="text-sm font-semibold text-accent-ink">
+          {rows.length === 0
+            ? "Nothing on the board yet — this puts you at #1."
+            : priceCents > topCents
+              ? "That puts you at #1."
+              : `That puts you at #${wouldBeRank} — ${formatUsd(topCents + 100)} takes the top spot.`}{" "}
+          Application link comes next.
         </div>
       </div>
 
