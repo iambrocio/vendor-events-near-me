@@ -7,64 +7,39 @@ export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata({
     key: "rules",
     canonical: "/rules",
-    defaultTitle: "Rules of the Board",
+    defaultTitle: "Rules",
     defaultDescription:
-      "Ten rules for listing a market on the board: real in-person events, one listing each, payments are final.",
+      "How the leaderboard works, what you can list, and what happens after you pay. Minimum $5, no refunds, listings run until the day of your event.",
   });
 }
 
-const LAST_UPDATED = "12 August 2026";
+const LAST_UPDATED = "22 August 2026";
 
-const RULES: { n: string; title: string; body: string }[] = [
+const SECTIONS: { title: string; points: string[] }[] = [
   {
-    n: "01",
-    title: "Real, in-person markets only",
-    body: "The listing has to point at an actual event vendors can physically attend — a market, fair, festival, flea, bazaar or pop-up with a date and an address. No online-only marketplaces, no dropship storefronts, no directories of other events.",
+    title: "How it works",
+    points: [
+      "The minimum price to list your market is $5. After that, it all depends on the price you want to pay.",
+      "Your event will stay in its ranking until someone surpasses it. They can surpass you by paying more than what you paid.",
+      "Listings don't expire until the day of your event. Once your event day has passed, we will no longer show it. We want to keep relevant results.",
+      "You can pay as many times as you'd like. Paying again on the same listing only costs the difference.",
+    ],
   },
   {
-    n: "02",
-    title: "One listing per market",
-    body: "One spot per event. Running your market under three fake names to squat the whole top 5 gets all three pulled, refunded once, and then you're out.",
+    title: "What can you list",
+    points: [
+      "You can list an event application form or event page.",
+      "Chat and invite links are not allowed — Telegram, WhatsApp, Discord, Messenger, Signal, and similar. The board is for products and profiles, not group chats.",
+      "Links to sexual content are not allowed. If it is porn, NSFW, or an adult platform, it does not belong on the board.",
+    ],
   },
   {
-    n: "03",
-    title: "The link goes where you say it goes",
-    body: "Your link must land on that market's own page or vendor application. No redirect chains, no affiliate wrappers, no pop-up on arrival, no page that asks for a vendor's payment details before it says what the event is.",
-  },
-  {
-    n: "04",
-    title: "Payments are final",
-    body: "Money's spent the second the payment clears. Somebody pays more an hour later and moves above you? That's not a bug, that's the entire premise. You keep whatever rank your money still holds.",
-  },
-  {
-    n: "05",
-    title: "Being passed never deletes you",
-    body: "You lose the position, never the listing. A $5 listing from launch day is still sitting on this board somewhere.",
-  },
-  {
-    n: "06",
-    title: "Moving up costs the difference",
-    body: "Pay again under the same market name and you pay the gap between your old and new amount, not the full price twice.",
-  },
-  {
-    n: "07",
-    title: "Cancelled events come down",
-    body: "If your market is cancelled or postponed, email us and we'll pull or update the listing. Leaving a dead event on the board while vendors apply and pay booth fees is the one thing that gets a permanent ban.",
-  },
-  {
-    n: "08",
-    title: "No MLM, no vendor-recruitment schemes",
-    body: "Events that exist to sell booths to downline recruits, or that charge vendors for training, leads or territory, aren't markets. Removed without refund.",
-  },
-  {
-    n: "09",
-    title: "Nothing that puts vendors at risk",
-    body: "No events requiring vendors to pay in cryptocurrency or gift cards, no unpermitted street setups sold as sanctioned markets, no adult or weapons events in general-audience listings.",
-  },
-  {
-    n: "10",
-    title: "We can refuse anything",
-    body: "Rare, but the call exists. If we pull your listing for a reason not on this list, you get your money back.",
+    title: "After you pay",
+    points: [
+      "Your listing goes live. Clicks go to the link you provided.",
+      "No refunds — since you dictate the price, all sales are final.",
+      "Rankings go into effect right away. If you don't see the change, feel free to reach out at ivan@marketlly.com.",
+    ],
   },
 ];
 
@@ -73,45 +48,32 @@ export default function Rules() {
     <div className="flex w-full flex-1 flex-col">
       <SiteHeader />
 
-      <div className="container-prose px-6 pt-[72px]">
-        <div className="eyebrow mb-[18px] text-accent-ink">
+      <div className="container-prose px-6 pb-4 pt-[72px]">
+        <h1 className="mb-5 text-balance text-[34px] font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
           Rules
-        </div>
-        <h1 className="mb-3.5 text-balance text-[34px] font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
-          Ten rules. Enforced by one guy.
         </h1>
-        <p className="mb-11 text-[15px] leading-[1.6] text-muted">
-          Last updated {LAST_UPDATED}
+
+        <p className="mb-2.5 text-pretty text-[17px] leading-[1.6] text-body">
+          Vendor Events Near Me is a public leaderboard and directory. You pay what you want
+          to get listed — and whoever pays the most gets shown at the top, with the most
+          visibility. To surpass them, you just need to pay more.
         </p>
+        <p className="mb-10 text-sm text-faint">Last updated {LAST_UPDATED}</p>
 
-        <div className="flex flex-col gap-3">
-          {RULES.map((rule) => (
-            <div
-              key={rule.n}
-              className="grid grid-cols-[44px_minmax(0,1fr)] items-start gap-4 rounded-[20px] border-[1.5px] border-line px-6 py-[22px] sm:grid-cols-[52px_minmax(0,1fr)]"
-            >
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-lav-chip text-[13.5px] font-extrabold text-accent-ink">
-                {rule.n}
-              </div>
-              <div>
-                <div className="mb-[7px] text-[18px] font-bold tracking-[-0.015em]">
-                  {rule.title}
-                </div>
-                <p className="text-pretty text-[15px] leading-[1.6] text-body">{rule.body}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-11 rounded-[20px] border-[1.5px] border-line bg-lav px-6 py-[22px]">
-          <p className="text-pretty text-[14.5px] leading-[1.6] text-muted">
-            Anything not covered here gets decided by one person reading your email. If a call
-            goes against you and you think it was wrong, say so and it gets looked at again.{" "}
-            <a href="mailto:hello@vendoreventsnearme.com" className="text-accent-deep underline">
-              hello@vendoreventsnearme.com
-            </a>
-          </p>
-        </div>
+        {SECTIONS.map((section) => (
+          <section key={section.title} className="mb-9">
+            <h2 className="mb-3.5 text-[22px] font-extrabold tracking-[-0.02em]">
+              {section.title}
+            </h2>
+            <ul className="list-disc space-y-2.5 pl-5 text-[17px] leading-[1.6] text-body marker:text-accent">
+              {section.points.map((point) => (
+                <li key={point} className="text-pretty pl-1">
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </div>
 
       <SiteFooter />

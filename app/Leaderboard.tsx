@@ -8,6 +8,7 @@ import {
   PREVIEW_COUNT,
   type BoardRow,
   displayUrl,
+  formatEventDate,
   formatUsd,
   processingFeeCents,
   rankFor,
@@ -223,6 +224,14 @@ export function Leaderboard({
                   placeholder="Asheville, NC"
                   className={INPUT}
                 />
+              </label>
+              <label className="block">
+                <span className={FIELD_LABEL}>Event date</span>
+                <input type="date" name="eventDate" className={INPUT} />
+                <span className="mt-1.5 block text-xs leading-[1.5] text-muted">
+                  Your listing runs until this day, then comes off the board. Leave it blank
+                  for a weekly or monthly market that doesn&rsquo;t have one date.
+                </span>
               </label>
               <label className="block">
                 <span className={FIELD_LABEL}>Type of market</span>
@@ -468,6 +477,9 @@ export function Leaderboard({
                         Front page
                       </span>
                     )}
+                    {row.eventDate && (
+                      <span className={CHIP}>{formatEventDate(row.eventDate)}</span>
+                    )}
                     {row.location && <span className={CHIP}>{row.location}</span>}
                     <a
                       href={row.applyUrl}
@@ -534,7 +546,13 @@ export function Leaderboard({
                       )}
                     </div>
                     <div className="mt-0.5 truncate text-[12.5px] font-semibold text-faint">
-                      {[row.category, row.location].filter(Boolean).join(" · ")}
+                      {[
+                        row.category,
+                        row.location,
+                        row.eventDate && formatEventDate(row.eventDate),
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
                     </div>
                   </div>
                   <div className="text-right">

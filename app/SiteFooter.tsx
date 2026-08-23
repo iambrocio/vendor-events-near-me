@@ -47,7 +47,7 @@ export function SiteFooter() {
         </Link>{" "}
         ·{" "}
         <a
-          href="mailto:hello@vendoreventsnearme.com"
+          href="mailto:ivan@marketlly.com"
           className="font-medium text-accent-deep hover:underline"
         >
           Contact

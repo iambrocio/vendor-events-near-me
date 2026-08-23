@@ -11,6 +11,8 @@ export type BoardRow = {
   category: string;
   /** Free-text "City, ST" as the organizer typed it. */
   location: string;
+  /** ISO date the market happens, or null for recurring markets. */
+  eventDate: string | null;
   /** Cumulative amount paid for position, in cents. */
   bidCents: number;
   applyUrl: string;
@@ -57,6 +59,19 @@ export function normalizeName(name: string) {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
+}
+
+/** `2026-09-13` → `13 Sep`, or `13 Sep 2027` when it isn't this year. */
+export function formatEventDate(iso: string, today = new Date()) {
+  const [y, m, d] = iso.split("-").map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  const sameYear = y === today.getUTCFullYear();
+  return date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: sameYear ? undefined : "numeric",
+    timeZone: "UTC",
+  });
 }
 
 /** Strips the scheme so an apply link reads as plain text on the board. */
