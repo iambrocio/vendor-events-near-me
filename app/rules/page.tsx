@@ -9,7 +9,7 @@ export async function generateMetadata(): Promise<Metadata> {
     canonical: "/rules",
     defaultTitle: "Rules of the Board",
     defaultDescription:
-      "Ten rules for listing a market on the leaderboard: real in-person events, one listing each, bids are final.",
+      "Ten rules for listing a market on the board: real in-person events, one listing each, payments are final.",
   });
 }
 
@@ -33,18 +33,18 @@ const RULES: { n: string; title: string; body: string }[] = [
   },
   {
     n: "04",
-    title: "Bids are final",
-    body: "Money's spent the second the bid clears. Somebody outbids you an hour later? That's not a bug, that's the entire premise. You keep whatever rank your bid still holds.",
+    title: "Payments are final",
+    body: "Money's spent the second the payment clears. Somebody pays more an hour later and moves above you? That's not a bug, that's the entire premise. You keep whatever rank your money still holds.",
   },
   {
     n: "05",
-    title: "Getting outbid never deletes you",
-    body: "You lose the position, never the listing. A $5 bid from launch day is still sitting on this board somewhere.",
+    title: "Being passed never deletes you",
+    body: "You lose the position, never the listing. A $5 listing from launch day is still sitting on this board somewhere.",
   },
   {
     n: "06",
-    title: "Raising a bid costs the difference",
-    body: "Bid again under the same market name and you pay the gap between your old and new bid, not the full amount twice.",
+    title: "Moving up costs the difference",
+    body: "Pay again under the same market name and you pay the gap between your old and new amount, not the full price twice.",
   },
   {
     n: "07",

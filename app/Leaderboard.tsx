@@ -65,15 +65,6 @@ export function Leaderboard({
   const feeCents = processingFeeCents(bidCents);
   const visible = showAll ? rows : rows.slice(0, PREVIEW_COUNT);
 
-  // Loads the bid that beats a row into the form, then brings the form back
-  // into view — the rows people click sit well below it.
-  function claim(row: BoardRow) {
-    setBidInput(row.bidCents + 100);
-    document
-      .getElementById("bid-form")
-      ?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }
-
   if (paid) {
     return (
       <div className="mx-auto w-full max-w-[620px] px-6 pt-24 text-center">
@@ -119,7 +110,7 @@ export function Leaderboard({
         <h1 className="mb-10 mt-[22px] text-balance text-[32px] font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[42px]">
           {bidCents > topBidCents
             ? "One charge and the top spot is yours."
-            : `Locking in #${wouldBeRank}.`}
+            : `Your spot: #${wouldBeRank}.`}
         </h1>
 
         <div className="grid grid-cols-1 items-start gap-11 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
@@ -139,7 +130,7 @@ export function Leaderboard({
                 </span>
               </div>
               <div className="flex justify-between gap-4 border-t border-line pt-[14px]">
-                <span className="text-sm text-muted">Position this bid takes</span>
+                <span className="text-sm text-muted">Position this takes</span>
                 <span className="font-mono text-[15px] font-bold text-accent">
                   #{wouldBeRank}
                 </span>
@@ -163,6 +154,18 @@ export function Leaderboard({
                   This is what owns the listing. Bid again with the same market name and
                   email to raise it and pay only the difference.
                 </span>
+              </label>
+              <label className="block">
+                <span className="mb-1.5 block text-[12.5px] font-semibold text-muted">
+                  Where it happens
+                </span>
+                <input
+                  name="location"
+                  required
+                  maxLength={80}
+                  placeholder="Asheville, NC"
+                  className={`${INPUT} bg-panel`}
+                />
               </label>
               <label className="block">
                 <span className="mb-1.5 block text-[12.5px] font-semibold text-muted">
@@ -193,7 +196,7 @@ export function Leaderboard({
             <div className="mb-5 text-[19px] font-bold tracking-[-0.01em]">Order</div>
             <div className="flex flex-col gap-3 border-b border-line pb-4">
               <div className="flex justify-between gap-3">
-                <span className="text-[14.5px]">Bid on {name.trim() || "your market"}</span>
+                <span className="text-[14.5px]">Listing for {name.trim() || "your market"}</span>
                 <span className="font-mono text-[14.5px] font-bold">
                   {formatUsd(bidCents)}
                 </span>
@@ -210,7 +213,7 @@ export function Leaderboard({
               </span>
             </div>
             <div className="mb-5 font-mono text-[11.5px] leading-[1.5] text-muted">
-              One charge. No subscription, no renewal. Raising an existing bid costs only
+              One charge. No subscription, no renewal. Raising an existing listing costs only
               the difference, so the total may come out lower on Stripe.
             </div>
 
@@ -224,8 +227,8 @@ export function Leaderboard({
               {pending ? "Taking you to Stripe…" : "Continue to payment"}
             </button>
             <div className="mt-[14px] text-[12.5px] leading-[1.55] text-muted">
-              Card details are handled by Stripe, not us. Bids are final: getting outbid
-              later moves your rank down but never removes your listing. See the{" "}
+              Card details are handled by Stripe, not us. Payments are final: somebody paying
+              more later moves your rank down but never removes your listing. See the{" "}
               <a href="/rules" className="text-accent-deep underline">
                 rules
               </a>
@@ -243,21 +246,21 @@ export function Leaderboard({
       <div className="grid grid-cols-1 items-start gap-14 border-b border-line pb-[52px] md:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
         <div>
           <div className="mb-[18px] font-mono text-[11.5px] uppercase tracking-[0.14em] text-accent">
-            Pay-to-win event listings
+            Name-your-price event listings
           </div>
           <h1 className="mb-5 text-balance text-[40px] font-extrabold leading-[0.98] tracking-[-0.03em] sm:text-[58px]">
-            Buy your way to #1. That&rsquo;s the whole website.
+            Pay what a spot is worth. That&rsquo;s the whole website.
           </h1>
           <p className="mb-[26px] max-w-[46ch] text-pretty text-[17px] leading-[1.55] text-body">
-            No ads. No algorithm. No 40-minute onboarding call. Highest bid sits at the top,
-            gets seen by every vendor who lands here, and gets blasted to our socials and the
-            homepage. Get outbid and you slide down. Bid again and you don&rsquo;t.
+            No ads. No algorithm. No 40-minute onboarding call. You decide what a spot on
+            this board is worth, and the board sorts by it — most paid sits at the top, gets
+            seen by every vendor who lands here, and goes out to our socials and the homepage.
           </p>
           <div className="flex flex-wrap gap-x-[18px] gap-y-1.5 font-mono text-[12.5px] text-muted">
             <span>
               <span className="text-live">●</span>{" "}
               {rows.length > 0
-                ? `${rows.length} markets fighting for it`
+                ? `${rows.length} markets on the board`
                 : "Nobody on the board yet"}
             </span>
             <span>Cheapest spot: {formatUsd(MIN_BID_CENTS)}</span>
@@ -266,7 +269,7 @@ export function Leaderboard({
 
         <div id="bid-form" className="border border-line-strong bg-panel p-[26px]">
           <div className="mb-5 flex items-baseline justify-between gap-3">
-            <div className="text-[19px] font-bold tracking-[-0.01em]">Take the top spot</div>
+            <div className="text-[19px] font-bold tracking-[-0.01em]">List your market</div>
             <div className="font-mono text-xs text-muted">
               from {formatUsd(MIN_BID_CENTS)}
             </div>
@@ -301,7 +304,7 @@ export function Leaderboard({
           />
 
           <label className={FIELD_LABEL} htmlFor="market-bid">
-            Your bid
+            What you&rsquo;ll pay
           </label>
           <div className="mb-2 flex items-stretch border border-line-input bg-paper">
             <span className="flex items-center pl-[13px] pr-1 font-mono text-[22px] text-muted">
@@ -322,14 +325,14 @@ export function Leaderboard({
               className="min-w-0 flex-1 border-none bg-transparent px-2 py-3 font-mono text-[22px] font-bold text-ink outline-none"
             />
             <button
-              aria-label="Lower the bid by a dollar"
+              aria-label="Lower the price by a dollar"
               onClick={() => setBidInput(Math.max(MIN_BID_CENTS, bidCents - 100))}
               className="w-9 shrink-0 border-l border-line-input text-lg text-muted hover:bg-line hover:text-ink"
             >
               −
             </button>
             <button
-              aria-label="Raise the bid by a dollar"
+              aria-label="Raise the price by a dollar"
               onClick={() => setBidInput(bidCents + 100)}
               className="w-9 shrink-0 border-l border-line-input text-lg text-muted hover:bg-line hover:text-ink"
             >
@@ -338,17 +341,17 @@ export function Leaderboard({
           </div>
           <div className="mb-[18px] font-mono text-[11.5px] leading-[1.5] text-muted">
             {rows.length === 0
-              ? "Board's empty. Any bid takes #1."
+              ? "Nothing on the board yet — this puts you at #1."
               : bidCents > topBidCents
-                ? `Takes #1 from ${rows[0].name}.`
-                : `Lands at #${wouldBeRank}. ${formatUsd(topBidCents + 100)} takes the top spot.`}
+                ? "That puts you at #1."
+                : `That sits at #${wouldBeRank}. ${formatUsd(topBidCents + 100)} would put you at the top.`}
           </div>
 
           <button onClick={() => setView("checkout")} className={PRIMARY_BUTTON}>
-            Outbid them
+            List my market
           </button>
           <div className="mt-3 text-[12.5px] leading-[1.5] text-muted">
-            Already up there? Same market name, bigger number. You only pay the difference.
+            Already listed? Same market name, bigger number, and you only pay the difference.
           </div>
         </div>
       </div>
@@ -387,7 +390,7 @@ export function Leaderboard({
             No markets on the board yet.
           </p>
           <p className="text-[14.5px] leading-[1.5] text-body">
-            First bid takes #1 and holds it until somebody pays more.
+            The first listing takes #1 and holds it until somebody pays more.
           </p>
         </div>
       ) : (
@@ -415,6 +418,11 @@ export function Leaderboard({
                       {row.category}
                     </span>
                   </div>
+                  {row.location && (
+                    <div className="mb-1.5 font-mono text-[12px] text-muted">
+                      {row.location}
+                    </div>
+                  )}
                   {row.blurb && (
                     <p className="mb-[9px] max-w-[62ch] text-pretty text-[14.5px] leading-[1.5] text-body">
                       {row.blurb}
@@ -429,16 +437,10 @@ export function Leaderboard({
                     {displayUrl(row.applyUrl)} →
                   </a>
                 </div>
-                <div className="col-span-2 flex items-center gap-4 sm:col-span-1 sm:block sm:text-right">
-                  <div className="font-mono text-[22px] font-bold tracking-[-0.02em] sm:mb-2.5">
+                <div className="col-span-2 sm:col-span-1 sm:text-right">
+                  <div className="font-mono text-[22px] font-bold tracking-[-0.02em]">
                     {formatUsd(row.bidCents)}
                   </div>
-                  <button
-                    onClick={() => claim(row)}
-                    className="border border-line-strong px-2.5 py-[7px] font-mono text-[11px] uppercase tracking-[0.05em] text-body hover:border-accent hover:text-accent-deep"
-                  >
-                    Take it for {formatUsd(row.bidCents + 100)}
-                  </button>
                 </div>
               </div>
             );
@@ -461,11 +463,11 @@ export function Leaderboard({
       <div className="mt-16 grid grid-cols-1 gap-[34px] border-y border-line py-[34px] sm:grid-cols-3">
         <div>
           <div className="mb-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
-            01 / Bid
+            01 / List
           </div>
           <p className="text-pretty text-[14.5px] leading-[1.55] text-body">
-            Market name, application link, a number. Beat the bid above you and that spot is
-            yours. Takes about nine seconds.
+            Market name, application link, and what a spot is worth to you. Takes about nine
+            seconds.
           </p>
         </div>
         <div>
@@ -474,7 +476,7 @@ export function Leaderboard({
           </div>
           <p className="text-pretty text-[14.5px] leading-[1.55] text-body">
             Top 10 goes out to our Facebook, Instagram and the weekly vendor email. Top 3 takes
-            over the homepage. Free promo, bought with money.
+            over the homepage. The more you put in, the further up you sit.
           </p>
         </div>
         <div>

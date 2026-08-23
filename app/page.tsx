@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/sanity/lib/pageSeo";
-import { formatUsd, rankFor } from "@/lib/board";
+import { formatUsd, rankOf } from "@/lib/board";
 import { getBoard, getPaidConfirmation, getRecentBids } from "@/lib/listings";
 import { Leaderboard } from "./Leaderboard";
 import { SiteFooter } from "./SiteFooter";
@@ -10,9 +10,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const metadata = await pageMetadata({
     key: "home",
     canonical: "/",
-    defaultTitle: "Vendor Events Leaderboard — Buy Your Way to #1",
+    defaultTitle: "Vendor Events Leaderboard — List Your Market",
     defaultDescription:
-      "A pay-to-win board for markets, fairs and festivals. Highest bid sits at #1, every bid is public, and vendors go straight to your application.",
+      "A board of markets, fairs and festivals, sorted by what organizers paid for their spot. Every price is public, and vendors go straight to your application.",
   });
   return {
     ...metadata,
@@ -62,11 +62,11 @@ export default async function Home({
           confirmation && {
             name: confirmation.name,
             totalCents: confirmation.totalCents,
-            // The webhook may not have landed yet, in which case there's no
-            // listing to rank and the confirmation says so instead.
-            rank: confirmation.listing
-              ? rankFor(rows, confirmation.listing.bidCents)
-              : null,
+            // `rankOf`, not `rankFor`: the listing is already on the board by
+            // now, and asking what rank its bid *would* take counts it as its
+            // own competitor — which reported everyone one place too low.
+            // Null when the webhook hasn't landed yet; the screen says so.
+            rank: confirmation.listing ? rankOf(rows, confirmation.listing.id) : null,
           }
         }
         cancelled={bid === "cancelled"}
