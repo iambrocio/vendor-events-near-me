@@ -29,7 +29,7 @@ export default function About() {
 
         <div className="flex flex-col gap-[22px] text-[17px] leading-[1.6] text-body">
           <p className="text-pretty">
-            My name is Ivan, and I&rsquo;m the co-founder of Vendor Events Near Me. I&rsquo;ve
+            My name is Ivan, and I&rsquo;m the founder of Vendor Events Near Me. I&rsquo;ve
             been attending vendor markets and events for a few years now. I usually find them
             through Facebook or a Google search. It&rsquo;s not hard, but it&rsquo;s definitely
             unconventional.
