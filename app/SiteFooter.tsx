@@ -36,22 +36,7 @@ export function SiteFooter() {
         ·{" "}
         <Link href="/rules" className="font-medium text-accent-deep hover:underline">
           Rules
-        </Link>{" "}
-        ·{" "}
-        <Link href="/blog" className="font-medium text-accent-deep hover:underline">
-          Blog
-        </Link>{" "}
-        ·{" "}
-        <Link href="/sitemap" className="font-medium text-accent-deep hover:underline">
-          Sitemap
-        </Link>{" "}
-        ·{" "}
-        <a
-          href="mailto:ivan@marketlly.com"
-          className="font-medium text-accent-deep hover:underline"
-        >
-          Contact
-        </a>
+        </Link>
       </div>
     </footer>
   );
