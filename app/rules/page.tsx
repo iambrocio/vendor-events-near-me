@@ -22,7 +22,7 @@ const SECTIONS: { title: string; points: string[] }[] = [
       "The minimum price to list your market is $5. After that, it all depends on the price you want to pay.",
       "Your event will stay in its ranking until someone surpasses it. They can surpass you by paying more than what you paid.",
       "Listings don't expire until the day of your event. Once your event day has passed, we will no longer show it. We want to keep relevant results.",
-      "You can bid as many times as you'd like.",
+      "You can pay as many times as you'd like. Paying again on the same listing only costs the difference.",
     ],
   },
   {
@@ -54,9 +54,9 @@ export default function Rules() {
         </h1>
 
         <p className="mb-2.5 text-pretty text-[17px] leading-[1.6] text-body">
-          Vendor Events Near Me is a public leaderboard and directory. You pay to list your
-          vendor event or market. The event with the highest bid gets the most visibility and
-          is featured at the top. To surpass them, you just need to bid higher.
+          Vendor Events Near Me is a public leaderboard and directory. You pay what you want
+          to get listed — and whoever pays the most gets shown at the top, with the most
+          visibility. To surpass them, you just need to pay more.
         </p>
         <p className="mb-10 text-sm text-faint">Last updated {LAST_UPDATED}</p>
 
