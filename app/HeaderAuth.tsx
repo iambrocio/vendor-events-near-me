@@ -17,25 +17,25 @@ import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
  */
 export function HeaderAuth() {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-6">
       <Show when="signed-out">
         <SignInButton>
-          <button className="rounded-full px-[14px] py-[9px] text-sm font-semibold text-ink hover:bg-lav-chip">
+          <button className="text-[15px] font-bold text-ink hover:text-accent-deep">
             Sign in
           </button>
         </SignInButton>
         <SignUpButton>
-          <button className="rounded-full bg-accent px-[18px] py-[10px] font-sans text-sm font-bold text-white transition-colors hover:bg-accent-strong">
-            List your market
+          <button className="text-[15px] font-bold text-ink hover:text-accent-deep">
+            Sign up
           </button>
         </SignUpButton>
       </Show>
       <Show when="signed-in">
         <Link
-          href="/dashboard/list-market"
-          className="rounded-full bg-accent px-[18px] py-[10px] font-sans text-sm font-bold text-white transition-colors hover:bg-accent-strong"
+          href="/dashboard"
+          className="text-[15px] font-bold text-ink hover:text-accent-deep"
         >
-          List your market
+          Dashboard
         </Link>
         <UserButton />
       </Show>
