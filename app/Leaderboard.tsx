@@ -420,38 +420,50 @@ export function Leaderboard({
           {featured.map((row, i) => {
             const rank = i + 1;
             const isTop = rank <= 3;
+            const badge = isTop ? "bg-accent text-white" : "bg-lav-chip text-accent-ink";
             return (
               <div
                 key={row.id}
-                className="grid grid-cols-[44px_minmax(0,1fr)] items-center gap-4 rounded-[20px] border-[1.5px] border-line p-4 transition-colors hover:border-accent sm:grid-cols-[56px_minmax(0,1fr)_minmax(0,178px)] sm:gap-[22px] sm:px-6 sm:py-[22px]"
+                className="rounded-[18px] border-[1.5px] border-line p-4 transition-colors hover:border-accent sm:grid sm:grid-cols-[56px_minmax(0,1fr)_minmax(0,178px)] sm:items-center sm:gap-[22px] sm:rounded-[20px] sm:px-6 sm:py-[22px]"
               >
+                {/* Rank sits in its own column on desktop, but inline with the
+                    name on a phone — two placements, so two elements. */}
                 <div
-                  className={`flex h-11 w-11 items-center justify-center rounded-full text-[15px] font-extrabold tracking-[-0.02em] sm:h-14 sm:w-14 sm:text-[19px] ${
-                    isTop ? "bg-accent text-white" : "bg-lav-chip text-accent-ink"
-                  }`}
+                  className={`hidden h-14 w-14 items-center justify-center rounded-full text-[19px] font-extrabold tracking-[-0.02em] sm:flex ${badge}`}
                 >
                   {rank}
                 </div>
-                <div className="min-w-0">
-                  <div className="mb-[7px] flex flex-wrap items-center gap-[9px]">
-                    <span className="text-[17.5px] font-extrabold leading-[1.15] tracking-[-0.025em] sm:text-[20px]">
+
+                <div className="flex min-w-0 flex-col">
+                  <div className="mb-2.5 flex items-center gap-2.5 sm:mb-[7px] sm:flex-wrap sm:gap-[9px]">
+                    <span
+                      className={`flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full text-sm font-extrabold sm:hidden ${badge}`}
+                    >
+                      {rank}
+                    </span>
+                    <span className="min-w-0 flex-1 text-[17.5px] font-extrabold leading-[1.15] tracking-[-0.025em] sm:flex-none sm:text-[20px]">
                       {row.name}
                     </span>
-                    <span className="rounded-full bg-lav-chip px-2.5 py-1 text-[11.5px] font-bold uppercase tracking-[0.03em] text-accent-ink">
+                    <span className="hidden rounded-full bg-lav-chip px-2.5 py-1 text-[11.5px] font-bold uppercase tracking-[0.03em] text-accent-ink sm:inline">
                       {row.category}
                     </span>
                     {isTop && (
-                      <span className="rounded-full bg-accent px-2.5 py-1 text-[11.5px] font-bold uppercase tracking-[0.03em] text-white">
+                      <span className="hidden rounded-full bg-accent px-2.5 py-1 text-[11.5px] font-bold uppercase tracking-[0.03em] text-white sm:inline">
                         Front page
                       </span>
                     )}
                   </div>
-                  {row.blurb && (
-                    <p className="mb-2.5 max-w-[60ch] text-pretty text-[14.5px] leading-[1.5] text-body">
-                      {row.blurb}
-                    </p>
-                  )}
-                  <div className="flex flex-wrap gap-[7px]">
+
+                  {/* Chips lead on a phone and trail on desktop. */}
+                  <div className="order-1 mb-2.5 flex flex-wrap gap-1.5 sm:order-3 sm:mb-0 sm:gap-[7px]">
+                    <span className="rounded-full bg-lav-chip px-[9px] py-1 text-[11px] font-bold uppercase tracking-[0.03em] text-accent-ink sm:hidden">
+                      {row.category}
+                    </span>
+                    {isTop && (
+                      <span className="rounded-full bg-accent px-[9px] py-1 text-[11px] font-bold uppercase tracking-[0.03em] text-white sm:hidden">
+                        Front page
+                      </span>
+                    )}
                     {row.location && <span className={CHIP}>{row.location}</span>}
                     <a
                       href={row.applyUrl}
@@ -462,17 +474,26 @@ export function Leaderboard({
                       {displayUrl(row.applyUrl)} →
                     </a>
                   </div>
+
+                  {row.blurb && (
+                    <p className="order-2 mb-3 max-w-[60ch] text-pretty text-sm leading-[1.45] text-body sm:order-2 sm:mb-2.5 sm:text-[14.5px] sm:leading-[1.5]">
+                      {row.blurb}
+                    </p>
+                  )}
                 </div>
-                <div className="col-span-2 flex items-center justify-between gap-2.5 border-t-[1.5px] border-line-soft pt-3 sm:col-span-1 sm:block sm:border-0 sm:pt-0 sm:text-right">
+
+                <div className="flex items-center justify-between gap-2.5 border-t-[1.5px] border-line-soft pt-3 sm:block sm:border-0 sm:pt-0 sm:text-right">
                   <div>
                     <div className="font-mono text-[21px] font-bold leading-none tracking-[-0.03em] sm:mb-2.5 sm:text-2xl">
                       {formatUsd(row.bidCents)}
                     </div>
-                    <div className="text-[11.5px] font-semibold text-faint sm:hidden">paid</div>
+                    <div className="mt-0.5 text-[11.5px] font-semibold text-faint sm:hidden">
+                      current price
+                    </div>
                   </div>
                   <button
                     onClick={() => passThem(row)}
-                    className="shrink-0 rounded-full border-[1.5px] border-line bg-white px-[15px] py-[11px] text-[13px] font-bold text-ink transition-colors hover:border-accent hover:bg-accent hover:text-white sm:py-[9px]"
+                    className="min-h-11 shrink-0 rounded-full border-[1.5px] border-line bg-white px-[15px] py-[11px] text-[13px] font-bold text-ink transition-colors hover:border-accent hover:bg-accent hover:text-white sm:min-h-0 sm:py-[9px]"
                   >
                     Pass them for {formatUsd(row.bidCents + 100)}
                   </button>
