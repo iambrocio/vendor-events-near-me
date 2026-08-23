@@ -61,6 +61,26 @@ export function normalizeName(name: string) {
     .trim();
 }
 
+/**
+ * Where a market happens. A state is coarse, but it's the question vendors
+ * actually ask first — whether an event is close enough to drive to — and a
+ * fixed list keeps the data filterable in a way free text never is.
+ *
+ * Shared by the form and the server, so a direct POST can't store anything
+ * that isn't on this list.
+ */
+export const US_STATES = [
+  "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
+  "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia",
+  "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
+  "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota",
+  "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire",
+  "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota",
+  "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island",
+  "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
+  "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming",
+] as const;
+
 /** `2026-09-13` → `13 Sep`, or `13 Sep 2027` when it isn't this year. */
 export function formatEventDate(iso: string, today = new Date()) {
   const [y, m, d] = iso.split("-").map(Number);

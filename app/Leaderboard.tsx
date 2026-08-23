@@ -6,6 +6,7 @@ import {
   FEATURED_COUNT,
   MIN_BID_CENTS,
   PREVIEW_COUNT,
+  US_STATES,
   type BoardRow,
   displayUrl,
   formatEventDate,
@@ -216,14 +217,15 @@ export function Leaderboard({
                 </span>
               </label>
               <label className="block">
-                <span className={FIELD_LABEL}>Where it happens</span>
-                <input
-                  name="location"
-                  required
-                  maxLength={80}
-                  placeholder="Asheville, NC"
-                  className={INPUT}
-                />
+                <span className={FIELD_LABEL}>State</span>
+                <select name="location" required defaultValue="" className={INPUT}>
+                  <option value="" disabled>
+                    Pick a state
+                  </option>
+                  {US_STATES.map((state) => (
+                    <option key={state}>{state}</option>
+                  ))}
+                </select>
               </label>
               <label className="block">
                 <span className={FIELD_LABEL}>Event date</span>
