@@ -1,52 +1,80 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Brand palette — the pay-to-win board.
-     Ink on white, one purple accent, hairlines instead of cards. */
+  /* Brand palette — soft pastel panels, one purple accent, rounded everything.
+     Ink stays the same; the hairline-on-white treatment is gone. */
   --color-ink: #1e1814;
   --color-paper: #ffffff;
-  --color-panel: rgba(30, 24, 20, 0.025);
-  --color-line: rgba(30, 24, 20, 0.13);
-  --color-line-strong: rgba(30, 24, 20, 0.18);
-  --color-line-input: rgba(30, 24, 20, 0.2);
-  --color-body: rgba(30, 24, 20, 0.74);
-  --color-muted: rgba(30, 24, 20, 0.62);
-  --color-faint: rgba(30, 24, 20, 0.5);
+
+  /* Section and chip surfaces. `lav` carries the brand; mint/sun/peach
+     differentiate the three how-it-works steps and the paid state. */
+  --color-lav: oklch(0.97 0.022 300);
+  --color-lav-chip: oklch(0.96 0.022 300);
+  --color-lav-tint: oklch(0.98 0.008 300);
+  --color-mint: oklch(0.965 0.032 160);
+  --color-sun: oklch(0.965 0.035 90);
+  --color-peach: oklch(0.965 0.035 40);
+
+  /* Accent ramp. Note hover goes DARKER now, not lighter. `accent-ink` is for
+     small bold text sitting on a pastel panel, where the mid purple is too
+     light to read. */
   --color-accent: oklch(0.62 0.15 300);
-  --color-accent-hover: oklch(0.68 0.13 300);
-  --color-accent-deep: oklch(0.56 0.16 300);
-  --color-live: oklch(0.55 0.15 150);
+  --color-accent-strong: oklch(0.55 0.16 300);
+  --color-accent-deep: oklch(0.5 0.17 300);
+  --color-accent-ink: oklch(0.45 0.16 300);
+
+  --color-live: oklch(0.62 0.16 150);
+  --color-paid: oklch(0.55 0.14 155);
+
+  --color-line: rgba(30, 24, 20, 0.1);
+  --color-line-soft: rgba(30, 24, 20, 0.08);
+  --color-chip: rgba(30, 24, 20, 0.045);
+
+  --color-body: rgba(30, 24, 20, 0.74);
+  --color-muted: rgba(30, 24, 20, 0.68);
+  --color-faint: rgba(30, 24, 20, 0.55);
 
   /* Legacy token names, remapped onto the palette above so the pages that
      aren't part of this redesign (blog, event pages, dashboard) still read as
      one site. Prefer the semantic names above in new work. */
-  --color-surface: rgba(30, 24, 20, 0.025);
-  --color-hairline: rgba(30, 24, 20, 0.13);
-  --color-sage: rgba(30, 24, 20, 0.62);
+  --color-panel: oklch(0.97 0.022 300);
+  --color-surface: oklch(0.98 0.008 300);
+  --color-hairline: rgba(30, 24, 20, 0.1);
+  --color-line-strong: rgba(30, 24, 20, 0.1);
+  --color-line-input: rgba(30, 24, 20, 0.1);
+  --color-sage: rgba(30, 24, 20, 0.68);
   --color-sage-muted: #a9a2a6;
   --color-clay: oklch(0.62 0.15 300);
-  --color-clay-dark: oklch(0.68 0.13 300);
-  --color-market-green: oklch(0.56 0.16 300);
-  --color-market-green-dark: oklch(0.62 0.15 300);
+  --color-clay-dark: oklch(0.55 0.16 300);
+  --color-market-green: oklch(0.5 0.17 300);
+  --color-market-green-dark: oklch(0.55 0.16 300);
   --color-amber: oklch(0.78 0.13 300);
-  --color-tag-soft: #f1edf3;
+  --color-tag-soft: oklch(0.96 0.022 300);
 
   --font-sans: var(--font-libre-franklin);
   --font-mono: var(--font-space-mono);
 }
 
-/* Board-width content column — everything full-bleed sits inside this. */
+/* Page-width content column — everything full-bleed sits inside this. */
 @utility container-site {
   width: 100%;
-  max-width: 1120px;
+  max-width: 1140px;
   margin-inline: auto;
 }
 
-/* Narrower measure for the reading pages (About, Rules). */
+/* Narrower measure for the reading pages (About, Rules, Why list). */
 @utility container-prose {
   width: 100%;
   max-width: 720px;
   margin-inline: auto;
+}
+
+/* The small uppercase label that opens most sections. */
+@utility eyebrow {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 body {

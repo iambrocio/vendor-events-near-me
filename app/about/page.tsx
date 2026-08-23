@@ -20,7 +20,7 @@ export default function About() {
       <SiteHeader />
 
       <div className="container-prose px-6 pt-[72px]">
-        <div className="mb-[18px] font-mono text-[11.5px] uppercase tracking-[0.14em] text-accent">
+        <div className="eyebrow mb-[18px] text-accent-ink">
           About
         </div>
         <h1 className="mb-7 text-balance text-[34px] font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
@@ -57,11 +57,11 @@ export default function About() {
           </p>
         </div>
 
-        <div className="mt-11 flex flex-wrap items-center justify-between gap-5 border border-line-strong bg-panel p-[26px]">
+        <div className="mt-11 flex flex-wrap items-center justify-between gap-5 rounded-[20px] border-[1.5px] border-line bg-lav p-[26px]">
           <div className="text-base font-semibold">Cheapest spot on the board: $5.</div>
           <Link
             href="/"
-            className="bg-accent px-5 py-3 text-[14.5px] font-bold text-white transition-colors hover:bg-accent-hover"
+            className="rounded-full bg-accent px-6 py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-accent-strong"
           >
             List your market
           </Link>

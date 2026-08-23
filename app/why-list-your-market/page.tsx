@@ -70,7 +70,7 @@ export default function WhyListYourMarket() {
       <SiteHeader />
 
       <div className="container-prose px-6 pt-[72px]">
-        <div className="mb-[18px] font-mono text-[11.5px] uppercase tracking-[0.14em] text-accent">
+        <div className="eyebrow mb-[18px] text-accent-ink">
           Why list
         </div>
         <h1 className="mb-3.5 text-balance text-[34px] font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
@@ -80,13 +80,15 @@ export default function WhyListYourMarket() {
           There are a million directories out there, so what makes us different?
         </p>
 
-        <div className="flex flex-col gap-px border-y border-line bg-line">
+        <div className="flex flex-col gap-3">
           {REASONS.map((reason) => (
             <div
               key={reason.n}
-              className="grid grid-cols-[46px_minmax(0,1fr)] items-start gap-4 bg-paper py-6 sm:grid-cols-[62px_minmax(0,1fr)]"
+              className="grid grid-cols-[44px_minmax(0,1fr)] items-start gap-4 rounded-[20px] border-[1.5px] border-line px-6 py-[22px] sm:grid-cols-[52px_minmax(0,1fr)]"
             >
-              <div className="pt-0.5 font-mono text-[15px] font-bold text-accent">{reason.n}</div>
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-lav-chip text-[13.5px] font-extrabold text-accent-ink">
+                {reason.n}
+              </div>
               <div>
                 <div className="mb-[7px] text-[18px] font-bold tracking-[-0.015em]">
                   {reason.title}
@@ -99,10 +101,10 @@ export default function WhyListYourMarket() {
                       alt={reason.proof.alt}
                       width={reason.proof.width}
                       height={reason.proof.height}
-                      className="h-auto w-full border border-line"
+                      className="h-auto w-full rounded-xl border-[1.5px] border-line"
                       sizes="(max-width: 720px) 100vw, 658px"
                     />
-                    <figcaption className="mt-2 font-mono text-[11.5px] leading-[1.5] text-muted">
+                    <figcaption className="mt-2 text-[12px] leading-[1.5] text-faint">
                       {reason.proof.caption}
                     </figcaption>
                   </figure>
@@ -112,13 +114,13 @@ export default function WhyListYourMarket() {
           ))}
         </div>
 
-        <div className="mt-11 flex flex-wrap items-center justify-between gap-5 border border-line-strong bg-panel p-[26px]">
+        <div className="mt-11 flex flex-wrap items-center justify-between gap-5 rounded-[20px] border-[1.5px] border-line bg-lav p-[26px]">
           <div className="text-base font-semibold">
             Cheapest spot on the board: {formatUsd(MIN_BID_CENTS)}.
           </div>
           <Link
             href="/"
-            className="bg-accent px-5 py-3 text-[14.5px] font-bold text-white transition-colors hover:bg-accent-hover"
+            className="rounded-full bg-accent px-6 py-3.5 text-[15px] font-bold text-white transition-colors hover:bg-accent-strong"
           >
             List your market
           </Link>
