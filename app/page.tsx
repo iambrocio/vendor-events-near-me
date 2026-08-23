@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { pageMetadata } from "@/sanity/lib/pageSeo";
-import { formatUsd, rankOf } from "@/lib/board";
+import { rankOf } from "@/lib/board";
 import { getBoard, getPaidConfirmation, getRecentBids } from "@/lib/listings";
 import { Leaderboard } from "./Leaderboard";
 import { SiteFooter } from "./SiteFooter";
@@ -45,8 +45,6 @@ export default async function Home({
     paidSession ? getPaidConfirmation(paidSession) : null,
   ]);
 
-  const pot = rows.reduce((sum, row) => sum + row.bidCents, 0);
-
   return (
     <div className="flex w-full flex-1 flex-col">
       <SiteHeader />
@@ -71,17 +69,7 @@ export default async function Home({
         }
         cancelled={bid === "cancelled"}
       />
-      <SiteFooter
-        tagline={
-          pot > 0 ? (
-            <>
-              Organizers have spent{" "}
-              <span className="font-bold text-ink">{formatUsd(pot)}</span> on this
-              board so far
-            </>
-          ) : undefined
-        }
-      />
+      <SiteFooter />
     </div>
   );
 }
