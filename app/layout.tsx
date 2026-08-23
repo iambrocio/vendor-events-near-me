@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { clerkAppearance } from "./clerk-appearance";
 import { Roboto, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "@/lib/site";
+
+const GA_ID = "G-NY33C1MRF1";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -40,6 +43,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <ClerkProvider appearance={clerkAppearance}>{children}</ClerkProvider>
       </body>
+      {/* Production only: localhost and preview deploys would otherwise report
+          into the same property as real organizers. */}
+      {process.env.NODE_ENV === "production" && <GoogleAnalytics gaId={GA_ID} />}
     </html>
   );
 }
