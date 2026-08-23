@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HeaderAuth } from "./HeaderAuth";
@@ -13,14 +14,18 @@ const NAV_LINKS = [
   { href: "/rules", label: "Rules" },
 ];
 
-export function Wordmark() {
+export function LogoMark() {
   return (
-    <span className="flex items-center gap-[9px] text-[17px] font-extrabold tracking-[-0.02em] text-ink">
-      <span className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[10px] bg-accent text-[15px] font-extrabold text-white">
-        V
-      </span>
-      Vendor Events Near Me
-    </span>
+    <Image
+      src="/logo-mark.svg"
+      alt="Vendor Events Near Me"
+      width={60}
+      height={60}
+      priority
+      // The artwork sits in the middle ~57% of its square viewBox, so it needs
+      // to render larger than its optical size to match the nav's weight.
+      className="h-[42px] w-auto"
+    />
   );
 }
 
@@ -30,10 +35,10 @@ export function SiteHeader() {
   return (
     <header className="px-6">
       <div className="container-site flex items-center justify-between gap-6 py-[18px]">
-        <Link href="/">
-          <Wordmark />
+        <Link href="/" aria-label="Vendor Events Near Me — home" className="flex">
+          <LogoMark />
         </Link>
-        {/* Below sm the header is the wordmark alone — nav and the Clerk
+        {/* Below sm the header is the mark alone — nav and the Clerk
             controls both drop away. */}
         <div className="hidden items-center gap-6 sm:flex">
           <nav className="flex items-center gap-6">
