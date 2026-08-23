@@ -260,7 +260,7 @@ export function Leaderboard({
             <span>
               <span className="text-live">●</span>{" "}
               {rows.length > 0
-                ? `${rows.length} markets fighting for it`
+                ? `${rows.length} markets on the board`
                 : "Nobody on the board yet"}
             </span>
             <span>Cheapest spot: {formatUsd(MIN_BID_CENTS)}</span>
@@ -304,7 +304,7 @@ export function Leaderboard({
           />
 
           <label className={FIELD_LABEL} htmlFor="market-bid">
-            Your bid
+            What you&rsquo;ll pay
           </label>
           <div className="mb-2 flex items-stretch border border-line-input bg-paper">
             <span className="flex items-center pl-[13px] pr-1 font-mono text-[22px] text-muted">
@@ -325,14 +325,14 @@ export function Leaderboard({
               className="min-w-0 flex-1 border-none bg-transparent px-2 py-3 font-mono text-[22px] font-bold text-ink outline-none"
             />
             <button
-              aria-label="Lower the bid by a dollar"
+              aria-label="Lower the price by a dollar"
               onClick={() => setBidInput(Math.max(MIN_BID_CENTS, bidCents - 100))}
               className="w-9 shrink-0 border-l border-line-input text-lg text-muted hover:bg-line hover:text-ink"
             >
               −
             </button>
             <button
-              aria-label="Raise the bid by a dollar"
+              aria-label="Raise the price by a dollar"
               onClick={() => setBidInput(bidCents + 100)}
               className="w-9 shrink-0 border-l border-line-input text-lg text-muted hover:bg-line hover:text-ink"
             >
