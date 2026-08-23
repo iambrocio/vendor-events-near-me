@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useActionState, useMemo, useState } from "react";
 import {
   FEATURED_COUNT,
   MIN_BID_CENTS,
@@ -79,8 +79,10 @@ export function Leaderboard({
   const [view, setView] = useState<"board" | "checkout">("board");
   const [showAll, setShowAll] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [stateFilter, setStateFilter] = useState("All");
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
+  const [location, setLocation] = useState("");
   // null means "nothing typed yet" — the field then opens a dollar over the
   // top listing rather than at a hardcoded number.
   const [priceInput, setPriceInput] = useState<number | null>(null);
@@ -95,7 +97,20 @@ export function Leaderboard({
 
   const wouldBeRank = rankFor(rows, priceCents);
   const feeCents = processingFeeCents(priceCents);
-  const visible = showAll ? rows : rows.slice(0, PREVIEW_COUNT);
+  // Filter pills are built from the states actually on the board, commonest
+  // first — a hardcoded list would offer filters that return nothing.
+  const statesOnBoard = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const row of rows) {
+      if (row.location) counts.set(row.location, (counts.get(row.location) ?? 0) + 1);
+    }
+    return [...counts.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([state]) => state);
+  }, [rows]);
+
+  const filtered = stateFilter === "All" ? rows : rows.filter((r) => r.location === stateFilter);
+  const visible = showAll ? filtered : filtered.slice(0, PREVIEW_COUNT);
   const featured = visible.slice(0, FEATURED_COUNT);
   const rest = visible.slice(FEATURED_COUNT);
   const potCents = rows.reduce((sum, row) => sum + row.bidCents, 0);
@@ -168,6 +183,12 @@ export function Leaderboard({
                 </span>
               </div>
               <div className="flex justify-between gap-4">
+                <span className="text-sm font-semibold text-muted">State</span>
+                <span className="text-right text-[14.5px] font-bold">
+                  {location || "Not set"}
+                </span>
+              </div>
+              <div className="flex justify-between gap-4">
                 <span className="text-sm font-semibold text-muted">Application link</span>
                 <span className="break-all text-right text-sm font-semibold">
                   {displayUrl(url.trim()) || "yourmarket.com/apply"}
@@ -203,6 +224,17 @@ export function Leaderboard({
             <div className="eyebrow mb-3.5 text-faint">How it shows on the board</div>
             <div className="flex flex-col gap-[14px]">
               <label className="block">
+                <span className={FIELD_LABEL}>Market name</span>
+                <input
+                  name="name"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Riverbend Makers Market"
+                  className={INPUT}
+                />
+              </label>
+              <label className="block">
                 <span className={FIELD_LABEL}>Email for the receipt</span>
                 <input
                   type="email"
@@ -215,17 +247,6 @@ export function Leaderboard({
                   This is what owns the listing. Pay again with the same market name and email
                   to move up, and you&rsquo;ll only be charged the difference.
                 </span>
-              </label>
-              <label className="block">
-                <span className={FIELD_LABEL}>State</span>
-                <select name="location" required defaultValue="" className={INPUT}>
-                  <option value="" disabled>
-                    Pick a state
-                  </option>
-                  {US_STATES.map((state) => (
-                    <option key={state}>{state}</option>
-                  ))}
-                </select>
               </label>
               <label className="block">
                 <span className={FIELD_LABEL}>Event date</span>
@@ -308,21 +329,32 @@ export function Leaderboard({
 
   return (
     <div className="container-site px-6">
-      {/* Hero — one line to get someone onto the board; the rest comes next */}
-      <div id="list-form" className="mx-auto max-w-[800px] pb-2 pt-[76px] text-center">
-        <div className="mb-6 inline-flex items-center gap-[7px] text-[13px] font-bold text-accent-ink">
-          <span className="h-[7px] w-[7px] rounded-full bg-live" />
-          {rows.length > 0
-            ? `${rows.length} ${rows.length === 1 ? "market" : "markets"} on the board`
-            : "Nothing on the board yet"}
+      {/* Hero — link, state and amount is everything needed to get going */}
+      <div id="list-form" className="mx-auto max-w-[900px] pb-2 pt-[60px] text-center">
+        <div className="mb-[34px] inline-flex flex-wrap items-center justify-center gap-2 rounded-full bg-chip px-5 py-2.5 text-[15px] text-muted">
+          <span className="h-2 w-2 rounded-full bg-live" />
+          <span className="font-bold text-live">
+            {rows.length} {rows.length === 1 ? "market" : "markets"} on the board
+          </span>
+          {potCents > 0 && <span>· {formatUsd(potCents)} paid to date ·</span>}
+          <a href="#board" className="font-semibold text-ink hover:text-accent-deep">
+            see the board →
+          </a>
         </div>
-        <h1 className="mb-[22px] text-balance text-[40px] font-extrabold leading-[1.0] tracking-[-0.04em] sm:text-[60px]">
+
+        <h1 className="mb-[18px] text-balance text-[32px] font-extrabold leading-[1.08] tracking-[-0.035em] sm:text-[44px]">
           List Your Vendor Event. Pay What It&rsquo;s Worth to You.
         </h1>
-        <p className="mx-auto mb-[34px] max-w-[60ch] text-pretty text-[18px] leading-[1.55] text-body">
-          Reach more vendors and grow your event. List your market in under 5 minutes and pay
-          whatever price you think it&rsquo;s worth. Markets that pay more show up higher on
-          the leaderboard and get seen by more vendors.
+        <p className="mx-auto mb-[30px] max-w-[60ch] text-pretty text-[18px] leading-[1.55] text-body">
+          Reach more vendors and grow your event. Markets that pay more show up higher on the
+          leaderboard and get seen by more vendors.
+        </p>
+        <p className="mx-auto mb-[26px] max-w-[60ch] text-[15.5px] leading-[1.55] text-muted">
+          <span className="font-semibold text-accent-deep">
+            New spots start at {formatUsd(MIN_BID_CENTS)}.
+          </span>{" "}
+          Paying less than the #1 price still puts you on the board at whatever place that
+          amount can take.
         </p>
 
         {cancelled && (
@@ -331,25 +363,41 @@ export function Leaderboard({
           </p>
         )}
 
-        <div className="mx-auto mb-3.5 flex max-w-[620px] flex-col gap-2 rounded-[20px] border-[1.5px] border-line bg-lav-tint p-2">
-          <input
-            aria-label="Market or event name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Your market or event name"
-            className="w-full rounded-[14px] border-[1.5px] border-line-soft bg-white px-4 py-3.5 text-[15.5px] text-ink outline-none focus:border-accent"
-          />
-          <input
-            aria-label="Application or event link"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="Application or event link — yourmarket.com/apply"
-            className="w-full rounded-[14px] border-[1.5px] border-line-soft bg-white px-4 py-3.5 text-[15.5px] text-ink outline-none focus:border-accent"
-          />
-          <div className="flex items-stretch gap-2">
-            <div className="flex min-w-0 flex-1 items-center gap-[3px] rounded-[14px] border-[1.5px] border-line-soft bg-white pl-4 pr-2">
-              <span className="mr-1 whitespace-nowrap text-xs font-bold text-faint">You pay</span>
-              <span className="text-[17px] font-bold text-faint">$</span>
+        <div className="mb-3 flex flex-wrap items-stretch gap-2 md:flex-nowrap">
+          <div className="flex min-w-0 flex-[1_1_100%] items-center gap-[9px] rounded-full border-[1.5px] border-line-input bg-white px-[18px] md:flex-[1_1_auto]">
+            <span className="shrink-0 text-[17px] text-faint" aria-hidden="true">
+              ◍
+            </span>
+            <input
+              aria-label="Your event link or application URL"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="Your event link or application URL"
+              className="min-w-0 flex-1 bg-transparent py-[17px] text-base text-ink outline-none"
+            />
+          </div>
+          <select
+            aria-label="State the market happens in"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="min-w-0 flex-[1_1_100%] cursor-pointer rounded-full border-[1.5px] border-line-input bg-white px-3.5 py-[17px] text-[15px] text-ink outline-none md:flex-[0_1_180px]"
+          >
+            <option value="">Choose a state</option>
+            {US_STATES.map((state) => (
+              <option key={state}>{state}</option>
+            ))}
+          </select>
+          <div className="flex flex-[1_1_100%] items-center justify-center gap-[7px] rounded-full border-[1.5px] border-line-input bg-white pl-[13px] pr-2 md:flex-none">
+            <span className="whitespace-nowrap text-xs font-bold text-faint">You pay</span>
+            <button
+              aria-label="Lower the price by a dollar"
+              onClick={() => setPriceInput(Math.max(MIN_BID_CENTS, priceCents - 100))}
+              className="h-[26px] w-[26px] shrink-0 rounded-full bg-lav-chip text-base font-bold leading-none text-accent-ink hover:bg-accent/25"
+            >
+              −
+            </button>
+            <span className="inline-flex items-center text-xl font-extrabold tracking-[-0.02em] text-accent-deep">
+              <span>$</span>
               <input
                 aria-label="What you'll pay"
                 inputMode="numeric"
@@ -362,32 +410,27 @@ export function Leaderboard({
                     ),
                   )
                 }
-                className="min-w-0 flex-1 bg-transparent py-3 text-[19px] font-extrabold tracking-[-0.02em] text-ink outline-none"
+                style={{ width: `${Math.max(2, String(Math.round(priceCents / 100)).length)}ch` }}
+                className="bg-transparent py-[15px] text-xl font-extrabold tracking-[-0.02em] text-accent-deep outline-none"
               />
-              <button
-                aria-label="Lower the price by a dollar"
-                onClick={() => setPriceInput(Math.max(MIN_BID_CENTS, priceCents - 100))}
-                className="h-7 w-7 shrink-0 rounded-full bg-chip text-[15px] text-muted hover:bg-line"
-              >
-                −
-              </button>
-              <button
-                aria-label="Raise the price by a dollar"
-                onClick={() => setPriceInput(priceCents + 100)}
-                className="h-7 w-7 shrink-0 rounded-full bg-chip text-[15px] text-muted hover:bg-line"
-              >
-                +
-              </button>
-            </div>
+            </span>
             <button
-              onClick={() => setView("checkout")}
-              className="shrink-0 whitespace-nowrap rounded-[14px] bg-accent px-6 py-3.5 font-sans text-[15px] font-bold text-white transition-colors hover:bg-accent-strong"
+              aria-label="Raise the price by a dollar"
+              onClick={() => setPriceInput(priceCents + 100)}
+              className="h-[26px] w-[26px] shrink-0 rounded-full bg-lav-chip text-base font-bold leading-none text-accent-ink hover:bg-accent/25"
             >
-              List my market
+              +
             </button>
           </div>
+          <button
+            onClick={() => setView("checkout")}
+            className="flex-[1_1_100%] whitespace-nowrap rounded-full bg-accent px-[26px] py-[17px] font-sans text-[15.5px] font-bold text-white transition-colors hover:bg-accent-strong md:flex-none"
+          >
+            List it
+          </button>
         </div>
-        <div className="text-sm font-semibold text-accent-ink">
+        <div className="text-[14.5px] text-muted">
+          Already on the board? Enter the same link and raise your amount.{" "}
           {rows.length === 0
             ? "Nothing on the board yet — this puts you at #1."
             : priceCents > topCents
@@ -396,27 +439,56 @@ export function Leaderboard({
         </div>
       </div>
 
+      {/* State filters */}
+      {statesOnBoard.length > 1 && (
+        <div className="flex flex-wrap items-center gap-[7px] pb-1 pt-10">
+          {["All", ...statesOnBoard.slice(0, 5)].map((state) => (
+            <button
+              key={state}
+              onClick={() => setStateFilter(state)}
+              className={`shrink-0 whitespace-nowrap rounded-full px-[15px] py-[9px] text-[13.5px] font-bold transition-colors ${
+                stateFilter === state
+                  ? "bg-accent text-white"
+                  : "bg-chip text-muted hover:bg-lav-chip"
+              }`}
+            >
+              {state}
+            </button>
+          ))}
+          {statesOnBoard.length > 5 && (
+            <select
+              aria-label="Filter the board by state"
+              value={statesOnBoard.slice(0, 5).includes(stateFilter) ? "" : stateFilter}
+              onChange={(e) => setStateFilter(e.target.value || "All")}
+              className={`shrink-0 cursor-pointer rounded-full px-3 py-[9px] text-[13.5px] font-bold outline-none ${
+                statesOnBoard.slice(0, 5).includes(stateFilter) || stateFilter === "All"
+                  ? "bg-chip text-muted"
+                  : "bg-accent text-white"
+              }`}
+            >
+              <option value="">All states ▾</option>
+              {statesOnBoard.slice(5).map((state) => (
+                <option key={state}>{state}</option>
+              ))}
+            </select>
+          )}
+        </div>
+      )}
+
       {/* The board */}
       <div
         id="board"
-        className="flex flex-wrap items-end justify-between gap-5 pb-[22px] pt-14"
+        className="flex flex-wrap items-center justify-between gap-4 pb-3.5 pt-[30px]"
       >
-        <div>
-          <h2 className="mb-2 text-[34px] font-extrabold tracking-[-0.03em]">The board</h2>
-          <p className="text-[15.5px] text-muted">
-            Sorted by one thing only.
-            {rows.length > 0 &&
-              ` Showing ${showAll ? rows.length : Math.min(PREVIEW_COUNT, rows.length)} of ${rows.length}.`}
-          </p>
-        </div>
+        <h2 className="sr-only">The board</h2>
+        <p className="text-[14.5px] text-muted">
+          Sorted by what organizers pay.
+          {filtered.length > 0 &&
+            ` Showing ${showAll ? filtered.length : Math.min(PREVIEW_COUNT, filtered.length)} of ${filtered.length}.`}
+        </p>
         {potCents > 0 && (
-          <div className="flex flex-wrap gap-2">
-            <div className="rounded-full bg-lav-chip px-[15px] py-[9px] text-[13px] font-bold">
-              {rows.length} {rows.length === 1 ? "market" : "markets"} listed
-            </div>
-            <div className="rounded-full bg-lav-chip px-[15px] py-[9px] text-[13px] font-bold">
-              {formatUsd(potCents)} paid to date
-            </div>
+          <div className="rounded-full bg-lav-chip px-3.5 py-2 text-[12.5px] font-bold">
+            {formatUsd(potCents)} paid to date
           </div>
         )}
       </div>
@@ -434,12 +506,23 @@ export function Leaderboard({
         <div className="flex flex-col gap-3">
           {featured.map((row, i) => {
             const rank = i + 1;
-            const isTop = rank <= 3;
-            const badge = isTop ? "bg-accent text-white" : "bg-lav-chip text-accent-ink";
+            const badge = rank <= 3 ? "bg-accent text-white" : "bg-lav-chip text-accent-ink";
+            // The top of the board is tinted, strongest at #1 and fading out by
+            // #5 — position is the product, so it should be visible at a glance.
+            const tint = [0.075, 0.055, 0.04, 0.026, 0.014][rank - 1];
             return (
               <div
                 key={row.id}
-                className="rounded-[18px] border-[1.5px] border-line p-4 transition-colors hover:border-accent sm:grid sm:grid-cols-[56px_minmax(0,1fr)_minmax(0,178px)] sm:items-center sm:gap-[22px] sm:rounded-[20px] sm:px-6 sm:py-[22px]"
+                style={{
+                  background: tint ? `oklch(0.62 0.19 280 / ${tint})` : undefined,
+                  borderColor:
+                    rank === 1
+                      ? "oklch(0.62 0.19 280 / 0.5)"
+                      : tint
+                        ? "oklch(0.62 0.19 280 / 0.2)"
+                        : undefined,
+                }}
+                className="rounded-[18px] border-[1.5px] border-line p-4 transition-colors hover:!border-accent sm:grid sm:grid-cols-[56px_minmax(0,1fr)_minmax(0,178px)] sm:items-center sm:gap-[22px] sm:rounded-[20px] sm:px-6 sm:py-[22px]"
               >
                 {/* Rank sits in its own column on desktop, but inline with the
                     name on a phone — two placements, so two elements. */}
@@ -459,26 +542,13 @@ export function Leaderboard({
                     <span className="min-w-0 flex-1 text-[17.5px] font-extrabold leading-[1.15] tracking-[-0.025em] sm:flex-none sm:text-[20px]">
                       {row.name}
                     </span>
-                    <span className="hidden rounded-full bg-lav-chip px-2.5 py-1 text-[11.5px] font-bold uppercase tracking-[0.03em] text-accent-ink sm:inline">
-                      {row.category}
-                    </span>
-                    {isTop && (
-                      <span className="hidden rounded-full bg-accent px-2.5 py-1 text-[11.5px] font-bold uppercase tracking-[0.03em] text-white sm:inline">
-                        Front page
-                      </span>
-                    )}
                   </div>
 
                   {/* Chips lead on a phone and trail on desktop. */}
                   <div className="order-1 mb-2.5 flex flex-wrap gap-1.5 sm:order-3 sm:mb-0 sm:gap-[7px]">
-                    <span className="rounded-full bg-lav-chip px-[9px] py-1 text-[11px] font-bold uppercase tracking-[0.03em] text-accent-ink sm:hidden">
+                    <span className="rounded-full bg-lav-chip px-[9px] py-1 text-[11px] font-bold uppercase tracking-[0.03em] text-accent-ink sm:px-2.5 sm:text-[11.5px]">
                       {row.category}
                     </span>
-                    {isTop && (
-                      <span className="rounded-full bg-accent px-[9px] py-1 text-[11px] font-bold uppercase tracking-[0.03em] text-white sm:hidden">
-                        Front page
-                      </span>
-                    )}
                     {row.eventDate && (
                       <span className={CHIP}>{formatEventDate(row.eventDate)}</span>
                     )}
