@@ -543,8 +543,11 @@ export function Leaderboard({
               Boolean,
             ) as string[];
             return (
-              <div
+              <a
                 key={row.id}
+                href={row.applyUrl}
+                target="_blank"
+                rel="nofollow noopener external"
                 style={{
                   background: tint ? `oklch(0.62 0.19 280 / ${tint})` : undefined,
                   borderColor:
@@ -554,7 +557,9 @@ export function Leaderboard({
                         ? "oklch(0.62 0.19 280 / 0.2)"
                         : undefined,
                 }}
-                className="rounded-[18px] border-[1.5px] border-line p-4 transition-colors hover:!border-accent sm:grid sm:grid-cols-[56px_minmax(0,1fr)_minmax(0,178px)] sm:items-center sm:gap-[22px] sm:rounded-[20px] sm:px-6 sm:py-[22px]"
+                // The whole card is the link now, so it holds no button — a
+                // button inside an anchor is invalid and swallows the click.
+                className="block rounded-[18px] border-[1.5px] border-line p-4 transition-colors hover:!border-accent sm:grid sm:grid-cols-[56px_minmax(0,1fr)_minmax(0,178px)] sm:items-center sm:gap-[22px] sm:rounded-[20px] sm:px-6 sm:py-[22px]"
               >
                 <div
                   style={{ color: hashColor }}
@@ -571,16 +576,9 @@ export function Leaderboard({
                     >
                       #{rank}
                     </span>
-                    {/* The link chip is gone from the card, so the name carries
-                        it — a vendor still needs one click to the application. */}
-                    <a
-                      href={row.applyUrl}
-                      target="_blank"
-                      rel="nofollow noopener external"
-                      className="min-w-0 flex-1 text-[17.5px] font-extrabold leading-[1.15] tracking-[-0.025em] hover:text-accent-deep sm:text-[20px]"
-                    >
+                    <span className="min-w-0 flex-1 text-[17.5px] font-extrabold leading-[1.15] tracking-[-0.025em] sm:text-[20px]">
                       {row.name}
-                    </a>
+                    </span>
                   </div>
 
                   {meta.length > 0 && (
@@ -604,23 +602,13 @@ export function Leaderboard({
                   )}
                 </div>
 
-                <div className="flex items-center justify-between gap-2.5 border-t-[1.5px] border-line-soft pt-3 sm:block sm:border-0 sm:pt-0 sm:text-right">
-                  <div>
-                    <div className="font-mono text-[21px] font-bold leading-none tracking-[-0.03em] sm:mb-2.5 sm:text-2xl">
-                      {formatUsd(row.bidCents)}
-                    </div>
-                    <div className="mt-0.5 text-[11.5px] font-semibold text-faint sm:hidden">
-                      paid
-                    </div>
+                <div className="flex items-baseline justify-between gap-2.5 border-t-[1.5px] border-line-soft pt-3 sm:block sm:border-0 sm:pt-0 sm:text-right">
+                  <div className="font-mono text-[21px] font-bold leading-none tracking-[-0.03em] sm:text-2xl">
+                    {formatUsd(row.bidCents)}
                   </div>
-                  <button
-                    onClick={() => passThem(row)}
-                    className="min-h-11 shrink-0 rounded-full border-[1.5px] border-line bg-white px-[15px] py-[11px] text-[13px] font-bold text-ink transition-colors hover:border-accent hover:bg-accent hover:text-white sm:min-h-0 sm:py-[9px]"
-                  >
-                    Pass them for {formatUsd(row.bidCents + 100)}
-                  </button>
+                  <div className="text-[11.5px] font-semibold text-faint sm:mt-1">paid</div>
                 </div>
-              </div>
+              </a>
             );
           })}
         </div>
