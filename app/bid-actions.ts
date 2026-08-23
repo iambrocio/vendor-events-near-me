@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { MIN_BID_CENTS, normalizeName, processingFeeCents } from "@/lib/board";
+import { MIN_BID_CENTS, US_STATES, normalizeName, processingFeeCents } from "@/lib/board";
 import { findOwnedListing, getBoard } from "@/lib/listings";
 import { getStripe } from "@/lib/stripe";
 import { SITE_URL } from "@/lib/site";
@@ -47,7 +47,7 @@ export async function startCheckout(
   const rawUrl = String(formData.get("applyUrl") ?? "");
   const blurb = String(formData.get("blurb") ?? "").trim().slice(0, 400);
   const category = String(formData.get("category") ?? "").trim().slice(0, 40) || "Market";
-  const location = String(formData.get("location") ?? "").trim().slice(0, 80);
+  const location = String(formData.get("location") ?? "").trim();
   const eventDate = String(formData.get("eventDate") ?? "").trim();
 
   if (!name || normalizeName(name).length < 2) {
@@ -63,8 +63,10 @@ export async function startCheckout(
   }
 
   // A market with no place is useless to a vendor deciding whether to drive.
-  if (location.length < 2) {
-    return { error: "Say where the market is — city and state." };
+  // Checked against the list rather than for length: the field is a select, so
+  // anything else arrived by posting straight at the action.
+  if (!(US_STATES as readonly string[]).includes(location)) {
+    return { error: "Pick the state the market happens in." };
   }
 
   // Optional: recurring markets have no single date. When given it has to be a
