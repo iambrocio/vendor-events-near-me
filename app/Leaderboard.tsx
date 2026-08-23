@@ -80,6 +80,7 @@ export function Leaderboard({
   const [showAll, setShowAll] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [stateFilter, setStateFilter] = useState("All");
+  const [heroError, setHeroError] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [location, setLocation] = useState("");
@@ -157,7 +158,6 @@ export function Leaderboard({
       <form action={formAction} className="mx-auto w-full max-w-[940px] px-6 pt-10">
         {/* What the form collected, carried to the server as-is. The server
             re-prices from these; it never trusts the total below. */}
-        <input type="hidden" name="name" value={name} />
         <input type="hidden" name="bid" value={String(priceCents / 100)} />
 
         <button
@@ -249,11 +249,28 @@ export function Leaderboard({
                 </span>
               </label>
               <label className="block">
+                <span className={FIELD_LABEL}>State</span>
+                <select
+                  name="location"
+                  required
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  className={INPUT}
+                >
+                  <option value="" disabled>
+                    Pick a state
+                  </option>
+                  {US_STATES.map((state) => (
+                    <option key={state}>{state}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="block">
                 <span className={FIELD_LABEL}>Event date</span>
-                <input type="date" name="eventDate" className={INPUT} />
+                <input type="date" name="eventDate" required className={INPUT} />
                 <span className="mt-1.5 block text-xs leading-[1.5] text-muted">
-                  Your listing runs until this day, then comes off the board. Leave it blank
-                  for a weekly or monthly market that doesn&rsquo;t have one date.
+                  Your listing runs until this day, then comes off the board. For a
+                  recurring market, use the next date it happens.
                 </span>
               </label>
               <label className="block">
@@ -268,6 +285,7 @@ export function Leaderboard({
                 <span className={FIELD_LABEL}>What vendors should know</span>
                 <textarea
                   name="blurb"
+                  required
                   rows={3}
                   maxLength={400}
                   placeholder="Ninth year on the French Broad. 120 booths, juried handmade only."
@@ -421,12 +439,20 @@ export function Leaderboard({
             </button>
           </div>
           <button
-            onClick={() => setView("checkout")}
+            onClick={() => {
+              if (!url.trim()) return setHeroError("Add the link vendors should apply through.");
+              if (!location) return setHeroError("Pick the state the market happens in.");
+              setHeroError(null);
+              setView("checkout");
+            }}
             className="flex-[1_1_100%] whitespace-nowrap rounded-full bg-accent px-[26px] py-[17px] font-sans text-[15.5px] font-bold text-white transition-colors hover:bg-accent-strong md:flex-none"
           >
             List it
           </button>
         </div>
+        {heroError && (
+          <p className="mb-2 text-[14.5px] font-semibold text-accent-deep">{heroError}</p>
+        )}
         <div className="text-[14.5px] text-muted">
           Already on the board? Enter the same link and raise your amount.{" "}
           {rows.length === 0
