@@ -349,7 +349,7 @@ export function Leaderboard({
           </span>
         </div>
 
-        <h1 className="mb-3.5 text-balance text-[29px] font-extrabold leading-[1.08] tracking-[-0.035em] md:mb-[18px] md:text-[44px]">
+        <h1 className="mb-3.5 text-balance text-[29px] font-extrabold leading-[1.08] tracking-[-0.035em] md:mb-[18px] md:text-[52px]">
           List Your Vendor Event. Pay What It&rsquo;s Worth to You.
         </h1>
         <p className="mx-auto mb-6 max-w-[60ch] text-pretty text-[15px] leading-[1.55] text-body md:mb-[30px] md:text-[18px]">
