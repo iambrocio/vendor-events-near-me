@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { pageMetadata } from "@/sanity/lib/pageSeo";
@@ -15,11 +16,26 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-const REASONS: { n: string; title: string; body: string }[] = [
+type Reason = {
+  n: string;
+  title: string;
+  body: string;
+  /** Evidence for the claim, shown under it. */
+  proof?: { src: string; alt: string; caption: string; width: number; height: number };
+};
+
+const REASONS: Reason[] = [
   {
     n: "01",
     title: "Our domain name gets searched a lot.",
     body: "People type “vendor events near me” into Google every day. Listing with us puts your market in front of that search traffic.",
+    proof: {
+      src: "/ahrefs-metrics.png",
+      alt: "Ahrefs keyword overview for “vendor events near me”: 3.8K monthly searches in the United States, 4.0K globally, and a keyword difficulty score of 0.",
+      caption: "Ahrefs, August 2026 — 3.8K US searches a month, 4.0K worldwide.",
+      width: 2522,
+      height: 848,
+    },
   },
   {
     n: "02",
@@ -76,6 +92,21 @@ export default function WhyListYourMarket() {
                   {reason.title}
                 </div>
                 <p className="text-pretty text-[15px] leading-[1.6] text-body">{reason.body}</p>
+                {reason.proof && (
+                  <figure className="mt-4">
+                    <Image
+                      src={reason.proof.src}
+                      alt={reason.proof.alt}
+                      width={reason.proof.width}
+                      height={reason.proof.height}
+                      className="h-auto w-full border border-line"
+                      sizes="(max-width: 720px) 100vw, 658px"
+                    />
+                    <figcaption className="mt-2 font-mono text-[11.5px] leading-[1.5] text-muted">
+                      {reason.proof.caption}
+                    </figcaption>
+                  </figure>
+                )}
               </div>
             </div>
           ))}
