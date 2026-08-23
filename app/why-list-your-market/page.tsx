@@ -33,7 +33,7 @@ const REASONS: { n: string; title: string; body: string }[] = [
   },
   {
     n: "04",
-    title: "You can 10x your money with the right vendors.",
+    title: "The right vendors make it pay for itself.",
     body: "A single listing that brings in a few solid vendors can pay for itself many times over.",
   },
   {
