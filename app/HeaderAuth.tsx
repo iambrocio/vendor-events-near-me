@@ -20,22 +20,22 @@ export function HeaderAuth() {
     <div className="flex items-center gap-4">
       <Show when="signed-out">
         <SignInButton>
-          <button className="text-[13.5px] font-semibold tracking-[0.01em] text-ink opacity-50 hover:text-accent-deep hover:opacity-100">
+          <button className="rounded-full px-[14px] py-[9px] text-sm font-semibold text-ink hover:bg-lav-chip">
             Sign in
           </button>
         </SignInButton>
         <SignUpButton>
-          <button className="bg-accent px-[15px] py-[9px] font-sans text-[13.5px] font-bold text-white transition-colors hover:bg-accent-hover">
-            List a market
+          <button className="rounded-full bg-accent px-[18px] py-[10px] font-sans text-sm font-bold text-white transition-colors hover:bg-accent-strong">
+            List your market
           </button>
         </SignUpButton>
       </Show>
       <Show when="signed-in">
         <Link
           href="/dashboard/list-market"
-          className="bg-accent px-[15px] py-[9px] font-sans text-[13.5px] font-bold text-white transition-colors hover:bg-accent-hover"
+          className="rounded-full bg-accent px-[18px] py-[10px] font-sans text-sm font-bold text-white transition-colors hover:bg-accent-strong"
         >
-          List a market
+          List your market
         </Link>
         <UserButton />
       </Show>

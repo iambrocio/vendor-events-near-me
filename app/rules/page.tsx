@@ -74,23 +74,25 @@ export default function Rules() {
       <SiteHeader />
 
       <div className="container-prose px-6 pt-[72px]">
-        <div className="mb-[18px] font-mono text-[11.5px] uppercase tracking-[0.14em] text-accent">
+        <div className="eyebrow mb-[18px] text-accent-ink">
           Rules
         </div>
         <h1 className="mb-3.5 text-balance text-[34px] font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
           Ten rules. Enforced by one guy.
         </h1>
-        <p className="mb-11 font-mono text-[15px] leading-[1.6] text-muted">
+        <p className="mb-11 text-[15px] leading-[1.6] text-muted">
           Last updated {LAST_UPDATED}
         </p>
 
-        <div className="flex flex-col gap-px border-y border-line bg-line">
+        <div className="flex flex-col gap-3">
           {RULES.map((rule) => (
             <div
               key={rule.n}
-              className="grid grid-cols-[46px_minmax(0,1fr)] items-start gap-4 bg-paper py-6 sm:grid-cols-[62px_minmax(0,1fr)]"
+              className="grid grid-cols-[44px_minmax(0,1fr)] items-start gap-4 rounded-[20px] border-[1.5px] border-line px-6 py-[22px] sm:grid-cols-[52px_minmax(0,1fr)]"
             >
-              <div className="pt-0.5 font-mono text-[15px] font-bold text-accent">{rule.n}</div>
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-lav-chip text-[13.5px] font-extrabold text-accent-ink">
+                {rule.n}
+              </div>
               <div>
                 <div className="mb-[7px] text-[18px] font-bold tracking-[-0.015em]">
                   {rule.title}
@@ -101,7 +103,7 @@ export default function Rules() {
           ))}
         </div>
 
-        <div className="mt-11 border border-line-strong bg-panel px-6 py-[22px]">
+        <div className="mt-11 rounded-[20px] border-[1.5px] border-line bg-lav px-6 py-[22px]">
           <p className="text-pretty text-[14.5px] leading-[1.6] text-muted">
             Anything not covered here gets decided by one person reading your email. If a call
             goes against you and you think it was wrong, say so and it gets looked at again.{" "}

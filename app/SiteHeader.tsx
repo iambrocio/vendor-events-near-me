@@ -8,7 +8,6 @@ import { HeaderAuth } from "./HeaderAuth";
 // site-wide. The auth screens and the organizer dashboard are noindex and keep
 // their own minimal chrome.
 const NAV_LINKS = [
-  { href: "/", label: "Leaderboard" },
   { href: "/why-list-your-market", label: "Why list" },
   { href: "/about", label: "About" },
   { href: "/rules", label: "Rules" },
@@ -16,8 +15,11 @@ const NAV_LINKS = [
 
 export function Wordmark() {
   return (
-    <span className="font-mono text-[13px] font-bold uppercase tracking-[0.06em] text-ink">
-      vendoreventsnearme<span className="text-accent">.com</span>
+    <span className="flex items-center gap-[9px] text-[17px] font-extrabold tracking-[-0.02em] text-ink">
+      <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-accent text-[15px] font-extrabold text-white">
+        V
+      </span>
+      Vendor Events Near Me
     </span>
   );
 }
@@ -27,19 +29,19 @@ export function SiteHeader() {
 
   return (
     <header className="px-6">
-      <div className="container-site flex items-center justify-between gap-6 border-b border-line py-[22px]">
+      <div className="container-site flex items-center justify-between gap-6 py-[18px]">
         <Link href="/">
           <Wordmark />
         </Link>
-        <div className="flex items-center gap-[26px]">
-          <nav className="hidden items-center gap-[26px] sm:flex">
+        <div className="flex items-center gap-2">
+          <nav className="hidden items-center gap-2 sm:flex">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                // The current page reads at full strength; the rest sit back.
-                className={`text-[13.5px] font-semibold tracking-[0.01em] text-ink hover:text-accent-deep ${
-                  pathname === link.href ? "opacity-100" : "opacity-50"
+                // The current page keeps the chip filled; the rest fill on hover.
+                className={`rounded-full px-[14px] py-[9px] text-sm font-semibold text-ink hover:bg-lav-chip ${
+                  pathname === link.href ? "bg-lav-chip" : ""
                 }`}
               >
                 {link.label}
