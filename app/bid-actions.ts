@@ -1,7 +1,13 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { MIN_BID_CENTS, US_STATES, normalizeName, processingFeeCents } from "@/lib/board";
+import {
+  MIN_BID_CENTS,
+  US_STATES,
+  normalizeName,
+  normalizeUrl,
+  processingFeeCents,
+} from "@/lib/board";
 import { findOwnedListing, getBoard } from "@/lib/listings";
 import { getStripe } from "@/lib/stripe";
 import { SITE_URL } from "@/lib/site";
@@ -15,20 +21,6 @@ function parseBidCents(raw: string) {
   const dollars = Number(raw.replace(/[^0-9.]/g, ""));
   if (!Number.isFinite(dollars) || dollars <= 0) return null;
   return Math.round(dollars * 100);
-}
-
-function normalizeUrl(raw: string) {
-  const trimmed = raw.trim();
-  if (!trimmed) return null;
-  const withScheme = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
-  try {
-    const url = new URL(withScheme);
-    // Rule 03: the link has to go somewhere a vendor can actually apply.
-    if (!url.hostname.includes(".")) return null;
-    return url.toString();
-  } catch {
-    return null;
-  }
 }
 
 /**

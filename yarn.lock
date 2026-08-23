@@ -2312,6 +2312,13 @@
   resolved "https://registry.yarnpkg.com/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-16.2.11.tgz#9dcb67b2b2b7e01b68f337958b6c77a973d3b46b"
   integrity sha512-md8CLNggS1Dx9pUgApzps5uAf+N8GN9xywzmNx9vHAWo94HtBwCCqkSnhIrdfQe83Dhz8Lfo/20Nb1Zxal092w==
 
+"@next/third-parties@^16.3.2":
+  version "16.3.2"
+  resolved "https://registry.yarnpkg.com/@next/third-parties/-/third-parties-16.3.2.tgz#6cc1f8e4db23000f0f22e329ecb01ebaccb61984"
+  integrity sha512-8yT1R19bU8knUyvg4uhR9Qt3IHNyjNB+HWqsUlnK4742B/OIUkGbCB16lnH7Nk3A9+Lv7qpPH6pyrXk4joViyg==
+  dependencies:
+    third-party-capital "1.0.20"
+
 "@noble/ed25519@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@noble/ed25519/-/ed25519-3.1.0.tgz#f72f53c9ef2a3feebd59caee0bb5b2d4f766aa08"
@@ -8877,6 +8884,11 @@ text-decoder@^1.1.0:
   integrity sha512-vlLytXkeP4xvEq2otHeJfSQIRyWxo/oZGEbXrtEEF9Hnmrdly59sUbzZ/QgyWuLYHctCHxFF4tRQZNQ9k60ExQ==
   dependencies:
     b4a "^1.6.4"
+
+third-party-capital@1.0.20:
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/third-party-capital/-/third-party-capital-1.0.20.tgz#e218a929a35bf4d2245da9addb8ab978d2f41685"
+  integrity sha512-oB7yIimd8SuGptespDAZnNkzIz+NWaJCu2RMsbs4Wmp9zSDUM8Nhi3s2OOcqYuv3mN4hitXc8DVx+LyUmbUDiA==
 
 through2@^2.0.3:
   version "2.0.5"

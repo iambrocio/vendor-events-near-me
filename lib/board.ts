@@ -118,3 +118,24 @@ export function rankOf(rows: Pick<BoardRow, "id">[], id: string) {
   const index = rows.findIndex((row) => row.id === id);
   return index === -1 ? null : index + 1;
 }
+
+/**
+ * A vendor application link, normalized to an absolute URL, or null if the
+ * text isn't one. Scheme is optional so organizers can type
+ * "yourmarket.com/apply". Shared by the form and the server action so the
+ * browser and Stripe agree on what counts as a link.
+ */
+export function normalizeUrl(raw: string) {
+  const trimmed = raw.trim();
+  if (!trimmed) return null;
+  const withScheme = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  try {
+    const url = new URL(withScheme);
+    // Rule 03: the link has to go somewhere a vendor can actually apply.
+    if (!url.hostname.includes(".")) return null;
+    if (/\s/.test(trimmed)) return null;
+    return url.toString();
+  } catch {
+    return null;
+  }
+}

@@ -11,11 +11,18 @@ import {
   displayUrl,
   formatEventDate,
   formatUsd,
+  normalizeUrl,
   processingFeeCents,
   rankFor,
 } from "@/lib/board";
 import { startCheckout, type BidFormState } from "./bid-actions";
 import { Confetti } from "./Confetti";
+
+// Mirrors `normalizeUrl` for the browser's own validity check, which only
+// speaks regex: an optional scheme, then a host with a dot in it, no spaces.
+// The slashes inside the classes must stay escaped — `pattern` compiles under
+// the regex `v` flag, and an invalid pattern is silently ignored, not enforced.
+const URL_PATTERN = "\\s*(https?:\\/\\/)?[^\\s\\/?#]+\\.[^\\s\\/?#]+\\S*\\s*";
 
 const FIELD_LABEL = "mb-1.5 block text-[12.5px] font-bold text-muted";
 const INPUT =
@@ -184,9 +191,7 @@ export function Leaderboard({
           ← Back to the board
         </button>
         <h1 className="mb-9 mt-6 text-balance text-[30px] font-extrabold leading-[1.05] tracking-[-0.03em] sm:text-[40px]">
-          {priceCents > topCents
-            ? "One charge and the top spot is yours."
-            : `Your spot: #${wouldBeRank}.`}
+          Complete Listing
         </h1>
 
         <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
@@ -207,7 +212,7 @@ export function Leaderboard({
               <div className="flex justify-between gap-4">
                 <span className="text-sm font-semibold text-muted">Application link</span>
                 <span className="break-all text-right text-sm font-semibold">
-                  {displayUrl(url.trim()) || "yourmarket.com/apply"}
+                  {displayUrl(normalizeUrl(url) ?? "") || "yourmarket.com/apply"}
                 </span>
               </div>
               <div className="flex items-center justify-between gap-4 border-t-[1.5px] border-line-soft pt-[14px]">
@@ -225,6 +230,9 @@ export function Leaderboard({
                 <input
                   name="applyUrl"
                   required
+                  inputMode="url"
+                  pattern={URL_PATTERN}
+                  title="A web address, like yourmarket.com/apply"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   placeholder="yourmarket.com/apply"
@@ -482,10 +490,12 @@ export function Leaderboard({
           </div>
           <button
             onClick={() => {
-              if (!url.trim()) {
+              if (!normalizeUrl(url)) {
                 setHeroError({
                   field: "url",
-                  message: "Add the link vendors should apply through.",
+                  message: url.trim()
+                    ? "That isn't a link. Use the web address vendors apply through, like yourmarket.com/apply."
+                    : "Add the link vendors should apply through.",
                 });
                 document.getElementById("hero-url")?.focus();
                 return;
