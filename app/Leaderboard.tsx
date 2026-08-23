@@ -73,6 +73,7 @@ export function Leaderboard({
   const [showAll, setShowAll] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [name, setName] = useState("");
+  const [url, setUrl] = useState("");
   // null means "nothing typed yet" — the field then opens a dollar over the
   // top listing rather than at a hardcoded number.
   const [priceInput, setPriceInput] = useState<number | null>(null);
@@ -124,6 +125,7 @@ export function Leaderboard({
         {/* What the form collected, carried to the server as-is. The server
             re-prices from these; it never trusts the total below. */}
         <input type="hidden" name="name" value={name} />
+        <input type="hidden" name="applyUrl" value={url} />
         <input type="hidden" name="bid" value={String(priceCents / 100)} />
 
         <button
@@ -148,6 +150,12 @@ export function Leaderboard({
                   {name.trim() || "Your market"}
                 </span>
               </div>
+              <div className="flex justify-between gap-4">
+                <span className="text-sm font-semibold text-muted">Application link</span>
+                <span className="break-all text-right text-sm font-semibold">
+                  {displayUrl(url.trim()) || "yourmarket.com/apply"}
+                </span>
+              </div>
               <div className="flex items-center justify-between gap-4 border-t-[1.5px] border-line-soft pt-[14px]">
                 <span className="text-sm font-semibold text-muted">Position this takes</span>
                 <span className="rounded-full bg-accent px-[13px] py-1.5 text-[13.5px] font-bold text-white">
@@ -158,18 +166,6 @@ export function Leaderboard({
 
             <div className="eyebrow mb-3.5 text-faint">How it shows on the board</div>
             <div className="flex flex-col gap-[14px]">
-              <label className="block">
-                <span className={FIELD_LABEL}>Vendor application link</span>
-                <input
-                  name="applyUrl"
-                  required
-                  placeholder="yourmarket.com/apply"
-                  className={INPUT}
-                />
-                <span className="mt-1.5 block text-xs leading-[1.5] text-muted">
-                  You can link to your vendor application or event page.
-                </span>
-              </label>
               <label className="block">
                 <span className={FIELD_LABEL}>Email for the receipt</span>
                 <input
@@ -290,13 +286,20 @@ export function Leaderboard({
           </p>
         )}
 
-        <div className="mx-auto mb-3.5 flex max-w-[620px] flex-col items-stretch gap-2 rounded-[26px] border-[1.5px] border-line bg-lav-tint p-[7px] sm:flex-row sm:items-stretch sm:rounded-full sm:pl-5">
+        <div className="mx-auto mb-3.5 flex max-w-[860px] flex-col items-stretch gap-2 rounded-[26px] border-[1.5px] border-line bg-lav-tint p-[7px] sm:flex-row sm:items-stretch sm:rounded-full sm:pl-5">
           <input
             aria-label="Market name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Your market name"
             className="min-w-0 flex-1 rounded-full bg-transparent px-4 py-3 text-[15.5px] text-ink outline-none sm:px-0 sm:py-0"
+          />
+          <input
+            aria-label="Vendor application or event page link"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="yourmarket.com/apply"
+            className="min-w-0 flex-1 rounded-full border-line bg-transparent px-4 py-3 text-[15.5px] text-ink outline-none sm:border-l-[1.5px] sm:py-0 sm:pr-0 sm:pl-3.5"
           />
           <div className="flex items-center gap-0.5 border-line px-2 sm:border-l-[1.5px] sm:pl-2.5">
             <span className="text-[17px] font-bold text-faint">$</span>
@@ -341,8 +344,10 @@ export function Leaderboard({
             ? "Nothing on the board yet — this puts you at #1."
             : priceCents > topCents
               ? "That puts you at #1."
-              : `That puts you at #${wouldBeRank} — ${formatUsd(topCents + 100)} takes the top spot.`}{" "}
-          Application link comes next.
+              : `That puts you at #${wouldBeRank} — ${formatUsd(topCents + 100)} takes the top spot.`}
+        </div>
+        <div className="mt-1.5 text-[13.5px] text-muted">
+          The link can be your vendor application or your event page.
         </div>
       </div>
 
@@ -422,7 +427,7 @@ export function Leaderboard({
                       href={row.applyUrl}
                       target="_blank"
                       rel="nofollow noopener external"
-                      className="rounded-full bg-lav-chip px-[11px] py-[5px] text-[12.5px] font-bold text-accent-ink hover:bg-accent hover:text-white"
+                      className="max-w-full break-all rounded-full bg-lav-chip px-[11px] py-[5px] text-[12.5px] font-bold text-accent-ink hover:bg-accent hover:text-white"
                     >
                       {displayUrl(row.applyUrl)} →
                     </a>

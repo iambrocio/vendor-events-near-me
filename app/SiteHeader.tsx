@@ -16,7 +16,7 @@ const NAV_LINKS = [
 export function Wordmark() {
   return (
     <span className="flex items-center gap-[9px] text-[17px] font-extrabold tracking-[-0.02em] text-ink">
-      <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-accent text-[15px] font-extrabold text-white">
+      <span className="flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[10px] bg-accent text-[15px] font-extrabold text-white">
         V
       </span>
       Vendor Events Near Me

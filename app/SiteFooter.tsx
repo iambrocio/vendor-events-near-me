@@ -61,7 +61,7 @@ export function SiteFooter({ tagline }: { tagline?: React.ReactNode }) {
             <div className="flex flex-col gap-[9px] text-sm">
               <a
                 href="mailto:hello@vendoreventsnearme.com"
-                className="text-muted hover:text-accent-deep"
+                className="break-all text-muted hover:text-accent-deep"
               >
                 hello@vendoreventsnearme.com
               </a>
