@@ -8,9 +8,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return pageMetadata({
     key: "about",
     canonical: "/about",
-    defaultTitle: "About the Board",
+    defaultTitle: "About Vendor Events Near Me",
     defaultDescription:
-      "A free directory of markets since 2023, with one paid board bolted on. One input: what a spot is worth to you.",
+      "Why Ivan built a place to find every vendor market in your area, how organizers list on it, and why it isn't scraped.",
   });
 }
 
@@ -24,63 +24,36 @@ export default function About() {
           About
         </div>
         <h1 className="mb-7 text-balance text-[34px] font-extrabold leading-[1.02] tracking-[-0.03em] sm:text-[46px]">
-          It&rsquo;s a board. The sort order is money.
+          I kept wishing this existed. So I built it.
         </h1>
 
         <div className="flex flex-col gap-[22px] text-[17px] leading-[1.6] text-body">
           <p className="text-pretty">
-            Vendor Events Near Me has been a free directory of markets, fairs and festivals
-            since 2023. Organizers post an event, vendors browse it, nobody pays a cent. That
-            still works and it isn&rsquo;t going anywhere.
+            My name is Ivan, and I&rsquo;m the co-founder of Vendor Events Near Me. I&rsquo;ve
+            been attending vendor markets and events for a few years now. I usually find them
+            through Facebook or a Google search. It&rsquo;s not hard, but it&rsquo;s definitely
+            unconventional.
           </p>
           <p className="text-pretty">
-            But a free directory sorts by date, so your October craft fair sits under this
-            Saturday&rsquo;s flea market no matter how many empty booths you&rsquo;re staring
-            at. Organizers kept asking how to jump the line. Here it is, in the crudest form we
-            could think of.
+            For the longest time, I wished someone would build something like Vendor Events
+            Near Me, a place where you can see all the markets happening in your area. So I
+            decided to take action and create the resource myself.
           </p>
           <p className="text-pretty">
-            One input: what a spot is worth to you. Most paid is #1, second most is #2. No
-            algorithm, no quality score, no ad dashboard, no &ldquo;let&rsquo;s hop on a quick
-            call.&rdquo; Want to sit higher? Put in more. Nothing else moves you.
-          </p>
-
-          <h2 className="-mb-1.5 mt-3.5 text-[22px] font-bold tracking-[-0.015em] text-ink">
-            What the money actually buys
-          </h2>
-          <p className="text-pretty">
-            The board, which vendors find through search, our newsletter and our socials. Top 10
-            goes into the weekly vendor email and gets posted to Facebook and Instagram. Top 3
-            takes the banner on the main homepage. That&rsquo;s it. That&rsquo;s the product.
+            Event organizers can list their vendor markets on the platform for a fee. I&rsquo;ve
+            seen how much organizers can grow their events when they reach more vendors and
+            attendees, and this makes that easier.
           </p>
           <p className="text-pretty">
-            You&rsquo;re buying eyeballs, not vendors. We hand people your application link and
-            then get out of the way. Zero percent of your booth fees, zero access to your vendor
-            list, zero emails to your applicants.
+            This project is part of Marketlly, which helps event organizers run vendor events
+            and manage their vendors. Not every organizer needs help managing vendors, but they
+            all need a place to share their markets and events.
           </p>
-
-          <h2 className="-mb-1.5 mt-3.5 text-[22px] font-bold tracking-[-0.015em] text-ink">
-            Everything is public on purpose
-          </h2>
           <p className="text-pretty">
-            Every price and every position is visible to everyone, your competitors included.
-            You can see what a spot costs before you spend a dollar. Try getting that out of a
-            Facebook ad.
-          </p>
-
-          <h2 className="-mb-1.5 mt-3.5 text-[22px] font-bold tracking-[-0.015em] text-ink">
-            Who&rsquo;s behind it
-          </h2>
-          <p className="text-pretty">
-            One person and the free directory. Questions, refunds and complaints all land in the
-            same inbox:{" "}
-            <a
-              href="mailto:hello@vendoreventsnearme.com"
-              className="text-accent-deep underline"
-            >
-              hello@vendoreventsnearme.com
-            </a>
-            .
+            I also stay away from scraping websites and event pages, because a lot of that
+            content is fake or spam. That&rsquo;s why we charge. You can pay based on how much
+            value the platform brings you. If it helps you sign up two or three vendors,
+            it&rsquo;s already worth it.
           </p>
         </div>
 
@@ -90,12 +63,12 @@ export default function About() {
             href="/"
             className="bg-accent px-5 py-3 text-[14.5px] font-bold text-white transition-colors hover:bg-accent-hover"
           >
-            Go get it
+            List your market
           </Link>
         </div>
       </div>
 
-      <SiteFooter tagline="A free directory with one paid board bolted on." />
+      <SiteFooter tagline="Part of Marketlly. Built so organizers have somewhere to put a market." />
     </div>
   );
 }
