@@ -330,26 +330,24 @@ export function Leaderboard({
   return (
     <div className="container-site px-6">
       {/* Hero — link, state and amount is everything needed to get going */}
-      <div id="list-form" className="mx-auto max-w-[900px] pb-2 pt-[60px] text-center">
-        <div className="mb-[34px] inline-flex flex-wrap items-center justify-center gap-2 rounded-full bg-chip px-5 py-2.5 text-[15px] text-muted">
-          <span className="h-2 w-2 rounded-full bg-live" />
+      <div id="list-form" className="mx-auto max-w-[900px] pb-2 pt-[34px] text-center md:pt-[60px]">
+        <div className="mb-[22px] inline-flex items-center gap-2 rounded-full bg-chip px-[18px] py-[9px] text-sm text-muted md:mb-[34px]">
+          <span className="h-2 w-2 shrink-0 rounded-full bg-live" />
           <span className="font-bold text-live">
-            {rows.length} {rows.length === 1 ? "market" : "markets"} on the board
+            {rows.length > 0
+              ? `${rows.length} ${rows.length === 1 ? "market" : "markets"} on the board`
+              : "Nothing on the board yet"}
           </span>
-          {potCents > 0 && <span>· {formatUsd(potCents)} paid to date ·</span>}
-          <a href="#board" className="font-semibold text-ink hover:text-accent-deep">
-            see the board →
-          </a>
         </div>
 
-        <h1 className="mb-[18px] text-balance text-[32px] font-extrabold leading-[1.08] tracking-[-0.035em] sm:text-[44px]">
+        <h1 className="mb-3.5 text-balance text-[29px] font-extrabold leading-[1.08] tracking-[-0.035em] md:mb-[18px] md:text-[44px]">
           List Your Vendor Event. Pay What It&rsquo;s Worth to You.
         </h1>
-        <p className="mx-auto mb-[30px] max-w-[60ch] text-pretty text-[18px] leading-[1.55] text-body">
+        <p className="mx-auto mb-6 max-w-[60ch] text-pretty text-[15px] leading-[1.55] text-body md:mb-[30px] md:text-[18px]">
           Reach more vendors and grow your event. Markets that pay more show up higher on the
           leaderboard and get seen by more vendors.
         </p>
-        <p className="mx-auto mb-[26px] max-w-[60ch] text-[15.5px] leading-[1.55] text-muted">
+        <p className="mx-auto mb-6 max-w-[60ch] text-[13.5px] leading-[1.55] text-muted md:text-[15.5px]">
           <span className="font-semibold text-accent-deep">
             New spots start at {formatUsd(MIN_BID_CENTS)}.
           </span>{" "}
@@ -506,10 +504,18 @@ export function Leaderboard({
         <div className="flex flex-col gap-3">
           {featured.map((row, i) => {
             const rank = i + 1;
-            const badge = rank <= 3 ? "bg-accent text-white" : "bg-lav-chip text-accent-ink";
-            // The top of the board is tinted, strongest at #1 and fading out by
-            // #5 — position is the product, so it should be visible at a glance.
+            // The top of the board is tinted, strongest at #1 and gone by #6.
+            // Position is the product, so it should read at a glance.
             const tint = [0.075, 0.055, 0.04, 0.026, 0.014][rank - 1];
+            const hashColor =
+              rank <= 3
+                ? "oklch(0.58 0.2 280)"
+                : rank <= 5
+                  ? "oklch(0.62 0.15 280)"
+                  : "rgba(30,24,20,0.45)";
+            const meta = [row.location, row.eventDate && formatEventDate(row.eventDate)].filter(
+              Boolean,
+            ) as string[];
             return (
               <div
                 key={row.id}
@@ -524,49 +530,51 @@ export function Leaderboard({
                 }}
                 className="rounded-[18px] border-[1.5px] border-line p-4 transition-colors hover:!border-accent sm:grid sm:grid-cols-[56px_minmax(0,1fr)_minmax(0,178px)] sm:items-center sm:gap-[22px] sm:rounded-[20px] sm:px-6 sm:py-[22px]"
               >
-                {/* Rank sits in its own column on desktop, but inline with the
-                    name on a phone — two placements, so two elements. */}
                 <div
-                  className={`hidden h-14 w-14 items-center justify-center rounded-full text-[19px] font-extrabold tracking-[-0.02em] sm:flex ${badge}`}
+                  style={{ color: hashColor }}
+                  className="hidden text-[22px] font-extrabold tracking-[-0.03em] sm:block"
                 >
-                  {rank}
+                  #{rank}
                 </div>
 
-                <div className="flex min-w-0 flex-col">
-                  <div className="mb-2.5 flex items-center gap-2.5 sm:mb-[7px] sm:flex-wrap sm:gap-[9px]">
+                <div className="min-w-0">
+                  <div className="mb-2.5 flex items-center gap-2.5 sm:mb-[7px] sm:block">
                     <span
-                      className={`flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-full text-sm font-extrabold sm:hidden ${badge}`}
+                      style={{ color: hashColor }}
+                      className="shrink-0 text-[17px] font-extrabold tracking-[-0.03em] sm:hidden"
                     >
-                      {rank}
+                      #{rank}
                     </span>
-                    <span className="min-w-0 flex-1 text-[17.5px] font-extrabold leading-[1.15] tracking-[-0.025em] sm:flex-none sm:text-[20px]">
-                      {row.name}
-                    </span>
-                  </div>
-
-                  {/* Chips lead on a phone and trail on desktop. */}
-                  <div className="order-1 mb-2.5 flex flex-wrap gap-1.5 sm:order-3 sm:mb-0 sm:gap-[7px]">
-                    <span className="rounded-full bg-lav-chip px-[9px] py-1 text-[11px] font-bold uppercase tracking-[0.03em] text-accent-ink sm:px-2.5 sm:text-[11.5px]">
-                      {row.category}
-                    </span>
-                    {row.eventDate && (
-                      <span className={CHIP}>{formatEventDate(row.eventDate)}</span>
-                    )}
-                    {row.location && <span className={CHIP}>{row.location}</span>}
+                    {/* The link chip is gone from the card, so the name carries
+                        it — a vendor still needs one click to the application. */}
                     <a
                       href={row.applyUrl}
                       target="_blank"
                       rel="nofollow noopener external"
-                      className="max-w-full break-all rounded-full bg-lav-chip px-[11px] py-[5px] text-[12.5px] font-bold text-accent-ink hover:bg-accent hover:text-white"
+                      className="min-w-0 flex-1 text-[17.5px] font-extrabold leading-[1.15] tracking-[-0.025em] hover:text-accent-deep sm:text-[20px]"
                     >
-                      {displayUrl(row.applyUrl)} →
+                      {row.name}
                     </a>
                   </div>
 
-                  {row.blurb && (
-                    <p className="order-2 mb-3 max-w-[60ch] text-pretty text-sm leading-[1.45] text-body sm:order-2 sm:mb-2.5 sm:text-[14.5px] sm:leading-[1.5]">
-                      {row.blurb}
-                    </p>
+                  {meta.length > 0 && (
+                    <div className="mb-2.5 text-[12.5px] font-semibold text-muted sm:hidden">
+                      {meta.join(" · ")}
+                    </div>
+                  )}
+
+                  <p className="mb-2.5 line-clamp-3 max-w-[60ch] text-pretty text-[13.5px] leading-[1.45] text-body sm:mb-2.5 sm:line-clamp-2 sm:text-[14.5px] sm:leading-[1.5]">
+                    {row.blurb}
+                  </p>
+
+                  {meta.length > 0 && (
+                    <div className="hidden flex-wrap gap-[7px] sm:flex">
+                      {meta.map((item) => (
+                        <span key={item} className={CHIP}>
+                          {item}
+                        </span>
+                      ))}
+                    </div>
                   )}
                 </div>
 
