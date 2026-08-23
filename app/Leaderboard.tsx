@@ -15,6 +15,7 @@ import {
   rankFor,
 } from "@/lib/board";
 import { startCheckout, type BidFormState } from "./bid-actions";
+import { Confetti } from "./Confetti";
 
 const FIELD_LABEL = "mb-1.5 block text-[12.5px] font-bold text-muted";
 const INPUT =
@@ -367,7 +368,11 @@ export function Leaderboard({
   return (
     <div className="container-site px-6">
       {/* Hero — link, state and amount is everything needed to get going */}
-      <div id="list-form" className="mx-auto max-w-[900px] pb-2 pt-[34px] text-center md:pt-[60px]">
+      <div
+        id="list-form"
+        className="relative mx-auto max-w-[900px] pb-2 pt-[34px] text-center md:pt-[60px]"
+      >
+        <Confetti />
         <div className="mb-[22px] inline-flex items-center gap-2 rounded-full bg-chip px-[18px] py-[9px] text-sm text-muted md:mb-[34px]">
           <span className="h-2 w-2 shrink-0 rounded-full bg-live" />
           <span className="font-bold text-live">
@@ -400,7 +405,7 @@ export function Leaderboard({
 
         <div className="mb-3 flex flex-wrap items-stretch gap-2 md:flex-nowrap">
           <div
-            className={`flex min-w-0 flex-[1_1_100%] items-center gap-[9px] rounded-full border-[1.5px] bg-white px-[18px] md:flex-[1_1_auto] ${
+            className={`flex min-w-0 flex-[1_1_100%] items-center gap-[9px] rounded-full border-[1.5px] bg-white px-4 md:flex-[1_1_auto] ${
               heroError?.field === "url" ? "border-danger bg-danger-soft" : "border-line-input"
             }`}
           >
@@ -417,7 +422,7 @@ export function Leaderboard({
                 if (heroError?.field === "url") setHeroError(null);
               }}
               placeholder="Your event link or application URL"
-              className="min-w-0 flex-1 bg-transparent py-[17px] text-base text-ink outline-none"
+              className="min-w-0 flex-1 bg-transparent py-[13px] text-[15px] text-ink outline-none"
             />
           </div>
           <select
@@ -429,7 +434,7 @@ export function Leaderboard({
               setLocation(e.target.value);
               if (heroError?.field === "location") setHeroError(null);
             }}
-            className={`min-w-0 flex-[1_1_100%] cursor-pointer rounded-full border-[1.5px] px-3.5 py-[17px] text-[15px] text-ink outline-none md:flex-[0_1_180px] ${
+            className={`min-w-0 flex-[1_1_100%] cursor-pointer rounded-full border-[1.5px] px-3 py-[13px] text-[14.5px] text-ink outline-none md:flex-[0_1_170px] ${
               heroError?.field === "location"
                 ? "border-danger bg-danger-soft"
                 : "border-line-input bg-white"
@@ -440,16 +445,16 @@ export function Leaderboard({
               <option key={state}>{state}</option>
             ))}
           </select>
-          <div className="flex flex-[1_1_100%] items-center justify-center gap-[7px] rounded-full border-[1.5px] border-line-input bg-white pl-[13px] pr-2 md:flex-none">
+          <div className="flex flex-[1_1_100%] items-center justify-center gap-[7px] rounded-full border-[1.5px] border-line-input bg-white pl-3 pr-1.5 md:flex-none">
             <span className="whitespace-nowrap text-xs font-bold text-faint">You pay</span>
             <button
               aria-label="Lower the price by a dollar"
               onClick={() => setPriceInput(Math.max(MIN_BID_CENTS, priceCents - 100))}
-              className="h-[26px] w-[26px] shrink-0 rounded-full bg-lav-chip text-base font-bold leading-none text-accent-ink hover:bg-accent/25"
+              className="h-[23px] w-[23px] shrink-0 rounded-full bg-lav-chip text-[15px] font-bold leading-none text-accent-ink hover:bg-accent/25"
             >
               −
             </button>
-            <span className="inline-flex items-center text-xl font-extrabold tracking-[-0.02em] text-accent-deep">
+            <span className="inline-flex items-center text-[18px] font-extrabold tracking-[-0.02em] text-accent-deep">
               <span>$</span>
               <input
                 aria-label="What you'll pay"
@@ -464,13 +469,13 @@ export function Leaderboard({
                   )
                 }
                 style={{ width: `${Math.max(2, String(Math.round(priceCents / 100)).length)}ch` }}
-                className="bg-transparent py-[15px] text-xl font-extrabold tracking-[-0.02em] text-accent-deep outline-none"
+                className="bg-transparent py-[13px] text-[18px] font-extrabold tracking-[-0.02em] text-accent-deep outline-none"
               />
             </span>
             <button
               aria-label="Raise the price by a dollar"
               onClick={() => setPriceInput(priceCents + 100)}
-              className="h-[26px] w-[26px] shrink-0 rounded-full bg-lav-chip text-base font-bold leading-none text-accent-ink hover:bg-accent/25"
+              className="h-[23px] w-[23px] shrink-0 rounded-full bg-lav-chip text-[15px] font-bold leading-none text-accent-ink hover:bg-accent/25"
             >
               +
             </button>
@@ -496,7 +501,7 @@ export function Leaderboard({
               setHeroError(null);
               setView("checkout");
             }}
-            className="flex-[1_1_100%] whitespace-nowrap rounded-full bg-accent px-[26px] py-[17px] font-sans text-[15.5px] font-bold text-white transition-colors hover:bg-accent-strong md:flex-none"
+            className="flex-[1_1_100%] whitespace-nowrap rounded-full bg-accent px-[22px] py-[13px] font-sans text-[15px] font-bold text-white transition-colors hover:bg-accent-strong md:flex-none"
           >
             List it
           </button>
