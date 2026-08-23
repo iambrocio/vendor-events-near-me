@@ -66,8 +66,8 @@ export async function POST(request: Request) {
       category: meta.category || "Market",
       location: meta.location ?? "",
       blurb: meta.blurb ?? "",
-      // Metadata values are always strings; "" means the organizer left it
-      // blank, which is a recurring market rather than a date of zero.
+      // Metadata values are always strings, and the action requires a date, so
+      // "" only shows up on a session created before it was mandatory.
       eventDate: meta.eventDate || null,
       totalCents,
       chargedCents: Number.isFinite(chargedCents) ? chargedCents : totalCents,

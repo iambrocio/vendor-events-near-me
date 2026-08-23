@@ -51,8 +51,9 @@ export async function getBoard(): Promise<BoardRow[]> {
   const { data, error } = await getSupabase()
     .from("listings")
     .select(SELECT)
-    // A market still shows on its own day, so this is `gte`, not `gt`. Dateless
-    // listings are recurring markets and stay up.
+    // A market still shows on its own day, so this is `gte`, not `gt`. A date
+    // is required at checkout, so a null one means the listing predates the
+    // column; those stay up rather than vanishing retroactively.
     .or(`event_date.is.null,event_date.gte.${todayIso()}`)
     .order("bid_cents", { ascending: false })
     .order("created_at", { ascending: true });
@@ -110,7 +111,7 @@ export async function recordPaidBid(input: {
   category: string;
   location: string;
   blurb: string;
-  /** ISO date the market happens, or null for recurring markets. */
+  /** ISO date the market happens. Null only on listings predating the column. */
   eventDate: string | null;
   /** The listing's new cumulative total — not the amount charged. */
   totalCents: number;

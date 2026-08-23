@@ -1,6 +1,6 @@
--- When the market actually happens. Nullable on purpose: plenty of markets are
--- weekly or monthly with no single date, and every listing that predates this
--- column has none. A null date means the listing never expires.
+-- When the market actually happens. Required at checkout — a recurring market
+-- lists its next date and pays again for the one after. Nullable only so the
+-- listings that predate this column keep showing rather than vanishing.
 alter table listings add column if not exists event_date date;
 
 -- The board filters on this on every read.

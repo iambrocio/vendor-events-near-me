@@ -11,7 +11,7 @@ export type BoardRow = {
   category: string;
   /** Free-text "City, ST" as the organizer typed it. */
   location: string;
-  /** ISO date the market happens, or null for recurring markets. */
+  /** ISO date the market happens. Null only on listings predating the column. */
   eventDate: string | null;
   /** Cumulative amount paid for position, in cents. */
   bidCents: number;
