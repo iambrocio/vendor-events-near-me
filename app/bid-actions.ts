@@ -69,17 +69,21 @@ export async function startCheckout(
     return { error: "Pick the state the market happens in." };
   }
 
-  // Optional: recurring markets have no single date. When given it has to be a
-  // real date that hasn't already passed, or the listing would be hidden the
-  // moment it went up.
-  if (eventDate) {
-    const today = new Date().toISOString().slice(0, 10);
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(eventDate) || Number.isNaN(Date.parse(eventDate))) {
-      return { error: "That event date doesn't look like a real date." };
-    }
-    if (eventDate < today) {
-      return { error: "That event date has already passed." };
-    }
+  if (!blurb) {
+    return { error: "Add a line about the market so vendors know what it is." };
+  }
+
+  // Required, and it has to be a real date that hasn't already passed — a past
+  // date would hide the listing the moment it went up.
+  if (!eventDate) {
+    return { error: "Add the date the market happens." };
+  }
+  const today = new Date().toISOString().slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(eventDate) || Number.isNaN(Date.parse(eventDate))) {
+    return { error: "That event date doesn't look like a real date." };
+  }
+  if (eventDate < today) {
+    return { error: "That event date has already passed." };
   }
 
   const requested = parseBidCents(String(formData.get("bid") ?? ""));
