@@ -116,15 +116,6 @@ export function Leaderboard({
   const rest = visible.slice(FEATURED_COUNT);
   const potCents = rows.reduce((sum, row) => sum + row.bidCents, 0);
 
-  // "Pass them for $X" loads the amount that clears a row into the form, then
-  // brings the form back into view — the rows people click sit below it.
-  function passThem(row: BoardRow) {
-    setPriceInput(row.bidCents + 100);
-    document
-      .getElementById("list-form")
-      ?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }
-
   if (paid) {
     return (
       <div className="mx-auto w-full max-w-[680px] px-6 pt-[60px]">
@@ -621,9 +612,12 @@ export function Leaderboard({
             {rest.map((row, i) => {
               const rank = FEATURED_COUNT + i + 1;
               return (
-                <div
+                <a
                   key={row.id}
-                  className="grid grid-cols-[30px_minmax(0,1fr)_auto] items-center gap-2.5 border-t-[1.5px] border-line-soft py-3.5 sm:grid-cols-[48px_minmax(0,1fr)_auto_auto] sm:gap-[18px] sm:px-2 sm:py-4 sm:hover:bg-lav-tint"
+                  href={row.applyUrl}
+                  target="_blank"
+                  rel="nofollow noopener external"
+                  className="grid grid-cols-[30px_minmax(0,1fr)_auto] items-center gap-2.5 border-t-[1.5px] border-line-soft py-3.5 transition-colors hover:bg-lav-tint sm:grid-cols-[48px_minmax(0,1fr)_auto] sm:gap-[18px] sm:px-2 sm:py-4"
                 >
                   <div className="font-mono text-[13.5px] font-bold text-faint sm:text-[15px]">
                     #{rank}
@@ -649,24 +643,10 @@ export function Leaderboard({
                         .join(" · ")}
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="font-mono text-[15.5px] font-bold leading-tight tracking-[-0.02em] sm:text-[17px]">
-                      {formatUsd(row.bidCents)}
-                    </div>
-                    <button
-                      onClick={() => passThem(row)}
-                      className="pt-0.5 text-xs font-bold text-accent-deep sm:hidden"
-                    >
-                      Pass →
-                    </button>
+                  <div className="text-right font-mono text-[15.5px] font-bold tracking-[-0.02em] sm:text-[17px]">
+                    {formatUsd(row.bidCents)}
                   </div>
-                  <button
-                    onClick={() => passThem(row)}
-                    className="hidden shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-[12.5px] font-bold text-accent-deep hover:bg-lav-chip sm:block"
-                  >
-                    Pass for {formatUsd(row.bidCents + 100)}
-                  </button>
-                </div>
+                </a>
               );
             })}
           </div>
