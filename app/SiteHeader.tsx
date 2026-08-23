@@ -33,8 +33,10 @@ export function SiteHeader() {
         <Link href="/">
           <Wordmark />
         </Link>
-        <div className="flex items-center gap-6">
-          <nav className="hidden items-center gap-6 sm:flex">
+        {/* Below sm the header is the wordmark alone — nav and the Clerk
+            controls both drop away. */}
+        <div className="hidden items-center gap-6 sm:flex">
+          <nav className="flex items-center gap-6">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.label}
