@@ -23,6 +23,9 @@ export const MIN_BID_CENTS = 500;
 /** Rows shown before "Show all". */
 export const PREVIEW_COUNT = 12;
 
+/** Top rows given the full card treatment; the rest run as a compact list. */
+export const FEATURED_COUNT = 5;
+
 /**
  * What we add to a bid to cover card processing — the "Processing" line on the
  * order summary. Modelled on Stripe's 2.9% + 30¢ and rounded up to a whole

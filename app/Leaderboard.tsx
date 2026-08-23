@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState, useState } from "react";
 import {
+  FEATURED_COUNT,
   MIN_BID_CENTS,
   PREVIEW_COUNT,
   type BoardRow,
@@ -89,7 +90,18 @@ export function Leaderboard({
   const wouldBeRank = rankFor(rows, priceCents);
   const feeCents = processingFeeCents(priceCents);
   const visible = showAll ? rows : rows.slice(0, PREVIEW_COUNT);
+  const featured = visible.slice(0, FEATURED_COUNT);
+  const rest = visible.slice(FEATURED_COUNT);
   const potCents = rows.reduce((sum, row) => sum + row.bidCents, 0);
+
+  // "Pass them for $X" loads the amount that clears a row into the form, then
+  // brings the form back into view — the rows people click sit below it.
+  function passThem(row: BoardRow) {
+    setPriceInput(row.bidCents + 100);
+    document
+      .getElementById("list-form")
+      ?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
 
   if (paid) {
     return (
@@ -125,7 +137,6 @@ export function Leaderboard({
         {/* What the form collected, carried to the server as-is. The server
             re-prices from these; it never trusts the total below. */}
         <input type="hidden" name="name" value={name} />
-        <input type="hidden" name="applyUrl" value={url} />
         <input type="hidden" name="bid" value={String(priceCents / 100)} />
 
         <button
@@ -161,6 +172,25 @@ export function Leaderboard({
                 <span className="rounded-full bg-accent px-[13px] py-1.5 text-[13.5px] font-bold text-white">
                   #{wouldBeRank}
                 </span>
+              </div>
+            </div>
+
+            <div className="eyebrow mb-3.5 text-faint">Where vendors apply</div>
+            <div className="mb-7">
+              <label className="block">
+                <span className={FIELD_LABEL}>Vendor application link</span>
+                <input
+                  name="applyUrl"
+                  required
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="yourmarket.com/apply"
+                  className={INPUT}
+                />
+              </label>
+              <div className="mt-[7px] text-[12.5px] text-muted">
+                Vendors click straight through to your own form. We never email your
+                applicants.
               </div>
             </div>
 
@@ -286,58 +316,61 @@ export function Leaderboard({
           </p>
         )}
 
-        <div className="mx-auto mb-3.5 flex max-w-[860px] flex-col items-stretch gap-2 rounded-[26px] border-[1.5px] border-line bg-lav-tint p-[7px] sm:flex-row sm:items-stretch sm:rounded-full sm:pl-5">
+        <div className="mx-auto mb-3.5 flex max-w-[620px] flex-col gap-2 rounded-[20px] border-[1.5px] border-line bg-lav-tint p-2">
           <input
-            aria-label="Market name"
+            aria-label="Market or event name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Your market name"
-            className="min-w-0 flex-1 rounded-full bg-transparent px-4 py-3 text-[15.5px] text-ink outline-none sm:px-0 sm:py-0"
+            placeholder="Your market or event name"
+            className="w-full rounded-[14px] border-[1.5px] border-line-soft bg-white px-4 py-3.5 text-[15.5px] text-ink outline-none focus:border-accent"
           />
           <input
-            aria-label="Vendor application or event page link"
+            aria-label="Application or event link"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
-            placeholder="yourmarket.com/apply"
-            className="min-w-0 flex-1 rounded-full border-line bg-transparent px-4 py-3 text-[15.5px] text-ink outline-none sm:border-l-[1.5px] sm:py-0 sm:pr-0 sm:pl-3.5"
+            placeholder="Application or event link — yourmarket.com/apply"
+            className="w-full rounded-[14px] border-[1.5px] border-line-soft bg-white px-4 py-3.5 text-[15.5px] text-ink outline-none focus:border-accent"
           />
-          <div className="flex items-center gap-0.5 border-line px-2 sm:border-l-[1.5px] sm:pl-2.5">
-            <span className="text-[17px] font-bold text-faint">$</span>
-            <input
-              aria-label="What you'll pay"
-              inputMode="numeric"
-              value={String(Math.round(priceCents / 100))}
-              onChange={(e) =>
-                setPriceInput(
-                  Math.max(
-                    MIN_BID_CENTS,
-                    (parseInt(e.target.value.replace(/[^0-9]/g, ""), 10) || 0) * 100,
-                  ),
-                )
-              }
-              className="w-[62px] bg-transparent text-[19px] font-extrabold tracking-[-0.02em] text-ink outline-none"
-            />
+          <div className="flex items-stretch gap-2">
+            <div className="flex min-w-0 flex-1 items-center gap-[3px] rounded-[14px] border-[1.5px] border-line-soft bg-white pl-4 pr-2">
+              <span className="mr-1 whitespace-nowrap text-xs font-bold text-faint">You pay</span>
+              <span className="text-[17px] font-bold text-faint">$</span>
+              <input
+                aria-label="What you'll pay"
+                inputMode="numeric"
+                value={String(Math.round(priceCents / 100))}
+                onChange={(e) =>
+                  setPriceInput(
+                    Math.max(
+                      MIN_BID_CENTS,
+                      (parseInt(e.target.value.replace(/[^0-9]/g, ""), 10) || 0) * 100,
+                    ),
+                  )
+                }
+                className="min-w-0 flex-1 bg-transparent py-3 text-[19px] font-extrabold tracking-[-0.02em] text-ink outline-none"
+              />
+              <button
+                aria-label="Lower the price by a dollar"
+                onClick={() => setPriceInput(Math.max(MIN_BID_CENTS, priceCents - 100))}
+                className="h-7 w-7 shrink-0 rounded-full bg-chip text-[15px] text-muted hover:bg-line"
+              >
+                −
+              </button>
+              <button
+                aria-label="Raise the price by a dollar"
+                onClick={() => setPriceInput(priceCents + 100)}
+                className="h-7 w-7 shrink-0 rounded-full bg-chip text-[15px] text-muted hover:bg-line"
+              >
+                +
+              </button>
+            </div>
             <button
-              aria-label="Lower the price by a dollar"
-              onClick={() => setPriceInput(Math.max(MIN_BID_CENTS, priceCents - 100))}
-              className="h-[26px] w-[26px] rounded-full bg-chip text-[15px] text-muted hover:bg-line"
+              onClick={() => setView("checkout")}
+              className="shrink-0 whitespace-nowrap rounded-[14px] bg-accent px-6 py-3.5 font-sans text-[15px] font-bold text-white transition-colors hover:bg-accent-strong"
             >
-              −
-            </button>
-            <button
-              aria-label="Raise the price by a dollar"
-              onClick={() => setPriceInput(priceCents + 100)}
-              className="h-[26px] w-[26px] rounded-full bg-chip text-[15px] text-muted hover:bg-line"
-            >
-              +
+              List my market
             </button>
           </div>
-          <button
-            onClick={() => setView("checkout")}
-            className="whitespace-nowrap rounded-full bg-accent px-6 py-[13px] font-sans text-[15px] font-bold text-white transition-colors hover:bg-accent-strong"
-          >
-            List my market
-          </button>
         </div>
         <div className="text-sm font-semibold text-accent-ink">
           {rows.length === 0
@@ -345,9 +378,6 @@ export function Leaderboard({
             : priceCents > topCents
               ? "That puts you at #1."
               : `That puts you at #${wouldBeRank} — ${formatUsd(topCents + 100)} takes the top spot.`}
-        </div>
-        <div className="mt-1.5 text-[13.5px] text-muted">
-          The link can be your vendor application or your event page.
         </div>
       </div>
 
@@ -387,24 +417,24 @@ export function Leaderboard({
         </div>
       ) : (
         <div className="flex flex-col gap-3">
-          {visible.map((row, i) => {
+          {featured.map((row, i) => {
             const rank = i + 1;
             const isTop = rank <= 3;
             return (
               <div
                 key={row.id}
-                className="grid grid-cols-[56px_minmax(0,1fr)] items-center gap-5 rounded-[20px] border-[1.5px] border-line px-6 py-[22px] transition-colors hover:border-accent sm:grid-cols-[56px_minmax(0,1fr)_minmax(0,140px)]"
+                className="grid grid-cols-[44px_minmax(0,1fr)] items-center gap-4 rounded-[20px] border-[1.5px] border-line p-4 transition-colors hover:border-accent sm:grid-cols-[56px_minmax(0,1fr)_minmax(0,178px)] sm:gap-[22px] sm:px-6 sm:py-[22px]"
               >
                 <div
-                  className={`flex h-14 w-14 items-center justify-center rounded-full text-[19px] font-extrabold tracking-[-0.02em] ${
-                    isTop ? "bg-accent text-white" : "bg-chip text-muted"
+                  className={`flex h-11 w-11 items-center justify-center rounded-full text-[15px] font-extrabold tracking-[-0.02em] sm:h-14 sm:w-14 sm:text-[19px] ${
+                    isTop ? "bg-accent text-white" : "bg-lav-chip text-accent-ink"
                   }`}
                 >
                   {rank}
                 </div>
-                <div>
+                <div className="min-w-0">
                   <div className="mb-[7px] flex flex-wrap items-center gap-[9px]">
-                    <span className="text-[20px] font-extrabold tracking-[-0.025em]">
+                    <span className="text-[17.5px] font-extrabold leading-[1.15] tracking-[-0.025em] sm:text-[20px]">
                       {row.name}
                     </span>
                     <span className="rounded-full bg-lav-chip px-2.5 py-1 text-[11.5px] font-bold uppercase tracking-[0.03em] text-accent-ink">
@@ -433,14 +463,76 @@ export function Leaderboard({
                     </a>
                   </div>
                 </div>
-                <div className="col-span-2 sm:col-span-1 sm:text-right">
-                  <div className="font-mono text-2xl font-bold tracking-[-0.03em]">
-                    {formatUsd(row.bidCents)}
+                <div className="col-span-2 flex items-center justify-between gap-2.5 border-t-[1.5px] border-line-soft pt-3 sm:col-span-1 sm:block sm:border-0 sm:pt-0 sm:text-right">
+                  <div>
+                    <div className="font-mono text-[21px] font-bold leading-none tracking-[-0.03em] sm:mb-2.5 sm:text-2xl">
+                      {formatUsd(row.bidCents)}
+                    </div>
+                    <div className="text-[11.5px] font-semibold text-faint sm:hidden">paid</div>
                   </div>
+                  <button
+                    onClick={() => passThem(row)}
+                    className="shrink-0 rounded-full border-[1.5px] border-line bg-white px-[15px] py-[11px] text-[13px] font-bold text-ink transition-colors hover:border-accent hover:bg-accent hover:text-white sm:py-[9px]"
+                  >
+                    Pass them for {formatUsd(row.bidCents + 100)}
+                  </button>
                 </div>
               </div>
             );
           })}
+        </div>
+      )}
+
+      {rest.length > 0 && (
+        <div className="mt-6 sm:mt-[30px]">
+          <div className="eyebrow pb-1.5 text-faint sm:pb-2.5">The rest of the board</div>
+          <div className="flex flex-col">
+            {rest.map((row, i) => {
+              const rank = FEATURED_COUNT + i + 1;
+              return (
+                <div
+                  key={row.id}
+                  className="grid grid-cols-[30px_minmax(0,1fr)_auto] items-center gap-2.5 border-t-[1.5px] border-line-soft py-3.5 sm:grid-cols-[48px_minmax(0,1fr)_auto_auto] sm:gap-[18px] sm:px-2 sm:py-4 sm:hover:bg-lav-tint"
+                >
+                  <div className="font-mono text-[13.5px] font-bold text-faint sm:text-[15px]">
+                    #{rank}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="flex items-baseline gap-2.5">
+                      <span className="truncate text-[15.5px] font-bold tracking-[-0.02em] sm:whitespace-nowrap sm:text-[16.5px]">
+                        {row.name}
+                      </span>
+                      {row.blurb && (
+                        <span className="hidden truncate text-[13.5px] text-muted sm:inline">
+                          {row.blurb}
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-0.5 truncate text-[12.5px] font-semibold text-faint">
+                      {[row.category, row.location].filter(Boolean).join(" · ")}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-mono text-[15.5px] font-bold leading-tight tracking-[-0.02em] sm:text-[17px]">
+                      {formatUsd(row.bidCents)}
+                    </div>
+                    <button
+                      onClick={() => passThem(row)}
+                      className="pt-0.5 text-xs font-bold text-accent-deep sm:hidden"
+                    >
+                      Pass →
+                    </button>
+                  </div>
+                  <button
+                    onClick={() => passThem(row)}
+                    className="hidden shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-[12.5px] font-bold text-accent-deep hover:bg-lav-chip sm:block"
+                  >
+                    Pass for {formatUsd(row.bidCents + 100)}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
 
@@ -476,8 +568,8 @@ export function Leaderboard({
           {
             step: "Step one",
             bg: "bg-sun",
-            title: "List your market",
-            body: "Market name, application link, where it happens, and what a spot is worth to you. Takes about nine seconds.",
+            title: "Pay for a spot",
+            body: "Market name, application link, a number. Pay more than the market above you and that spot is yours. Takes about nine seconds.",
           },
           {
             step: "Step two",
@@ -574,7 +666,7 @@ export function Leaderboard({
       {/* Closing CTA */}
       <div className="mt-[60px] rounded-[26px] bg-lav px-6 py-12 text-center sm:px-12">
         <h2 className="mb-3 text-balance text-[28px] font-extrabold tracking-[-0.03em] sm:text-[34px]">
-          Your booths won&rsquo;t fill themselves.
+          Somebody&rsquo;s about to pass you.
         </h2>
         <p className="mx-auto mb-6 max-w-[52ch] text-pretty text-[16.5px] text-body">
           The board starts at {formatUsd(MIN_BID_CENTS)} and your listing stays up for good.
