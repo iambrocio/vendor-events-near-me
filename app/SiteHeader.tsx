@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HeaderAuth } from "./HeaderAuth";
 
 // One header for every indexable page. Add a link here and it appears
 // site-wide. The auth screens and the organizer dashboard are noindex and keep
@@ -38,8 +37,7 @@ export function SiteHeader() {
         <Link href="/" aria-label="Vendor Events Near Me — home" className="flex">
           <LogoMark />
         </Link>
-        {/* Below sm the header is the mark alone — nav and the Clerk
-            controls both drop away. */}
+        {/* Below sm the header is the mark alone — the nav drops away. */}
         <div className="hidden items-center gap-6 sm:flex">
           <nav className="flex items-center gap-6">
             {NAV_LINKS.map((link) => (
@@ -54,7 +52,6 @@ export function SiteHeader() {
               </Link>
             ))}
           </nav>
-          <HeaderAuth />
         </div>
       </div>
     </header>

@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { clerkAppearance } from "./clerk-appearance";
 import { Roboto, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { SITE_URL } from "@/lib/site";
@@ -32,16 +30,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // No `dynamic` prop: that would opt every route into dynamic rendering and
-  // cost the homepage and blog posts their prerendering. Authed sections take
-  // `<ClerkProvider dynamic>` in their own layout instead.
   return (
     <html
       lang="en"
       className={`${roboto.variable} ${spaceMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <ClerkProvider appearance={clerkAppearance}>{children}</ClerkProvider>
+        {children}
       </body>
       {/* Production only: localhost and preview deploys would otherwise report
           into the same property as real organizers. */}
