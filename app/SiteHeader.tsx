@@ -9,6 +9,7 @@ import { HeaderAuth } from "./HeaderAuth";
 // their own minimal chrome.
 const NAV_LINKS = [
   { href: "/", label: "Leaderboard" },
+  { href: "/why-list-your-market", label: "Why list" },
   { href: "/about", label: "About" },
   { href: "/rules", label: "Rules" },
 ];

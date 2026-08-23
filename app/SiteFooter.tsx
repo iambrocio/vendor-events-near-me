@@ -2,6 +2,7 @@ import Link from "next/link";
 
 // One footer for every public page. Add a link here and it appears site-wide.
 const FOOTER_LINKS = [
+  { href: "/why-list-your-market", label: "Why list" },
   { href: "/about", label: "About" },
   { href: "/rules", label: "Rules" },
   { href: "/blog", label: "Blog" },
@@ -17,7 +18,7 @@ export function SiteFooter({ tagline }: { tagline?: React.ReactNode }) {
     <footer className="mt-auto px-6">
       <div className="container-site flex flex-wrap items-baseline justify-between gap-6 border-t border-line pb-10 pt-[26px]">
         <div className="font-mono text-xs text-muted">
-          {tagline ?? "A free directory with one paid board bolted on."}
+          {tagline ?? "Paid listings only. No scraping, no fake events."}
         </div>
         <div className="flex flex-wrap gap-5 font-mono text-xs">
           {FOOTER_LINKS.map((link) => (

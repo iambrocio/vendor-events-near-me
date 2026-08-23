@@ -16,6 +16,10 @@ const ROUTE_META: Record<string, { label: string; description?: string }> = {
     label: "Leaderboard",
     description: "The board, sorted by bid. Highest bid sits at #1.",
   },
+  "/why-list-your-market": {
+    label: "Why list your market",
+    description: "What this board does for an organizer that a directory doesn't.",
+  },
   "/about": {
     label: "About",
     description: "Why the board exists and what a bid actually buys.",
