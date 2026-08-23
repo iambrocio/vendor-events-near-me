@@ -6,7 +6,8 @@ import { findOwnedListing, getBoard } from "@/lib/listings";
 import { getStripe } from "@/lib/stripe";
 import { SITE_URL } from "@/lib/site";
 
-export type BidFormState = { error: string | null };
+/** `field` names the input that failed, so the form can highlight it. */
+export type BidFormState = { error: string | null; field?: string };
 
 const MAX_BID_CENTS = 100_000_00; // $100k — a typo guard, not a policy.
 
@@ -51,44 +52,44 @@ export async function startCheckout(
   const eventDate = String(formData.get("eventDate") ?? "").trim();
 
   if (!name || normalizeName(name).length < 2) {
-    return { error: "Give the market a name." };
+    return { error: "Give the market a name.", field: "name" };
   }
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-    return { error: "That email doesn't look right — the receipt goes there." };
+    return { error: "That email doesn't look right — the receipt goes there.", field: "email" };
   }
 
   const applyUrl = normalizeUrl(rawUrl);
   if (!applyUrl) {
-    return { error: "The vendor application link has to be a real URL." };
+    return { error: "The vendor application link has to be a real URL.", field: "applyUrl" };
   }
 
   // A market with no place is useless to a vendor deciding whether to drive.
   // Checked against the list rather than for length: the field is a select, so
   // anything else arrived by posting straight at the action.
   if (!(US_STATES as readonly string[]).includes(location)) {
-    return { error: "Pick the state the market happens in." };
+    return { error: "Pick the state the market happens in.", field: "location" };
   }
 
   if (!blurb) {
-    return { error: "Add a line about the market so vendors know what it is." };
+    return { error: "Add a line about the market so vendors know what it is.", field: "blurb" };
   }
 
   // Required, and it has to be a real date that hasn't already passed — a past
   // date would hide the listing the moment it went up.
   if (!eventDate) {
-    return { error: "Add the date the market happens." };
+    return { error: "Add the date the market happens.", field: "eventDate" };
   }
   const today = new Date().toISOString().slice(0, 10);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(eventDate) || Number.isNaN(Date.parse(eventDate))) {
-    return { error: "That event date doesn't look like a real date." };
+    return { error: "That event date doesn't look like a real date.", field: "eventDate" };
   }
   if (eventDate < today) {
-    return { error: "That event date has already passed." };
+    return { error: "That event date has already passed.", field: "eventDate" };
   }
 
   const requested = parseBidCents(String(formData.get("bid") ?? ""));
   if (requested === null || requested > MAX_BID_CENTS) {
-    return { error: "Enter a bid between $5 and $100,000." };
+    return { error: "Enter an amount between $5 and $100,000.", field: "bid" };
   }
 
   // Raising an existing listing charges only the gap (rule 06). Anyone else
@@ -97,11 +98,12 @@ export async function startCheckout(
   const alreadyPaid = owned?.bidCents ?? 0;
 
   if (requested < MIN_BID_CENTS) {
-    return { error: "The cheapest spot on the board is $5." };
+    return { error: "The cheapest spot on the board is $5.", field: "bid" };
   }
   if (owned && requested <= alreadyPaid) {
     return {
-      error: `You've already paid $${alreadyPaid / 100} for ${owned.name}. Bid higher than that to move up.`,
+      error: `You've already paid $${alreadyPaid / 100} for ${owned.name}. Enter more than that to move up.`,
+      field: "bid",
     };
   }
 

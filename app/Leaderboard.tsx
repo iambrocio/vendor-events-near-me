@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useMemo, useState } from "react";
+import { useActionState, useEffect, useMemo, useState } from "react";
 import {
   FEATURED_COUNT,
   MIN_BID_CENTS,
@@ -18,7 +18,13 @@ import { startCheckout, type BidFormState } from "./bid-actions";
 
 const FIELD_LABEL = "mb-1.5 block text-[12.5px] font-bold text-muted";
 const INPUT =
-  "w-full rounded-xl border-[1.5px] border-line bg-lav-tint px-[13px] py-3 text-[14.5px] text-ink outline-none focus:border-accent";
+  "w-full rounded-xl border-[1.5px] border-line bg-lav-tint px-[13px] py-3 text-[14.5px] text-ink outline-none focus:border-accent " +
+  // `user-invalid` rather than `invalid`: a required field is invalid the
+  // moment it renders, and nobody wants a form that's red before they touch it.
+  "[&:user-invalid]:border-danger [&:user-invalid]:bg-danger-soft";
+
+/** Ring drawn on the one field the server rejected. */
+const FLAGGED = "border-danger bg-danger-soft";
 const PILL_BUTTON =
   "w-full rounded-full bg-accent px-4 py-[15px] font-sans text-[15.5px] font-bold text-white transition-colors hover:bg-accent-strong disabled:opacity-60";
 const CHIP = "rounded-full bg-chip px-[11px] py-[5px] text-[12.5px] font-semibold text-muted";
@@ -80,7 +86,7 @@ export function Leaderboard({
   const [showAll, setShowAll] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [stateFilter, setStateFilter] = useState("All");
-  const [heroError, setHeroError] = useState<string | null>(null);
+  const [heroError, setHeroError] = useState<{ field: "url" | "location"; message: string } | null>(null);
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [location, setLocation] = useState("");
@@ -92,6 +98,17 @@ export function Leaderboard({
     startCheckout,
     { error: null },
   );
+
+  // Put the person on the field the server rejected rather than making them
+  // hunt for it against a message in the other column.
+  useEffect(() => {
+    if (!state.field) return;
+    const el = document.querySelector<HTMLElement>(`[name="${state.field}"]`);
+    el?.scrollIntoView({ behavior: "smooth", block: "center" });
+    el?.focus({ preventScroll: true });
+  }, [state]);
+
+  const flag = (name: string) => (state.field === name ? ` ${FLAGGED}` : "");
 
   const topCents = rows.length > 0 ? rows[0].bidCents : 0;
   const priceCents = priceInput ?? (rows.length > 0 ? topCents + 100 : MIN_BID_CENTS);
@@ -203,7 +220,7 @@ export function Leaderboard({
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   placeholder="yourmarket.com/apply"
-                  className={INPUT}
+                  className={INPUT + flag("applyUrl")}
                 />
               </label>
               <div className="mt-[7px] text-[12.5px] text-muted">
@@ -222,7 +239,7 @@ export function Leaderboard({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Riverbend Makers Market"
-                  className={INPUT}
+                  className={INPUT + flag("name")}
                 />
               </label>
               <label className="block">
@@ -232,7 +249,7 @@ export function Leaderboard({
                   name="email"
                   required
                   placeholder="you@yourmarket.com"
-                  className={INPUT}
+                  className={INPUT + flag("email")}
                 />
                 <span className="mt-1.5 block text-xs leading-[1.5] text-muted">
                   This is what owns the listing. Pay again with the same market name and email
@@ -246,7 +263,7 @@ export function Leaderboard({
                   required
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
-                  className={INPUT}
+                  className={INPUT + flag("location")}
                 >
                   <option value="" disabled>
                     Pick a state
@@ -258,7 +275,7 @@ export function Leaderboard({
               </label>
               <label className="block">
                 <span className={FIELD_LABEL}>Event date</span>
-                <input type="date" name="eventDate" required className={INPUT} />
+                <input type="date" name="eventDate" required className={INPUT + flag("eventDate")} />
                 <span className="mt-1.5 block text-xs leading-[1.5] text-muted">
                   Your listing runs until this day, then comes off the board. A recurring
                   market lists its next date — each time it runs is its own listing.
@@ -280,7 +297,7 @@ export function Leaderboard({
                   rows={3}
                   maxLength={400}
                   placeholder="Ninth year on the French Broad. 120 booths, juried handmade only."
-                  className={`${INPUT} resize-y`}
+                  className={`${INPUT}${flag("blurb")} resize-y`}
                 />
               </label>
             </div>
@@ -314,7 +331,10 @@ export function Leaderboard({
             </div>
 
             {state.error && (
-              <p className="mb-4 rounded-xl bg-white px-3.5 py-2.5 text-[13px] leading-[1.5] font-semibold text-accent-ink">
+              <p
+                role="alert"
+                className="mb-4 rounded-xl border-[1.5px] border-danger bg-danger-soft px-3.5 py-2.5 text-[13px] font-semibold leading-[1.5] text-danger"
+              >
                 {state.error}
               </p>
             )}
@@ -371,23 +391,41 @@ export function Leaderboard({
         )}
 
         <div className="mb-3 flex flex-wrap items-stretch gap-2 md:flex-nowrap">
-          <div className="flex min-w-0 flex-[1_1_100%] items-center gap-[9px] rounded-full border-[1.5px] border-line-input bg-white px-[18px] md:flex-[1_1_auto]">
+          <div
+            className={`flex min-w-0 flex-[1_1_100%] items-center gap-[9px] rounded-full border-[1.5px] bg-white px-[18px] md:flex-[1_1_auto] ${
+              heroError?.field === "url" ? "border-danger bg-danger-soft" : "border-line-input"
+            }`}
+          >
             <span className="shrink-0 text-[17px] text-faint" aria-hidden="true">
               ◍
             </span>
             <input
+              id="hero-url"
               aria-label="Your event link or application URL"
+              aria-invalid={heroError?.field === "url" || undefined}
               value={url}
-              onChange={(e) => setUrl(e.target.value)}
+              onChange={(e) => {
+                setUrl(e.target.value);
+                if (heroError?.field === "url") setHeroError(null);
+              }}
               placeholder="Your event link or application URL"
               className="min-w-0 flex-1 bg-transparent py-[17px] text-base text-ink outline-none"
             />
           </div>
           <select
+            id="hero-state"
             aria-label="State the market happens in"
+            aria-invalid={heroError?.field === "location" || undefined}
             value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="min-w-0 flex-[1_1_100%] cursor-pointer rounded-full border-[1.5px] border-line-input bg-white px-3.5 py-[17px] text-[15px] text-ink outline-none md:flex-[0_1_180px]"
+            onChange={(e) => {
+              setLocation(e.target.value);
+              if (heroError?.field === "location") setHeroError(null);
+            }}
+            className={`min-w-0 flex-[1_1_100%] cursor-pointer rounded-full border-[1.5px] px-3.5 py-[17px] text-[15px] text-ink outline-none md:flex-[0_1_180px] ${
+              heroError?.field === "location"
+                ? "border-danger bg-danger-soft"
+                : "border-line-input bg-white"
+            }`}
           >
             <option value="">Choose a state</option>
             {US_STATES.map((state) => (
@@ -431,8 +469,22 @@ export function Leaderboard({
           </div>
           <button
             onClick={() => {
-              if (!url.trim()) return setHeroError("Add the link vendors should apply through.");
-              if (!location) return setHeroError("Pick the state the market happens in.");
+              if (!url.trim()) {
+                setHeroError({
+                  field: "url",
+                  message: "Add the link vendors should apply through.",
+                });
+                document.getElementById("hero-url")?.focus();
+                return;
+              }
+              if (!location) {
+                setHeroError({
+                  field: "location",
+                  message: "Pick the state the market happens in.",
+                });
+                document.getElementById("hero-state")?.focus();
+                return;
+              }
               setHeroError(null);
               setView("checkout");
             }}
@@ -442,7 +494,9 @@ export function Leaderboard({
           </button>
         </div>
         {heroError && (
-          <p className="mb-2 text-[14.5px] font-semibold text-accent-deep">{heroError}</p>
+          <p role="alert" className="mb-2 text-[14.5px] font-semibold text-danger">
+            {heroError.message}
+          </p>
         )}
         <div className="text-[14.5px] text-muted">
           Already on the board? Enter the same link and raise your amount.{" "}
