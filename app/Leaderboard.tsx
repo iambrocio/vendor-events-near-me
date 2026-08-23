@@ -332,8 +332,11 @@ export function Leaderboard({
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="yourmarket.com/apply"
-              className={`${INPUT} mb-3.5`}
+              className={INPUT}
             />
+            <p className="mb-3.5 mt-1.5 text-xs leading-[1.5] text-muted">
+              You can link to your vendor application or event page.
+            </p>
 
             <label className={FIELD_LABEL} htmlFor="market-price">
               What you&rsquo;ll pay
