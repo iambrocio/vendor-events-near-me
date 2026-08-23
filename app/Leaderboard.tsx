@@ -269,8 +269,8 @@ export function Leaderboard({
                 <span className={FIELD_LABEL}>Event date</span>
                 <input type="date" name="eventDate" required className={INPUT} />
                 <span className="mt-1.5 block text-xs leading-[1.5] text-muted">
-                  Your listing runs until this day, then comes off the board. For a
-                  recurring market, use the next date it happens.
+                  Your listing runs until this day, then comes off the board. A recurring
+                  market lists its next date — each time it runs is its own listing.
                 </span>
               </label>
               <label className="block">
