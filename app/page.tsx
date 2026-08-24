@@ -63,7 +63,7 @@ export default async function Home({
 
   const [rows, recent, confirmation] = await Promise.all([
     getBoard(),
-    survivable("latest activity", () => getRecentBids(), []),
+    survivable("latest activity", () => getRecentBids(), null),
     paidSession
       ? survivable("paid confirmation", () => getPaidConfirmation(paidSession), null)
       : null,
@@ -74,12 +74,15 @@ export default async function Home({
       <SiteHeader />
       <Leaderboard
         rows={rows}
-        activity={recent.map((r) => ({
+        activity={(recent ?? []).map((r) => ({
           id: r.id,
           name: r.name,
           bidCents: r.bidCents,
           ago: timeAgo(r.at),
         }))}
+        // Distinct from an empty list: the query failed, so say so rather
+        // than implying the board has been quiet.
+        activityUnavailable={recent === null}
         paid={
           confirmation && {
             name: confirmation.name,
