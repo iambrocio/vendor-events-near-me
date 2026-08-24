@@ -16,6 +16,17 @@ const GA_ID = "G-NY33C1MRF1";
 const HOTJAR_ID = 6766136;
 const HOTJAR_SNIPPET_VERSION = 6;
 
+/**
+ * Whether to load analytics at all.
+ *
+ * `VERCEL_ENV` is "production" only on production deploys — "preview" on
+ * preview deploys, and unset locally. `NODE_ENV` cannot tell those apart,
+ * because Vercel builds previews in production mode too, so the previous
+ * check let preview traffic report into the live properties alongside real
+ * organizers.
+ */
+const ANALYTICS_ENABLED = process.env.VERCEL_ENV === "production";
+
 const roboto = Roboto({
   variable: "--font-roboto",
   subsets: ["latin"],
@@ -66,13 +77,11 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <ClerkProvider appearance={clerkAppearance}>{children}</ClerkProvider>
       </body>
-      {/* Production only: localhost and preview deploys would otherwise report
-          into the same property as real organizers. */}
-      {process.env.NODE_ENV === "production" && <GoogleAnalytics gaId={GA_ID} />}
-      {/* Same gate as GA above. Shipped as Hotjar's own loader snippet rather
-          than a plain `src`: the stub it installs on `window.hj` has to exist
-          before the remote script arrives, so splitting the two would race. */}
-      {process.env.NODE_ENV === "production" && (
+      {ANALYTICS_ENABLED && <GoogleAnalytics gaId={GA_ID} />}
+      {/* Shipped as Hotjar's own loader snippet rather than a plain `src`: the
+          stub it installs on `window.hj` has to exist before the remote script
+          arrives, so splitting the two would race. */}
+      {ANALYTICS_ENABLED && (
         <Script id="hotjar" strategy="afterInteractive">
           {`(function(h,o,t,j,a,r){
             h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
