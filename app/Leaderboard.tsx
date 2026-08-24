@@ -90,11 +90,14 @@ export type Activity = { id: string; name: string; bidCents: number; ago: string
 export function Leaderboard({
   rows,
   activity,
+  activityUnavailable = false,
   paid,
   cancelled,
 }: {
   rows: BoardRow[];
   activity: Activity[];
+  /** The activity query failed, as opposed to returning nothing. */
+  activityUnavailable?: boolean;
   paid: PaidConfirmation | null;
   cancelled: boolean;
 }) {
@@ -741,9 +744,14 @@ export function Leaderboard({
         </div>
       )}
 
-      {activity.length > 0 && (
+      {(activity.length > 0 || activityUnavailable) && (
         <div className="mt-11 rounded-[20px] bg-lav-tint px-6 py-[26px]">
           <div className="eyebrow mb-3.5 text-faint">Latest activity</div>
+          {activityUnavailable ? (
+            <div className="text-[14px] text-faint">
+              Temporarily unavailable — the board above is unaffected.
+            </div>
+          ) : (
           <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-x-8">
             {activity.map((a) => (
               <div key={a.id} className="flex items-baseline gap-3">
@@ -753,6 +761,7 @@ export function Leaderboard({
               </div>
             ))}
           </div>
+          )}
         </div>
       )}
 

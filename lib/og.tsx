@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { SITE_URL } from "./site";
 
 // Shared renderer for every `opengraph-image` route, so the default card and
 // the per-post cards stay identical apart from their copy.
@@ -20,6 +21,10 @@ const BRAND = {
   body: "rgba(30, 24, 20, 0.74)", // --color-body
   faint: "rgba(30, 24, 20, 0.55)", // --color-faint
 } as const;
+
+// Derived, not hardcoded: changing SITE_URL (an apex → www move, say) should
+// not leave the share cards advertising the old host.
+const SITE_HOST = SITE_URL.replace(/^https?:\/\//, "");
 
 const FONT_DIR = path.join(process.cwd(), "assets");
 
@@ -184,7 +189,7 @@ export async function renderOgImage({
               color: BRAND.ink,
             }}
           >
-            vendoreventsnearme.com
+            {SITE_HOST}
           </div>
         </div>
       </div>
