@@ -24,11 +24,20 @@ export async function pageMetadata({
   defaultTitle?: string;
   defaultDescription?: string;
 }): Promise<Metadata> {
-  const page = await client.fetch<PageSeo>(
-    PAGE_SEO_QUERY,
-    { key },
-    { next: { revalidate: 60 } },
-  );
+  // These overrides are optional by design — `defaultTitle` and
+  // `defaultDescription` are the fallbacks. Letting a Sanity outage throw here
+  // would take down the whole page over its <title>, since `generateMetadata`
+  // runs as part of the render.
+  let page: PageSeo = null;
+  try {
+    page = await client.fetch<PageSeo>(
+      PAGE_SEO_QUERY,
+      { key },
+      { next: { revalidate: 60 } },
+    );
+  } catch (error) {
+    console.error(`Metadata: Sanity lookup for "${key}" failed; using defaults.`, error);
+  }
   const seo = page?.seo;
   return {
     title: seo?.title ?? defaultTitle,
