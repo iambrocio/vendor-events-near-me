@@ -22,6 +22,28 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+/**
+ * Runs a query whose failure the page can survive, degrading to `fallback`.
+ *
+ * The board itself is the page, so if `getBoard` fails there is nothing worth
+ * rendering and the error boundary should take over. Everything else here is
+ * secondary — but because all three ran inside one `Promise.all`, a transient
+ * Supabase error on the decorative activity strip used to reject the whole
+ * render and take the paid listings down with it.
+ */
+async function survivable<T>(
+  label: string,
+  run: () => Promise<T>,
+  fallback: T,
+): Promise<T> {
+  try {
+    return await run();
+  } catch (error) {
+    console.error(`Homepage: ${label} failed; rendering without it.`, error);
+    return fallback;
+  }
+}
+
 /** `2026-08-22T18:04:00Z` → `18 min ago`. */
 function timeAgo(iso: string) {
   const minutes = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 60000));
@@ -41,8 +63,10 @@ export default async function Home({
 
   const [rows, recent, confirmation] = await Promise.all([
     getBoard(),
-    getRecentBids(),
-    paidSession ? getPaidConfirmation(paidSession) : null,
+    survivable("latest activity", () => getRecentBids(), []),
+    paidSession
+      ? survivable("paid confirmation", () => getPaidConfirmation(paidSession), null)
+      : null,
   ]);
 
   return (
