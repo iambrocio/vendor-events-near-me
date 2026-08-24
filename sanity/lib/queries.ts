@@ -60,3 +60,14 @@ export const PAGE_SEO_QUERY = defineQuery(`
     }
   }
 `);
+
+// Just enough of a post to render its share card — keeps the OG image route
+// from pulling the full body.
+export const POST_OG_QUERY = defineQuery(`
+  *[_type == "post" && slug.current == $slug][0]{
+    title,
+    publishedAt,
+    "description": coalesce(seo.metaDescription, overview, pt::text(body)),
+    "authorName": author->name
+  }
+`);

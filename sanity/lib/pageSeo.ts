@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { client } from "./client";
 import { PAGE_SEO_QUERY } from "./queries";
+import { shareMetadata } from "@/lib/site";
 
 type PageSeo = {
   seo: {
@@ -39,10 +40,15 @@ export async function pageMetadata({
     console.error(`Metadata: Sanity lookup for "${key}" failed; using defaults.`, error);
   }
   const seo = page?.seo;
+  const title = seo?.title ?? defaultTitle;
+  const description = seo?.description ?? defaultDescription;
   return {
-    title: seo?.title ?? defaultTitle,
-    description: seo?.description ?? defaultDescription,
+    title,
+    description,
     alternates: { canonical },
     robots: seo?.noIndex ? { index: false, follow: false } : undefined,
+    // Mirror the resolved title/description onto the share tags so a Sanity
+    // override drives the social card too, not just the search snippet.
+    ...shareMetadata({ title, description, url: canonical }),
   };
 }
