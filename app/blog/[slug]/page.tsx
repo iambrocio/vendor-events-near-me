@@ -10,6 +10,7 @@ import { POST_QUERY, POST_SLUGS_QUERY } from "@/sanity/lib/queries";
 import { TableOfContents, type Heading } from "./TableOfContents";
 import { SiteFooter } from "@/app/SiteFooter";
 import { SiteHeader } from "@/app/SiteHeader";
+import { shareMetadata } from "@/lib/site";
 
 type ImageValue = SanityImageSource & { alt?: string };
 type PortableValue = React.ComponentProps<typeof PortableText>["value"];
@@ -48,11 +49,23 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return {};
+  const title = post.seo.title;
+  const description = post.seo.description?.slice(0, 160);
+  const url = `/blog/${slug}`;
   return {
-    title: post.seo.title,
-    description: post.seo.description?.slice(0, 160),
-    alternates: { canonical: `/blog/${slug}` },
+    title,
+    description,
+    alternates: { canonical: url },
     robots: post.seo.noIndex ? { index: false, follow: false } : undefined,
+    ...shareMetadata({
+      title,
+      description,
+      url,
+      type: "article",
+      ownImage: true,
+      publishedTime: post.publishedAt ?? undefined,
+      authors: post.author?.name ? [post.author.name] : undefined,
+    }),
   };
 }
 

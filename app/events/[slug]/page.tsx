@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SiteFooter } from "@/app/SiteFooter";
 import { SiteHeader } from "@/app/SiteHeader";
+import { shareMetadata } from "@/lib/site";
 
 type NearbyMarket = {
   slug: string;
@@ -71,10 +72,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const market = getMarket(slug);
+  const title = `${market.name} · Vendor Events Near Me`;
+  const description = market.about[0];
+  const url = `/events/${slug}`;
   return {
-    title: `${market.name} · Vendor Events Near Me`,
-    description: market.about[0],
-    alternates: { canonical: `/events/${slug}` },
+    title,
+    description,
+    alternates: { canonical: url },
+    // No per-market card: every unknown slug resolves to the same placeholder
+    // market, so a bespoke image would just restate that more loudly. The
+    // site-wide card applies until these pages are backed by real data.
+    ...shareMetadata({ title, description, url }),
   };
 }
 
