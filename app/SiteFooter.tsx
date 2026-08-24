@@ -10,14 +10,7 @@ export function SiteFooter() {
   return (
     <footer className="mt-auto px-6">
       <div className="container-site border-t-[1.5px] border-line-soft pb-11 pt-[30px] text-center text-[14.5px] leading-[1.7] text-muted">
-        Created by the team at{" "}
-        <a
-          href="https://marketlly.com"
-          className="font-medium text-accent-deep hover:underline"
-        >
-          Marketlly
-        </a>{" "}
-        and{" "}
+        Created by{" "}
         <a
           href={`https://x.com/${X_HANDLE}`}
           rel="me noopener"
